@@ -1,5 +1,7 @@
 # Dash Picture Annotation
 
+<p><img alt="Banner" src="https://repository-images.githubusercontent.com/883421149/10c3593c-2d90-4eff-a3b5-761946985243"></p>
+
 <p align="center">
   <a href="https://github.com/cainmagi/dash-picture-annotation/releases/latest"><img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/cainmagi/dash-picture-annotation?logo=github&sort=semver&style=flat-square"></a>
   <a href="https://github.com/cainmagi/dash-picture-annotation/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/cainmagi/dash-picture-annotation/total?logo=github&style=flat-square"></a>
@@ -89,7 +91,10 @@ where the `data` is typed by `dpa.Annotations`. It should be formatted like this
         "x": -36.15, "y": 62.76, "width": 125.53, "height": 125.53, "type": "RECT"
       },
     },
-    ...
+    {
+      "id": "...",
+      "...": "...",
+    }
   ]
 }
 ```
