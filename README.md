@@ -35,7 +35,7 @@ Compared to the original project, this project has the following special feature
 
 Preview a quick video demo here:
 
-https://raw.githubusercontent.com/cainmagi/dash-picture-annotation/main/display/demo.mp4
+https://github.com/user-attachments/assets/398fa4ff-4926-4594-a9c6-9bb92d170c63
 
 ## 1. Install
 

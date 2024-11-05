@@ -17,3 +17,7 @@
 7. Add the devloper's environment folder `./docker` and the `Dockerfile`.
 8. Add GitHub workflows and issue/PR templates.
 9. Add the banner in the readme file.
+
+#### :wrench: Fix
+
+1. Fix: Fix the video link in the readme file.
