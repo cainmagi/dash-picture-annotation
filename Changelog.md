@@ -13,6 +13,7 @@
 #### :wrench: Fix
 
 1. Fix: Fix few typos in the docstrings.
+2. Fix: Fix the aliases in the top-level package.
 
 #### :floppy_disk: Change
 
