@@ -1,6 +1,6 @@
 {
   "name": "dash_picture_annotation",
-  "packageManager": "yarn@4.4.1",
+  "packageManager": "yarn@4.5.1",
   "version": "0.1.0",
   "description": "Dash porting version of the React project React Picture Annotation. Provide a simple annotation window for a single picture.",
   "repository": {

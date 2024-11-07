@@ -10,6 +10,10 @@
 
 1. Fix: Fix few typos in the docstrings.
 
+#### :floppy_disk: Change
+
+1. Upgrade Yarn to `v4.5.1`.
+
 ### 0.1.0 @ 11/04/2024
 
 #### :mega: New
