@@ -132,7 +132,7 @@ def get_data_items(
 ) -> Tuple[th.AnnoItem, ...]:
     """Get one or several annotation items by exactly matching the comment.
 
-    Note that this method will NOT validate the format of each returned annotation
+    Note that this method will not validate the format of each returned annotation
     items. Not well-formatted items will STILL be returned.
 
     Arguments
@@ -186,11 +186,12 @@ def get_data_items_by_regex(
     comment_regex: Optional[Union[str, re.Pattern]] = None,
     n: Optional[int] = None,
 ) -> Tuple[th.AnnoItem, ...]:
-    """Get one or several annotation items by exactly matching the comment.
+    """Get one or several annotation items by matching the comment with a regular
+    expression.
 
     The regex is done by `re.match`.
 
-    Note that this method will NOT validate the format of each returned annotation
+    Note that this method will not validate the format of each returned annotation
     items. Not well-formatted items will STILL be returned.
 
     Arguments

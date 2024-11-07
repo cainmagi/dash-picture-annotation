@@ -4,7 +4,7 @@ import {DashPictureAnnotation as RealComponent} from "../LazyLoader";
 
 /**
  * DashPictureAnnotation is a Dash porting version for the React component:
- * `react-picture-annotation/ReactPictureAnnotation`
+ * `react-picture-annotation/ReactPictureAnnotation`.
  *
  * This component provides a annotator that allows users to create, modify, or delete
  * the annotation information for a specific picture. This dash version has been
@@ -12,6 +12,10 @@ import {DashPictureAnnotation as RealComponent} from "../LazyLoader";
  * 1. Responsive size with respect to the parent component.
  * 2. Annotation type specified by a selector rather than an input box.
  * 3. Only trigger the data update when the mouse is released.
+ * 4. Extensive functionalities for fine-grained customization of colors.
+ * 5. Disabling the annotator by a flag.
+ * 6. Setting a lower boundary of the annotation size to prevent small annotations
+ *    created by mistake.
  */
 const DashPictureAnnotation = (props) => {
   return (
@@ -25,6 +29,7 @@ DashPictureAnnotation.defaultProps = {
   style: {height: "60vh"},
   placeholder_input: "Input tag here",
   placeholder_dropdown: "Select a tag",
+  clearable_dropdown: false,
   disabled: false,
   is_color_dynamic: false,
   size_minimal: {
@@ -212,6 +217,7 @@ DashPictureAnnotation.propTypes = {
       })
     ),
     PropTypes.object,
+    PropTypes.oneOf([null]),
   ]),
 
   /**
@@ -235,19 +241,20 @@ DashPictureAnnotation.propTypes = {
   placeholder_dropdown: PropTypes.string,
 
   /**
-   * Allow the annotation comment to be cleared when the dropdown box is being used.
+   * A flag. Set it to allow the annotation comment to be cleared when the dropdown
+   * box is being used.
    */
   clearable_dropdown: PropTypes.bool,
 
   /**
-   * Disable the annotator (make unclickable).
+   * A flag for disabling the annotator (make unclickable).
    */
   disabled: PropTypes.bool,
 
   /**
-   * If this flag is turned on, will make the color of each annotation box dynamically
-   * calculated based on the text of the annotation. An annotation box without a text
-   * comment will not be influenced.
+   * A flag. If this flag is turned on, will make the color of each annotation box
+   * dynamically calculated based on the text of the annotation. An annotation box
+   * without a text comment will not be influenced.
    */
   is_color_dynamic: PropTypes.bool,
 
@@ -255,7 +262,7 @@ DashPictureAnnotation.propTypes = {
    * The requirement of the minimal annotation size. Any newly created annotation with
    * a size smaller than this size will be dropped.
    * If this value is configured as a scalar, will use it for both `width` and `height`.
-   * If any of the value is not set or configured as invalid values, will use 0.
+   * If any of the value is not set or configured as invalid values, will use `0`.
    */
   size_minimal: PropTypes.oneOfType([
     PropTypes.number,
@@ -272,7 +279,7 @@ DashPictureAnnotation.propTypes = {
   ]),
 
   /**
-   * Object that holds the loading state object coming from dash-renderer
+   * Object that holds the loading state object coming from dash-renderer.
    */
   loading_state: PropTypes.shape({
     /**
