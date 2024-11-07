@@ -17,6 +17,7 @@
 #### :floppy_disk: Change
 
 1. Upgrade Yarn to `v4.5.1`.
+2. Downgrade React to `v18.2.x` because the `defaultProps` which is used by Dash is marked as deprecated since `v18.3.0`.
 
 ### 0.1.0 @ 11/04/2024
 
