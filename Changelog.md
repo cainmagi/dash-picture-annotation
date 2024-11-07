@@ -6,6 +6,10 @@
 
 ### 0.1.0 @ 11/06/2024
 
+#### :mega: New
+
+1. Add typehints: `AnnoStyle`, `DashSelectOptionItem`, and `Size`.
+
 #### :wrench: Fix
 
 1. Fix: Fix few typos in the docstrings.

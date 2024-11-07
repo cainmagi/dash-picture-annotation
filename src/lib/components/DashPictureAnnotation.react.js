@@ -45,17 +45,18 @@ DashPictureAnnotation.propTypes = {
   id: PropTypes.string,
 
   /**
-   * Often used with CSS to style elements with common properties.
+   * The css-class of the component. Use ` ` to separate different names. Often used
+   * with CSS to style elements with common properties.
    */
   class_name: PropTypes.string,
 
   /**
-   * Defines CSS styles which will override styles previously set.
+   * The css-styles which will override styles of the component container.
    */
   style: PropTypes.object,
 
   /**
-   * Defines CSS styles of the annotation marker (box).
+   * The css-styles of the annotation marker (box).
    * If this value is specified as a string, the string will be parsed as the default
    * color of the annotation boxes.
    */
@@ -209,12 +210,19 @@ DashPictureAnnotation.propTypes = {
         /**
          * Label (displayed text) of the option.
          */
-        label: PropTypes.string,
+        label: PropTypes.string.isRequired,
         /**
          * The value of the option which will be applied to the annotation data.
          */
-        value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        value: PropTypes.any.isRequired,
+        /**
+         * A flag. If specified, this option item will be not selectable.
+         */
+        disabled: PropTypes.bool,
       })
+    ),
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])
     ),
     PropTypes.object,
     PropTypes.oneOf([null]),

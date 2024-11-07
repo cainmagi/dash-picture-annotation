@@ -34,10 +34,14 @@ __all__ = (
     "AnnoMark",
     "AnnoItem",
     "Annotations",
+    "AnnoStyle",
+    "DashSelectOptionItem",
+    "Size",
     "is_sequence_of",
     "is_anno_mark",
     "is_anno_item",
     "is_annotations",
+    "is_dash_select_option_item",
 )
 
 
@@ -68,7 +72,7 @@ class AnnoMark(TypedDict):
 class _AnnoItem(TypedDict):
     """Annotation item. (private, internal)
 
-    The internal and incomplete definition of `AnnoItem`
+    The internal and incomplete definition of `AnnoItem`.
     """
 
     id: str
@@ -94,7 +98,7 @@ class AnnoItem(_AnnoItem, total=False):
 class _Annotations(TypedDict):
     """The collection of annotations. (private, internal)
 
-    The internal and incomplete definition of `Annotations`
+    The internal and incomplete definition of `Annotations`.
     """
 
     data: List[AnnoItem]
@@ -113,6 +117,91 @@ class Annotations(_Annotations, total=False):
     this value is necessary for ensuring that the user triggered changes will not be
     omitted. From the server side, this value can be set by `0` because the user
     interaction will use a higher value to replace it."""
+
+
+class AnnoStyle(TypedDict, total=False):
+    """The css-styles of the annotation marker (box).
+
+    If this value is specified as a string, the string will be parsed as the default
+    color of the annotation boxes.
+    """
+
+    padding: float
+    """Text padding."""
+
+    fontSize: float
+    """Text font size."""
+
+    fontColor: str
+    """Text font color."""
+
+    fontBackground: str
+    """Text background color."""
+
+    fontFamily: str
+    """Text font name."""
+
+    lineWidth: float
+    """Stroke width."""
+
+    shapeBackground: str
+    """Background color in the middle of the marker."""
+
+    shapeStrokeStyle: str
+    """Shape stroke color."""
+
+    shadowBlur: float
+    """Stroke shadow blur."""
+
+    shapeShadowStyle: str
+    """Stroke shape shadow color."""
+
+    transformerBackground: str
+    """Color of the scalable dots around the selected box."""
+
+    transformerSize: float
+    """Size of the scalable dots around the selected box."""
+
+
+class _DashSelectOptionItem(TypedDict):
+    """The option item of a Dash selectable component. (private, internal)
+
+    The internal and incomplete definition of `DashSelectOptionItem`.
+    """
+
+    label: str
+    """Label (displayed text) of the option."""
+
+    value: Any
+    """The value of the option which will be applied to the annotation data."""
+
+
+class DashSelectOptionItem(_DashSelectOptionItem, total=False):
+    """The option item of a Dash selectable component.
+
+    The available options of the annotator. The usage is like the selector component
+    `dcc.Dropdown(options=...)`. Each item represents an available choice of the
+    annotation type.
+    """
+
+    disabled: bool
+    """A flag. If specified, this option item will be not selectable."""
+
+
+class Size(TypedDict, total=False):
+    """The requirement of the minimal annotation size. Any newly created annotation
+    with a size smaller than this size will be dropped.
+
+    If this value is configured as a scalar, will use it for both `width` and `height`.
+
+    If any of the value is not set or configured as invalid values, will use `0`.
+    """
+
+    width: float
+    """Requirement of the minimal width of an annotator."""
+
+    height: float
+    """Requirement of the minimal height of an annotator."""
 
 
 def is_sequence_of(
@@ -171,3 +260,12 @@ def is_annotations(data: Any) -> TypeGuard[Annotations]:
         if not is_anno_item(anno):
             return False
     return True
+
+
+def is_dash_select_option_item(obj: Any) -> TypeGuard[DashSelectOptionItem]:
+    """Implementation of `isinstance(data, DashSelectOptionItem)`."""
+    if not isinstance(obj, collections.abc.Mapping):
+        return False
+    if "label" in obj and "value" in obj:
+        return True
+    return False
