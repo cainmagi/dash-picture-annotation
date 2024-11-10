@@ -1,0 +1,101 @@
+---
+id: sanitize_data_item
+title: sanitize_data_item
+sidebar_label: sanitize_data_item
+slug: /apis/utilities/sanitize_data_item
+description: Perform the full sanitization on an annotation item.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.sanitize_data_item" />
+
+```python
+sanitized_item: AnnoItem | None = sanitize_data_item(data_item: AnnoItem | AnnoMark)
+```
+
+Perform the full sanitization on an annotation item.
+
+The sanitization will ensure that:
+
+1. The result is a dictionary typed by [`AnnoItem`](../typehints/AnnoItem.mdx).
+2. A `None` value comment will be removed.
+3. The position of the annotation mark will always have positive width and height. (Negative values means that the starting location is reversed.)
+4. If no ID is specified, will return a randomly generated 6-character ID.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_data_item
+dpa.utilities.sanitize_data_item
+```
+
+## Arguments
+
+### Requires
+
+|  Argument   |                                               Type                                                |             Required              | <center>Description</center>                                                                     |
+| :---------: | :-----------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------------------------------------------------------------------ |
+| `data_item` | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| `}[AnnoMark](../typehints/AnnoMark.mdx)</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation item data to be sanitized. If the `data_item` is just a mark, will add ID for it. |
+
+### Returns
+
+|     Argument     |                               Type                               | <center>Description</center>                                                                   |
+| :--------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------------------------------------- |
+| `sanitized_item` | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| None`}</code> | The sanitized copy of the data item. Will return `None` if the given data cannot be sanitized. |
+
+## Examples
+
+### <IconObjType type="term"/> Sanitize a data item
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="sanitize_data_item.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": 0, "width": 0, "height": pos, "type": "RECT"}
+mark_eq = lambda pos: {"x": pos, "y": pos, "width": 0, "height": -pos, "type": "RECT"}
+
+pprint.pprint(dpa.sanitize_data_item(mark(17.7)))
+pprint.pprint(dpa.sanitize_data_item(mark_eq(17.7)))
+pprint.pprint(dpa.sanitize_data_item({"mark": mark(-17.7), "comment": "test"}))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'id': '1f0ef8',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': 17.7, 'y': 0}}
+{'id': '2b672d',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': 17.7, 'y': 0.0}}
+{'comment': 'test',
+ 'id': 'efbef4',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': -17.7, 'y': -17.7}}
+```
+
+</TabItem>
+
+</Tabs>

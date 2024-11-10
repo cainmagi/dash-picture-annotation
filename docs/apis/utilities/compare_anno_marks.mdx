@@ -1,0 +1,100 @@
+---
+id: compare_anno_marks
+title: compare_anno_marks
+sidebar_label: compare_anno_marks
+slug: /apis/utilities/compare_anno_marks
+description: Compare whether two annotation marks are equivalent or not.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.compare_anno_marks" />
+
+```python
+flag: bool = compare_anno_marks(
+    anno_item_1: AnnoItem | AnnoMark,
+    anno_item_2: AnnoItem | AnnoMark,
+    tolearance: float = 0.1,
+)
+```
+
+Compare whether two annotation marks are equivalent or not.
+
+The comparison is only performed on the positions. The ID and the comment of the
+annotation items will not be compared.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.compare_anno_marks
+dpa.utilities.compare_anno_marks
+```
+
+## Arguments
+
+### Requires
+
+|                 Argument                 |                                               Type                                                |             Required              | <center>Description</center>                                           |
+| :--------------------------------------: | :-----------------------------------------------------------------------------------------------: | :-------------------------------: | ---------------------------------------------------------------------- |
+| <p>`anno_item_1`</p><p>`anno_item_2`</p> | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| `}[AnnoMark](../typehints/AnnoMark.mdx)</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation items to be compared.                                   |
+|               `tolearance`               |                                              `float`                                              |                                   | The tolerance used for checking whether positions are the same or not. |
+
+### Returns
+
+| Argument |  Type  | <center>Description</center>                                                                                                                                                 |
+| :------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `flag`  | `bool` | <p>A flag. Returns `True` if the two items are in the same position and share the same size.</p><p>Will return `False` if any of them is not an annotation item or mark.</p> |
+
+## Examples
+
+### <IconObjType type="term"/> Get all comments of the data
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_id.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": 0, "width": 0, "height": pos, "type": "RECT"}
+mark_eq = lambda pos: {"x": pos, "y": pos, "width": 0, "height": -pos, "type": "RECT"}
+
+pprint.pprint(dpa.compare_anno_marks(mark(17.7), mark(17.7)))
+pprint.pprint(dpa.compare_anno_marks(mark(17.7), mark(17.8)))
+pprint.pprint(dpa.compare_anno_marks(mark(17.7), mark_eq(17.7)))
+pprint.pprint(dpa.compare_anno_marks({"id": mark(17.7)}, mark(17.7)))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+False
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

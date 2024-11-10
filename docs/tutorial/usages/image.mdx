@@ -1,0 +1,219 @@
+---
+id: image
+sidebar_label: Image
+title: Customize the image
+description: Customize the image by different ways.
+slug: /usages/image
+---
+
+import {DFCIcon} from "@site/src/components/icons/DFC";
+import InlineIcon from "@site/src/components/InlineIcon";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+# Customize the image
+
+This guide shows how to configure the currently used image of the annotator.
+The [`image`](../../apis/DashPictureAnnotation.mdx#component-properties) property
+can be configured in different ways. The following example is a minimal demo of
+configuring the image. It provides a button triggering the change of the image, and
+an annotator initialized with `image=None`.
+
+```python title="demo_image.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-image", children="Set image")),
+        dpa.DashPictureAnnotation(id="annotator", data=None, image=None),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image = ...  # Do something to get the image.
+        return image
+    return dash.no_update
+
+
+app.run()
+```
+
+After loading the component, since `image=None`, the annotator will render a
+placeholder showing that no image is available. In this case, the annotator is not
+usable.
+
+## Load the image by assets
+
+The basic usage of the image configuration is to use the static assets. By configuring
+the dash application like this:
+
+```python
+dash = Dash(assets_folder="path/to/the/assets")
+```
+
+The images can be put into the assets folder on which server device the dashboard
+is running. In the callback, the image can be specified by the site path to the
+asset image.
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image = "/a-test-image.png"
+        return image
+    return dash.no_update
+```
+
+When clicking the button, the image `path/to/the/assets/a-test-image.png` will be
+loaded and displayed to users, and the annotator will be usable.
+
+Apparently, this method is not quite useful because it can only load the images in
+the static assets folder. In other words, all the images need to be prepared before
+running the dashboard, which is not a good way to process the dynamic data in real
+practice.
+
+## Load the image by encoded data string
+
+A possible way to dynamically load the image is using the encoded data string. The
+data string can serve as the URL of the `<img src=...>`. It is also usable for this
+annotator.
+
+:::tip
+
+See more information in the [Data URLs documentation<IconExternalLink/>][link-dataurl].
+
+:::
+
+```python showLineNumbers
+import base64
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-start
+        with open("a-image-file.png", "rb") as fobj:
+            image = base64.b64encode(fobj.read()).decode("ascii")
+        return "data:image/{0};base64,{1}".format("png", get_image())
+        # highlight-end
+    return dash.no_update
+```
+
+In this example, the image is loaded from a `PNG` file and encoded as a Base64 string
+subsequently. Note that:
+
+1. The Base64 encoding is necessary for most kinds of images, except for
+   `image/svg+xml`. In other words, by using this image loading method, users need
+   to use Base64 in most cases.
+2. When returning the data URL, the prefix like `data:image/...;base64,` is necessary.
+   In particular, the `image/...` is the mimetype of the image to be loaded. It needs
+   to be consistent with the image read from the file.
+
+:::tip
+
+See more information in the [MiME type documentation<IconExternalLink/>][link-mimetype].
+
+:::
+
+The most important benefit of using this method is to allow the image to be loaded
+dynamically. In other words, the image can be loaded from a
+[`PIL.Image.Image`<IconExternalLink/>][link-image] or an io object like
+[`io.BytesIO`<IconExternalLink/>][link-bytesio].
+
+:::danger
+
+It is important to know that the length of such data URLs is limited. Different
+browsers may have different limitations to this length. See
+[Data URLs documentation<IconExternalLink/>][link-dataurllim]. In some cases, even
+if the length does not exceed the limit, there may still have some unexpected
+behaviors. Therefore, we recommend users to use this method when
+**the image file size does not exceed `8 MB`**.
+
+:::
+
+## Load the image by `dash-file-cache`
+
+Since the data URL has a size limitation, it is preferred to use a more secure way
+to dynamically serve the images to the browser. The best way to do this is to write
+a `flask` service by [`flask.View`][link-flaskview]. However, writing a service is
+a little bit complicated. If users do not want to write the service by themselves,
+please try our friend project:
+[<InlineIcon icon={DFCIcon}/>**Dash File Cache**<IconExternalLink/>][link-dfc].
+
+```python title="demo_with_dfc.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+# highlight-next-line
+import dash_file_cache as dfc
+
+
+app = dash.Dash()
+# highlight-start
+service = dfc.ServiceData(cache=dfc.CacheFile("./temp"))
+service.serve(app)
+# highlight-end
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-image", children="Set image")),
+        dpa.DashPictureAnnotation(id="annotator", data=None, image=None),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image: str = service.register("path/to-a-image.png", mime_type="image/png")
+        return image
+    return dash.no_update
+
+
+app.run()
+```
+
+In the above example, we provide a service by the instance
+[`dfc.ServiceData(...)`<IconExternalLink/>][link-dfcservice]. It can put a file
+to the cache, and return the address that is used for accessing the file. Since the
+file is cached and will be delivered to the users by the file stream, the file size
+does not have a limitation in this case.
+
+[link-dataurl]: https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data
+[link-mimetype]: https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types/Common_types
+[link-image]: https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image
+[link-bytesio]: https://docs.python.org/3/library/io.html#io.BytesIO
+[link-dataurllim]: https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data#length_limitations
+[link-flaskview]: https://flask.palletsprojects.com/en/stable/views/
+[link-dfc]: https://cainmagi.github.io/dash-file-cache/
+[link-dfcservice]: https://cainmagi.github.io/dash-file-cache/docs/usages/service

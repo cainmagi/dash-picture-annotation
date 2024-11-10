@@ -1,0 +1,64 @@
+---
+id: AnnoStyle
+title: AnnoStyle
+sidebar_label: AnnoStyle
+slug: /apis/typehints/AnnoStyle
+description: The css-styles of the annotation marker (box).
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.AnnoStyle" />
+
+```python
+AnnoStyle(
+    padding: float,
+    fontSize: float,
+    fontColor: str,
+    fontBackground: str,
+    fontFamily: str,
+    lineWidth: float,
+    shapeBackground: str,
+    shapeStrokeStyle: str,
+    shadowBlur: float,
+    shapeShadowStyle: str,
+    transformerBackground: str,
+    transformerSize: float,
+)
+```
+
+`AnnoStyle` is a `TypedDict`.
+
+The css-styles of the annotation marker (box).
+
+If this value is specified as a string, the string will be parsed as the default
+color of the annotation boxes.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.AnnoStyle
+dpa.typehints.AnnoStyle
+```
+
+## Keywords
+
+|         Keyword         |  Type   | Required | <center>Description</center>                        |
+| :---------------------: | :-----: | :------: | :-------------------------------------------------- |
+|        `padding`        | `float` |          | Text padding.                                       |
+|       `fontSize`        | `float` |          | Text font size.                                     |
+|       `fontColor`       |  `str`  |          | Text font color.                                    |
+|    `fontBackground`     |  `str`  |          | Text background color.                              |
+|      `fontFamily`       |  `str`  |          | Text font name.                                     |
+|       `lineWidth`       | `float` |          | Stroke width.                                       |
+|    `shapeBackground`    |  `str`  |          | Background color in the middle of the marker.       |
+|   `shapeStrokeStyle`    |  `str`  |          | Shape stroke color.                                 |
+|      `shadowBlur`       | `float` |          | Stroke shadow blur.                                 |
+|   `shapeShadowStyle`    |  `str`  |          | Stroke shape shadow color.                          |
+| `transformerBackground` |  `str`  |          | Color of the scalable dots around the selected box. |
+|    `transformerSize`    | `float` |          | Size of the scalable dots around the selected box.  |

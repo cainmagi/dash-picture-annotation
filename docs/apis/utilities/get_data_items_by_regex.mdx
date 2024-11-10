@@ -1,0 +1,143 @@
+---
+id: get_data_items_by_regex
+title: get_data_items_by_regex
+sidebar_label: get_data_items_by_regex
+slug: /apis/utilities/get_data_items_by_regex
+description: Get one or several annotation items by exactly matching the comment.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_items_by_regex" />
+
+```python
+items: [AnnoItem] = get_data_items_by_regex(
+    data: Annotations | [AnnoItem],
+    comment_regex: str | Pattern | None = None,
+    n: int | None = None,
+)
+```
+
+Get one or several annotation items by exactly matching the comment.
+
+The regex is done by `re.match`.
+
+Note that this method will not validate the format of each returned annotation
+items. Not well-formatted items will STILL be returned.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_items_by_regex
+dpa.utilities.get_data_items_by_regex
+```
+
+## Arguments
+
+### Requires
+
+|    Argument     |                                                    Type                                                     |             Required              | <center>Description</center>                                                                                                                                                                                               |
+| :-------------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `data`      | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is queried.                                                                                                                                                                                       |
+| `comment_regex` |               <code>{`str \| `}[Pattern<IconExternalLink/>][link-pattern]{` \| None`}</code>               |                                   | <p>The regular expression used for matching the comment of the annoatations. All comments matching the regex will be returned.</p><p>If using `None`, will return the annotations without comments.</p>                    |
+|       `n`       |                                                `int \| None`                                                |                                   | <p>Limit the maximal number of the items to be found. If not provided, will try to return all annotation items with a specified `comment`.</p><p>Specifying a non-positive value will cause this number to be ignored.</p> |
+
+### Returns
+
+| Argument |                             Type                             | <center>Description</center>                                                                             |
+| :------: | :----------------------------------------------------------: | :------------------------------------------------------------------------------------------------------- |
+| `items`  | <code>{`[`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | The located annotation items. Modifying the content of these items will cause the `data` to be modified. |
+
+## Examples
+
+### <IconObjType type="term"/> Get an annotation item by quering the comment with an regular expression
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_comment_with_regex.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": pos, "width": 0, "height": 0, "type": "RECT"}
+
+data = [
+    {"id": "a", "mark": mark(0)},
+    {"id": "b", "mark": mark(1)},
+    {"id": "c", "mark": mark(2), "comment": "type-1"},
+    {"id": "d", "mark": mark(3), "comment": "type-2"},
+    {"id": "d", "mark": mark(4), "comment": "type-2"},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_items_by_regex(data))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d"))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped, r"type-\d"))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d", 1))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped, r"type-\d", 1))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d{2,}"))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+()
+```
+
+</TabItem>
+
+</Tabs>
+
+[link-pattern]: https://docs.python.org/3/library/re.html#re.Pattern

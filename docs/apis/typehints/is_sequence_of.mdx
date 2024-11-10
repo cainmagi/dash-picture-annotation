@@ -1,0 +1,189 @@
+---
+id: is_sequence_of
+title: is_sequence_of
+sidebar_label: is_sequence_of
+slug: /apis/typehints/is_sequence_of
+description: Check whether data is Sequence[T], where T is specified by validator.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_sequence_of" />
+
+```python
+flag: TypeGuard[[T]] = is_sequence_of(
+    data: Any,
+    validator: type[T] | (Any) => TypeGuard[T],
+)
+```
+
+Check whether `data` is `Sequence[T]`, where `T` is specified by `validator`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_sequence_of
+dpa.typehints.is_sequence_of
+```
+
+## Arguments
+
+### Requires
+
+|  Argument   |                Type                |             Required              | <center>Description</center>                                                                    |
+| :---------: | :--------------------------------: | :-------------------------------: | ----------------------------------------------------------------------------------------------- |
+|   `data`    |               `Any`                | <InlineIcon icon={vsiCheckIcon}/> | The value to be verified.                                                                       |
+| `validator` | `type[T] \| (Any) => TypeGuard[T]` | <InlineIcon icon={vsiCheckIcon}/> | The validator. It can be a type or a function validating whether a value is of a specific type. |
+
+### Returns
+
+| Argument |  Type  | <center>Description</center>                                                                                |
+| :------: | :----: | :---------------------------------------------------------------------------------------------------------- |
+|  `flag`  | `bool` | If this value is `True`, `data` is a sequence of the instance of `T` determined by `validator`, vice versa. |
+
+## Examples
+
+### <IconObjType type="term"/> Check whether an object is a list of `int`
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_int.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+print(dpa.is_sequence_of([], int))
+print(dpa.is_sequence_of((1,), int))
+print(dpa.is_sequence_of([1, 2, 3], int))
+print(dpa.is_sequence_of([1, 2, 3, 4.0], int))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> Check whether an object is a list of a customized type
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_hascopy.py" showLineNumbers
+from typing import Any
+from typing_extensions import TypeGuard, Protocol, Self
+import dash_picture_annotation as dpa
+
+
+class HasCopy(Protocol):
+    def copy(self: Self) -> Self: ...
+
+
+def is_has_copy(val: Any) -> TypeGuard[HasCopy]:
+    return callable(getattr(val, "copy", None))
+
+
+print(dpa.is_sequence_of([[], [], []], is_has_copy))
+print(dpa.is_sequence_of([tuple(), [], []], is_has_copy))
+print(dpa.is_sequence_of([dict(),], is_has_copy))
+print(dpa.is_sequence_of(["", "", ""], is_has_copy))
+print(dpa.is_sequence_of([[], dict()], is_has_copy))
+print(dpa.is_sequence_of([[], dict(), tuple()], is_has_copy))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+False
+True
+False
+True
+False
+```
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> Check whether an object is a list of annotation items
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_annoitem.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+example_empty = []
+example_one_item = dpa.AnnoItem(
+    id="test", mark=dpa.AnnoMark(x=0, y=0, width=0, height=0, type="RECT")
+)
+example_item_single_tuple = (example_one_item,)
+example_items = [example_one_item, example_one_item, example_one_item]
+example_items_bad = [example_one_item, dict(id="test", mark={"x": 1})]
+
+print(dpa.is_sequence_of(example_empty, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_one_item, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_item_single_tuple, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_items, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_items_bad, dpa.is_anno_item))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+False
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

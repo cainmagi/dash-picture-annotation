@@ -1,0 +1,99 @@
+---
+id: is_annotations
+title: is_annotations
+sidebar_label: is_annotations
+slug: /apis/typehints/is_annotations
+description: Implementation of isinstance(data, Annotations).
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_annotations" />
+
+```python
+flag: TypeGuard[Annotations] = is_annotations(data: Any)
+```
+
+Implementation of `isinstance(data, Annotations)`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_annotations
+dpa.typehints.is_annotations
+```
+
+## Arguments
+
+### Requires
+
+| Argument | Type  |             Required              | <center>Description</center> |
+| :------: | :---: | :-------------------------------: | ---------------------------- |
+|  `data`  | `Any` | <InlineIcon icon={vsiCheckIcon}/> | The value to be verified.    |
+
+### Returns
+
+| Argument |  Type  | <center>Description</center>                                                             |
+| :------: | :----: | :--------------------------------------------------------------------------------------- |
+|  `flag`  | `bool` | If this value is `True`, `data` an instance of [`Annotations`](./Annotations.mdx), vice versa. |
+
+## Examples
+
+### <IconObjType type="term"/> Check whether an object is an `Annotations`
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_annotations.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+anno_item: dpa.AnnoItem = {
+    "id": "test",
+    "mark": {"x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"},
+}
+
+print(dpa.is_annotations({}))
+print(dpa.is_annotations({"data": anno_item}))
+print(dpa.is_annotations({"data": [anno_item]}))
+print(dpa.is_annotations({"data": (anno_item,)}))
+print(dpa.is_annotations([anno_item]))
+print(dpa.is_annotations({"timestamp": 0, "data": [anno_item]}))
+print(dpa.is_annotations({"timestamp": "0", "data": [anno_item]}))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+False
+False
+True
+False
+False
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

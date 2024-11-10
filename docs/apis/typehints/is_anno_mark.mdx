@@ -1,0 +1,102 @@
+---
+id: is_anno_mark
+title: is_anno_mark
+sidebar_label: is_anno_mark
+slug: /apis/typehints/is_anno_mark
+description: Implementation of isinstance(data, AnnoMark).
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_anno_mark" />
+
+```python
+flag: TypeGuard[AnnoMark] = is_anno_mark(data: Any)
+```
+
+Implementation of `isinstance(data, AnnoMark)`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_anno_mark
+dpa.typehints.is_anno_mark
+```
+
+## Arguments
+
+### Requires
+
+| Argument | Type  |             Required              | <center>Description</center> |
+| :------: | :---: | :-------------------------------: | ---------------------------- |
+|  `data`  | `Any` | <InlineIcon icon={vsiCheckIcon}/> | The value to be verified.    |
+
+### Returns
+
+| Argument |  Type  | <center>Description</center>                                                             |
+| :------: | :----: | :--------------------------------------------------------------------------------------- |
+|  `flag`  | `bool` | If this value is `True`, `data` an instance of [`AnnoMark`](./AnnoMark.mdx), vice versa. |
+
+## Examples
+
+### <IconObjType type="term"/> Check whether an object is an `AnnoMark`
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_annomark.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+print(dpa.is_anno_mark({}))
+print(dpa.is_anno_mark({"x": 1, "y": 2}))
+print(
+    dpa.is_anno_mark(
+        {"x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"}
+    )
+)
+print(
+    dpa.is_anno_mark(
+        {"id": "test", "x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"}
+    )
+)
+print(
+    dpa.is_anno_mark(
+        {"x": 1, "y": 2, "width": 1, "height": 1, "type": "rect"}
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+False
+False
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

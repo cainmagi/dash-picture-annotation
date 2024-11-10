@@ -1,0 +1,290 @@
+---
+id: colors
+sidebar_label: Colors
+title: Customize annotation colors
+description: Customize the colors of annotation boxes by different ways.
+slug: /usages/colors
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+# Customize annotation colors
+
+We provide different ways to customize the annotation colors. By default, all
+annotation boxes are white. To change the default color of annotations, use
+[`style_annotation`](../../apis/DashPictureAnnotation.mdx#component-properties).
+
+```python title="demo_colors.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+get_mark = lambda x, y: {"x": x, "y": y, "width": 50, "height": 50, "type": "RECT"}
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        dpa.DashPictureAnnotation(
+            id="annotator",
+            data=dpa.sanitize_data(
+                [
+                    get_mark(50, 50),
+                    get_mark(150, 50),
+                    {"mark": get_mark(250, 50), "comment": "cls-1"},
+                    {"mark": get_mark(350, 50), "comment": "cls-1"},
+                    {"mark": get_mark(50, 150), "comment": "cls-1"},
+                    {"mark": get_mark(150, 150), "comment": "cls-2"},
+                    {"mark": get_mark(250, 150), "comment": "cls-3"},
+                    {"mark": get_mark(350, 150), "comment": "cls-4"},
+                ],
+                deduplicate="add",
+            ),
+            image="/site-address/to/an/image",
+        ),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return "black"
+    return dash.no_update
+
+
+app.run()
+```
+
+This demo script will be used in the following parts of this guide. By default, when
+launching the app, users should be able to see the white annotation boxes
+
+<div className="insize-50 indark-bg">
+
+|                        The default annotation color                        |
+| :------------------------------------------------------------------------: |
+| ![Example of the default annotation color](/img/examples/colors-init.webp) |
+
+</div>
+
+## Change the default annotation color
+
+In the above script, the callback is defined as follows:
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return "black"
+    return dash.no_update
+```
+
+When clicking the button, the default annotation colors will be switched to `black`.
+That's because the `style_annotation` property is updated by a `str`. When this value
+is `str`, it will be interpreted as a CSS color.
+
+<div className="insize-50 indark-bg">
+
+|                          Change the default annotation color                           |
+| :------------------------------------------------------------------------------------: |
+| ![Example of changing the default annotation color](/img/examples/colors-default.webp) |
+
+</div>
+
+:::tip
+
+A CSS color can be formatted by different ways. For example, the color black can be
+written as `black`, `#000`, `#000000`, `rgb(0, 0, 0)`, `hsl(0, 0%, 0%)`.
+
+See more information in the [CSS color documentation<IconExternalLink/>][link-csscolor].
+
+:::
+
+## Change the default annotation color (fine-grained)
+
+The `style_annotation` property can be configured by a more fine-grained dictionary.
+If it is a dictionary typed by [`dpa.AnnoStyle`](../../apis/typehints/AnnoStyle.mdx),
+the different parts of the annoatation box can be configured by different values,
+respectively. For example,
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return dpa.AnnoStyle(shapeStrokeStyle="black", fontBackground="yellow")
+    return dash.no_update
+```
+
+In this example, the color of the box, and the background color of the comments are
+configured as `"black"` and `"yellow"`, respectively. If a property of
+[`dpa.AnnoStyle`](../../apis/typehints/AnnoStyle.mdx) is not specified, that property
+will be defined by the default value.
+
+<div className="insize-50 indark-bg">
+
+|                             Change the default annotation color (fine-grained)                             |
+| :--------------------------------------------------------------------------------------------------------: |
+| ![Example of changing the default annotation color (fine-grained)](/img/examples/colors-default-fine.webp) |
+
+</div>
+
+## Change the color of a specific class
+
+The colors of the annotations can be specified according to their comment value.
+This feature allows users to distinguish the color of each annotation type manually.
+This configuration is specified by the property
+[`colors`](../../apis/DashPictureAnnotation.mdx#component-properties). For example,
+we define another button setting the specified colors. Once the button
+is clicked, the callback `set_colors` will trigger.
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        # highlight-next-line
+        html.Div(html.Button(id="btn-colors", children="Set specified colors")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+    )
+)
+
+
+@app.callback(
+    # highlight-next-line
+    Output("annotator", "colors"),
+    Input("btn-colors", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_colors(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return {"cls-1": "#E00", "cls-2": "#66ccff"}
+    return dash.no_update
+```
+
+The callback returns a dictionary where the key and value represent the comment and
+the color, respectively. The same comment will always be configured as the same color.
+In the following example, because the `cls-1` is specified by `#E00`, all three
+annotation boxes with this comment are marked by the same color.
+
+<div className="insize-50 indark-bg">
+
+|                           Specify the comment color                           |
+| :---------------------------------------------------------------------------: |
+| ![Example of specifying the comment color](/img/examples/colors-specify.webp) |
+
+</div>
+
+:::tip
+
+The values of the `colors` property can be any kind of CSS color format. This
+usage is the same as the aforementioned `style_annotation` property.
+
+:::
+
+:::tip
+
+Only the background color can be specified when using the `colors` property. The font
+color of the corresponding annotations is calculated automatically by the lightness of
+the specified background color.
+
+:::
+
+## Use dynamic class color
+
+If users do not want to specify the colors of each comment manually, the color can be
+automatically calculated by specifying a flag named
+[`is_color_dynamic`](../../apis/DashPictureAnnotation.mdx#component-properties).
+In the folowing example, we use another button `btn-dynamic` to set this property.
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        # highlight-next-line
+        html.Div(html.Button(id="btn-dynamic", children="Set dynamic colors")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+    )
+)
+
+
+@app.callback(
+    # highlight-next-line
+    Output("annotator", "is_color_dynamic"),
+    Input("btn-dynamic", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_dynamic(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return True
+    return dash.no_update
+```
+
+By clicking the button, the colors of all annotation boxes with comments will be
+dynamically rendered. The color is rendered by calculating the hash code of the
+specified comment and using the hash to specify the hue of the color. Therefore,
+the color of the same comment is always the same. The color of the annotations
+without a comment still remains to be the default color.
+
+<div className="insize-50 indark-bg">
+
+|                         Dynamic rendered colors                          |
+| :----------------------------------------------------------------------: |
+| ![Example of dynamic rendered colors](/img/examples/colors-dynamic.webp) |
+
+</div>
+
+## Priority of different color properties
+
+In this guide, we talk about three ways to configure the annotation colors. The
+following figure shows an example of letting all three properties be set as the above
+configurations. In other words, the configurations are equivalent to:
+
+```python showLineNumbers
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style_annotation="black",
+    colors={"cls-1": "#E00", "cls-2": "#66ccff"},
+    is_color_dynamic=True,
+)
+```
+
+<div className="insize-50 indark-bg">
+
+|                    Priority of different color properties                     |
+| :---------------------------------------------------------------------------: |
+| ![Example of the priority of color properties](/img/examples/colors-all.webp) |
+
+</div>
+
+The results show that the priority of the three properties are as follows:
+
+```python
+"colors" > "is_color_dynamic" > "style_annotation"
+```
+
+## A full example
+
+In the `Examples`, we provide a full demo of changing the colors of the annotations.
+To view the details, check the [`Examples/Colors`](../examples/colors.mdx) section.
+
+[link-csscolor]: https://developer.mozilla.org/en-US/docs/Web/CSS/color

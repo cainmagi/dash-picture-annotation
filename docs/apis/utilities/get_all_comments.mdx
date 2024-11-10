@@ -1,0 +1,98 @@
+---
+id: get_all_comments
+title: get_all_comments
+sidebar_label: get_all_comments
+slug: /apis/utilities/get_all_comments
+description: Get the set of all comments in the annotation data. The returned comments are unordered.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_all_comments" />
+
+```python
+comments: {str} = get_all_comments(data: Annotations | [AnnoItem])
+```
+
+Get the set of all comments in the annotation data. The returned comments are
+unordered.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_all_comments
+dpa.utilities.get_all_comments
+```
+
+## Arguments
+
+### Requires
+
+| Argument |                                                      Type                                                       |             Required              | <center>Description</center>         |
+| :------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------ |
+|  `data`  | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is checked. |
+
+### Returns
+
+|  Argument  |  Type   | <center>Description</center>                                                                                                        |
+| :--------: | :-----: | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `comments` | `{str}` | The unordered set of comments appearing in the annotation data. If the data does not contain any comment, will return an empty set. |
+
+## Examples
+
+### <IconObjType type="term"/> Get all comments of the data
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_id.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": pos, "width": 0, "height": 0, "type": "RECT"}
+
+data = [
+    {"id": "a", "mark": mark(0)},
+    {"id": "b", "mark": mark(1)},
+    {"id": "c", "mark": mark(2), "comment": "type-1"},
+    {"id": "d", "mark": mark(3), "comment": "type-2"},
+    {"id": "d", "mark": mark(4), "comment": "type-2"},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_all_comments(data))
+pprint.pprint(dpa.get_all_comments(data_wrapped))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+frozenset({'type-1', 'type-2'})
+frozenset({'type-1', 'type-2'})
+```
+
+</TabItem>
+
+</Tabs>
