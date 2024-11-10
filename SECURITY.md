@@ -9,7 +9,7 @@ version of React-Picture-Annotation.
 
 | Version | Supported | Available on [PyPI :link:][link-pypi] | React-Picture-Annotation       |
 | ------- | --------- | ------------------------------------- | ------------------------------ |
-| `0.1.0` | :x:       | :white_check_mark:                    | [`1.2.0` :link:][link-rpa-120] |
+| `0.1.x` | :x:       | :white_check_mark:                    | [`1.2.0` :link:][link-rpa-120] |
 
 ## Reporting a Vulnerability
 
