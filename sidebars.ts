@@ -73,6 +73,8 @@ const sidebars: SidebarsConfig = {
         "apis/typehints/AnnoStyle",
         "apis/typehints/DashSelectOptionItem",
         "apis/typehints/Size",
+        "apis/typehints/NSAnnoItem",
+        "apis/typehints/NSAnnotations",
         "apis/typehints/is_sequence_of",
         "apis/typehints/is_anno_mark",
         "apis/typehints/is_anno_item",
