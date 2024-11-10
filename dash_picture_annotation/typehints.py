@@ -19,10 +19,10 @@ import collections.abc
 from typing import Union, Any, TypeVar
 
 try:
-    from typing import Sequence, Callable
+    from typing import Sequence, Callable, Mapping
     from typing import List, Type
 except ImportError:
-    from collections.abc import Sequence, Callable
+    from collections.abc import Sequence, Callable, Mapping
     from builtins import list as List, type as Type
 
 from typing_extensions import Literal, TypedDict, TypeGuard
@@ -37,6 +37,8 @@ __all__ = (
     "AnnoStyle",
     "DashSelectOptionItem",
     "Size",
+    "NSAnnoItem",
+    "NSAnnotations",
     "is_sequence_of",
     "is_anno_mark",
     "is_anno_item",
@@ -202,6 +204,25 @@ class Size(TypedDict, total=False):
 
     height: float
     """Requirement of the minimal height of an annotator."""
+
+
+NSAnnoItem = Union[AnnoItem, AnnoMark, Mapping[str, Any]]
+"""The type of a not sanitized annotation item."""
+
+
+class _NSAnnotations(TypedDict):
+    """The type of a not sanitized annotation collection. (private, internal)
+
+    The internal and incomplete definition of `NSAnnotations`.
+    """
+
+    data: Sequence[NSAnnoItem]
+    """A sequence of not sanitized data items. These items will be sanitized can
+    put into a sanitized data item list."""
+
+
+class NSAnnotations(_NSAnnotations, total=False):
+    """The type of a not sanitized annotation collection."""
 
 
 def is_sequence_of(

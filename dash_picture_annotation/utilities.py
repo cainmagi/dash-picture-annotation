@@ -409,9 +409,7 @@ def _generate_id(n: int = 3) -> str:
     return hash_code.hexdigest(n)
 
 
-def sanitize_data_item(
-    data_item: Union[th.AnnoItem, th.AnnoMark]
-) -> Optional[th.AnnoItem]:
+def sanitize_data_item(data_item: th.NSAnnoItem) -> Optional[th.AnnoItem]:
     """Perform the full sanitization on an annotation item.
 
     The sanitization will ensure that:
@@ -423,7 +421,7 @@ def sanitize_data_item(
 
     Arguments
     ---------
-    data_item: `AnnoItem | AnnoMark`
+    data_item: `AnnoItem | AnnoMark | {str: Any}`
         The annotation item data to be sanitized. If the `data_item` is just a mark,
         will add ID for it.
 
@@ -487,7 +485,7 @@ def _deduplicate_id_by_add(seen_ids: AbstractSet[str], anno_id: str) -> str:
 
 
 def sanitize_data(
-    data: Union[th.Annotations, Sequence[th.AnnoItem]],
+    data: Union[th.NSAnnotations, Sequence[th.NSAnnoItem]],
     deduplicate: Literal["add", "drop"] = "drop",
 ) -> th.Annotations:
     """Perform the full sanitization on the annotation data.
@@ -506,7 +504,7 @@ def sanitize_data(
 
     Arguments
     ---------
-    data: `Annotations | [AnnoItem]`
+    data: `Annotations | [AnnoItem | {str: Any}]`
         The annotation data that will be sanitized. Note that this method will not
         change the input data.
 
