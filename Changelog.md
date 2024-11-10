@@ -15,6 +15,7 @@
 
 1. Fix：Temporarily remove the `zh-cn` local because it is not ready yet.
 2. Fix: `Plyr` component cannot be imported by the server-side rendering. Move the component to the client-side only rendering. This change will let the component only appears when it is accessed by a browser.
+3. Fix: Fix the CSS style incompatibility issue of the `video.js`.
 
 #### :floppy_disk: Change
 

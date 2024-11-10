@@ -30,7 +30,6 @@ export const VideoJS = (props: VideoJSProps) => {
       videoRef.current.appendChild(videoElement);
 
       const player = (playerRef.current = videojs(videoElement, options, () => {
-        videojs.log("player is ready");
         onReady && onReady(player);
       }));
 
@@ -57,7 +56,7 @@ export const VideoJS = (props: VideoJSProps) => {
   }, [playerRef]);
 
   return (
-    <div data-vjs-player>
+    <div data-vjs-player className="video-js-container">
       <div ref={videoRef} />
     </div>
   );

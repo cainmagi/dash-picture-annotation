@@ -1,0 +1,27 @@
+.video-js-container {
+  .video-js:hover .vjs-big-play-button,
+  .video-js .vjs-big-play-button:focus {
+    border-color: #fff;
+    background-color: #73859f;
+    background-color: rgba(115, 133, 159, 0.5);
+    transition: all 0s;
+  }
+
+  .video-js {
+    &.vjs-controls-disabled .vjs-big-play-button,
+    &.vjs-has-started .vjs-big-play-button,
+    &.vjs-using-native-controls .vjs-big-play-button,
+    &.vjs-error .vjs-big-play-button {
+      display: none;
+    }
+
+    &.vjs-has-started.vjs-paused.vjs-show-big-play-button-on-pause:not(
+        .vjs-seeking,
+        .vjs-scrubbing,
+        .vjs-error
+      )
+      .vjs-big-play-button {
+      display: block;
+    }
+  }
+}
