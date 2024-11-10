@@ -1,7 +1,7 @@
 /* Themed Component
  * Author: cainmagi@gmail.com
  */
-import React, {CSSProperties, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 // import useThemeContext from '@theme/hooks/useThemeContext'; //docs: https://v2.docusaurus.io/docs/2.0.0-alpha.69/theme-classic#usethemecontext
 /* Refactor:

@@ -3,7 +3,10 @@
  * Yuchen Jin, mailto:cainmagi@gmail.com
  */
 
-import Plyr from "plyr-react";
+import React from "react";
+
+import BrowserOnly from "@docusaurus/BrowserOnly";
+
 import "./VideoPlayer.css";
 
 import {translate} from "@docusaurus/Translate";
@@ -268,7 +271,7 @@ const VideoPlayer = ({
   type = "video/mp4",
   options,
 }: VideoPlayerProps): JSX.Element => {
-  const source: Plyr.SourceInfo = {
+  const source = {
     type: "video",
     title: "Example title",
     sources: [
@@ -279,8 +282,19 @@ const VideoPlayer = ({
       },
     ],
   };
+
   return (
-    <Plyr source={source} options={{i18n: getLocalization(), ...options}} />
+    <BrowserOnly>
+      {() => {
+        const Plyr = require("plyr-react").Plyr;
+        return (
+          <Plyr
+            source={source}
+            options={{i18n: getLocalization(), ...options}}
+          />
+        );
+      }}
+    </BrowserOnly>
   );
 };
 
