@@ -32,7 +32,7 @@ from dash import Dash, dcc, callback, html, Input, Output, State
 import dash_picture_annotation as dpa
 
 app = Dash(
-    __name__, assets_folder=os.path.join(os.path.dirname(__file__), "tests/assets")
+    __name__, assets_folder=os.path.join(os.path.dirname(__file__), "tests", "assets")
 )
 
 

@@ -10,6 +10,10 @@
 
 1. Fix: Lossen the input argument type of `sanitize_data(...)` and `sanitize_data_item(...)`. Previously, passing not sanitized data to these functions will cause type checking issues.
 
+#### :floppy_disk: Change
+
+1. Change the configuration of the paths in the `usage.py`.
+
 ### 0.1.0 @ 11/06/2024
 
 #### :mega: New
