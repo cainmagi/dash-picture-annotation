@@ -9,6 +9,7 @@
 #### :wrench: Fix
 
 1. Fix: Lossen the input argument type of `sanitize_data(...)` and `sanitize_data_item(...)`. Previously, passing not sanitized data to these functions will cause type checking issues.
+2. Fix: Fix a severe bug of importing the components in a wrong list. Now the scope is limited to the auto-generated codes.
 
 #### :floppy_disk: Change
 

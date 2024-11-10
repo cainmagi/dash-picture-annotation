@@ -28,6 +28,7 @@ import dash as _dash
 
 # noinspection PyUnresolvedReferences
 from ._imports_ import DashPictureAnnotation
+from ._imports_ import __all__ as __import_all__
 
 from . import typehints
 from . import utilities
@@ -160,6 +161,6 @@ _js_dist.extend(
 _css_dist = []
 
 
-for _component in __all__:
+for _component in __import_all__:
     setattr(locals()[_component], "_js_dist", _js_dist)
     setattr(locals()[_component], "_css_dist", _css_dist)
