@@ -3,7 +3,7 @@
  * Yuchen Jin, mailto:cainmagi@gmail.com
  */
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
@@ -283,15 +283,26 @@ const VideoPlayer = ({
     ],
   };
 
+  const [plyrLib, setPlyrLib] = useState(undefined);
+
+  useEffect(() => {
+    setPlyrLib("plyr-react");
+  }, []);
+
   return (
     <BrowserOnly>
       {() => {
-        const Plyr = require("plyr-react").Plyr;
+        if (!plyrLib) {
+          return <div />;
+        }
+        const Plyr = require(plyrLib)?.Plyr;
         return (
-          <Plyr
-            source={source}
-            options={{i18n: getLocalization(), ...options}}
-          />
+          Plyr && (
+            <Plyr
+              source={source}
+              options={{i18n: getLocalization(), ...options}}
+            />
+          )
         );
       }}
     </BrowserOnly>
