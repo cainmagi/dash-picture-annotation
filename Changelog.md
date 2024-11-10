@@ -6,6 +6,10 @@
 
 ### 0.1.0 @ 11/10/2024
 
+#### :mega: New
+
+1. Add the security policy file.
+
 #### :wrench: Fix
 
 1. Fix: Lossen the input argument type of `sanitize_data(...)` and `sanitize_data_item(...)`. Previously, passing not sanitized data to these functions will cause type checking issues.
