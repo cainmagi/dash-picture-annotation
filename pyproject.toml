@@ -35,6 +35,7 @@ requires-python = ">=3.8"
 
 [project.urls]
 Homepage = "https://github.com/cainmagi/dash-picture-annotation"
+Documentation = "https://cainmagi.github.io/dash-picture-annotation/"
 Repository = "https://github.com/cainmagi/dash-picture-annotation.git"
 Issues = "https://github.com/cainmagi/dash-picture-annotation/issues"
 Changelog = "https://github.com/cainmagi/dash-picture-annotation/blob/main/Changelog.md"

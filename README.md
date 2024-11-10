@@ -105,7 +105,9 @@ A full demo for an integrated application can be found [here :link:][link-demo-u
 
 ## 3. Documentation
 
-To be done...
+Check the documentation to find more details about the examples and APIs.
+
+https://cainmagi.github.io/dash-picture-annotation/
 
 ## 4. Contributing
 

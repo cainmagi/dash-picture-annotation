@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.1.1 @ 11/10/2024
+
+#### :floppy_disk: Change
+
+1. Add the missing document information to the package metadata.
+
 ### 0.1.0 @ 11/10/2024
 
 #### :mega: New
