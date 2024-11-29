@@ -43,7 +43,7 @@
     "@types/prop-types": "^15",
     "@types/react": "^18.0.0",
     "@yarnpkg/types": "^4.0.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "browserslist": {
     "production": [
