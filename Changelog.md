@@ -6,6 +6,10 @@
 
 ### 0.1.0 @ 11/29/2024
 
+#### :wrench: Fix
+
+1. Fix: Switch from the hook `useDocsPreferredVersion` to `useDocsVersion`. This change fix the issue caused on the change of the browser navigation.
+
 #### :floppy_disk: Change
 
 1. Bump the `yarn` version from `4.5.1` to `4.5.3`.
