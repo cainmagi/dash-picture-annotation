@@ -9,6 +9,7 @@
 #### :floppy_disk: Change
 
 1. Bump the `yarn` version from `4.5.1` to `4.5.3`.
+2. Bump the `docusaurus` version from `3.6.1` to `3.6.3`.
 
 ### 0.1.0 @ 11/05/2024
 
