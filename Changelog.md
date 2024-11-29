@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.1.0 @ 11/29/2024
+
+#### :floppy_disk: Change
+
+1. Bump the `yarn` version from `4.5.1` to `4.5.3`.
+
 ### 0.1.0 @ 11/05/2024
 
 #### :mega: New
