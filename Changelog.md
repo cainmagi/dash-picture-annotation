@@ -14,6 +14,10 @@
 
 1. Fix: Correct typos and ambiguity in the whole document.
 
+#### :floppy_disk: Change
+
+1. Make the example section in the sidebar collapsed by default.
+
 ### 0.1.0 @ 11/29/2024
 
 #### :wrench: Fix
