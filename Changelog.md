@@ -12,6 +12,10 @@
 2. Fix: Add `examples/*` to the include list of `MANIFEST.in`.
 3. Fix: The `examples/*` should be included in the Dockerfile. The configurations related to it has been corrected.
 
+#### :floppy_disk: Change
+
+1. Bump the `yarn` version from `4.5.1` to `4.5.3`.
+
 ### 0.1.1 @ 11/10/2024
 
 #### :floppy_disk: Change
