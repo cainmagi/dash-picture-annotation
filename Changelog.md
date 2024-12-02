@@ -10,6 +10,10 @@
 
 1. Fix: Correct a typo in the code highlight in the page `/docs/examples/options`.
 
+#### :floppy_disk: Change
+
+1. Bump the document version to `0.1.2`.
+
 ### 0.1.1 @ 12/01/2024
 
 #### :mega: New
