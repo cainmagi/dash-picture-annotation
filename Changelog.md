@@ -11,7 +11,8 @@
 1. Fix: Correct a typo in the code highlight in the page `/docs/examples/options`.
 2. Fix: Correct a style issue in the page `/docs/usages/image` of the zh-cn document.
 3. Fix: Correct a bad-located link in `/zh-cn/docs/usages/image`.
-4. Fix: Correct the spacing in `zh-cn/docs/apis/utilities/sanitize_data` and `.../compare_anno_marks`.
+4. Fix: Correct the spacing in `/zh-cn/docs/apis/utilities/sanitize_data` and `.../compare_anno_marks`.
+5. Fix: Correct the link of the translation in `/zh-cn/docs/apis/utilities/get_data_items_by_regex`.
 
 #### :floppy_disk: Change
 
