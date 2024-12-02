@@ -1,0 +1,190 @@
+---
+id: is_sequence_of
+title: is_sequence_of
+sidebar_label: is_sequence_of
+slug: /apis/typehints/is_sequence_of
+description: 检查数据data是否是Sequence[T]，其中T由验证器确认。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_sequence_of" />
+
+```python
+flag: TypeGuard[[T]] = is_sequence_of(
+    data: Any,
+    validator: type[T] | (Any) => TypeGuard[T],
+)
+```
+
+检查数据`data`是否是`Sequence[T]`，其中`T`由验证器确认。
+
+## 别名 {#aliases}
+
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_sequence_of
+dpa.typehints.is_sequence_of
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|    参数     |                类型                |               必选                | <center>说明</center>                                                  |
+| :---------: | :--------------------------------: | :-------------------------------: | ---------------------------------------------------------------------- |
+|   `data`    |               `Any`                | <InlineIcon icon={vsiCheckIcon}/> | 要验证的值。                                                           |
+| `validator` | `type[T] \| (Any) => TypeGuard[T]` | <InlineIcon icon={vsiCheckIcon}/> | 验证器。其可以是一个数据类型，或者一个用来检查某值是否是某类型的函数。 |
+
+### 输出 {#returns}
+
+|  参数  |  类型  | <center>说明</center>                                                                |
+| :----: | :----: | :----------------------------------------------------------------------------------- |
+| `flag` | `bool` | 若该值为`True`，表示`data`是由`validator`所确认的类型`T`的实例构成的序列，反之亦然。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 检查某对象是否是`int`的序列 {#-check-whether-an-object-is-a-list-of-int}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_int.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+print(dpa.is_sequence_of([], int))
+print(dpa.is_sequence_of((1,), int))
+print(dpa.is_sequence_of([1, 2, 3], int))
+print(dpa.is_sequence_of([1, 2, 3, 4.0], int))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> 检查某对象是否是某定制类型的序列 {#-check-whether-an-object-is-a-list-of-a-customized-type}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_hascopy.py" showLineNumbers
+from typing import Any
+from typing_extensions import TypeGuard, Protocol, Self
+import dash_picture_annotation as dpa
+
+
+class HasCopy(Protocol):
+    def copy(self: Self) -> Self: ...
+
+
+def is_has_copy(val: Any) -> TypeGuard[HasCopy]:
+    return callable(getattr(val, "copy", None))
+
+
+print(dpa.is_sequence_of([[], [], []], is_has_copy))
+print(dpa.is_sequence_of([tuple(), [], []], is_has_copy))
+print(dpa.is_sequence_of([dict(),], is_has_copy))
+print(dpa.is_sequence_of(["", "", ""], is_has_copy))
+print(dpa.is_sequence_of([[], dict()], is_has_copy))
+print(dpa.is_sequence_of([[], dict(), tuple()], is_has_copy))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+False
+True
+False
+True
+False
+```
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> 检查某对象是否是标记数据项的序列 {#-check-whether-an-object-is-a-list-of-annotation-items}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_sequence_of_annoitem.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+example_empty = []
+example_one_item = dpa.AnnoItem(
+    id="test", mark=dpa.AnnoMark(x=0, y=0, width=0, height=0, type="RECT")
+)
+example_item_single_tuple = (example_one_item,)
+example_items = [example_one_item, example_one_item, example_one_item]
+example_items_bad = [example_one_item, dict(id="test", mark={"x": 1})]
+
+print(dpa.is_sequence_of(example_empty, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_one_item, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_item_single_tuple, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_items, dpa.is_anno_item))
+print(dpa.is_sequence_of(example_items_bad, dpa.is_anno_item))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+True
+False
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

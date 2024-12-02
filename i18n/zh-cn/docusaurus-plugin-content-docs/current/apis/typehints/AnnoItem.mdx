@@ -1,0 +1,48 @@
+---
+id: AnnoItem
+title: AnnoItem
+sidebar_label: AnnoItem
+slug: /apis/typehints/AnnoItem
+description: 标记数据项。
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.AnnoItem" />
+
+```python
+AnnoItem(
+    id: str,
+    mark: AnnoMark,
+    comment: str,
+)
+```
+
+`AnnoItem`是`TypedDict`。
+
+标记数据项。
+
+该字典代表了一个标记数据项，其中包含了边界框信息。
+
+## 别名 {#aliases}
+
+该类型可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.AnnoItem
+dpa.typehints.AnnoItem
+```
+
+## 关键字 {#keywords}
+
+|  关键字   |             类型             |               必选                | <center>说明</center>                                        |
+| :-------: | :--------------------------: | :-------------------------------: | :----------------------------------------------------------- |
+|   `id`    |            `str`             | <InlineIcon icon={vsiCheckIcon}/> | 标记数据项的ID，该ID只用来定位当前用户选中的标记。        |
+|  `mark`   | [`AnnoMark`](./AnnoMark.mdx) | <InlineIcon icon={vsiCheckIcon}/> | 标记数据项的边界框、和形状信息。                             |
+| `comment` |            `str`             |                                   | 附加在该标记数据项上的文字标注。通常，该值定义为标记的类型。 |

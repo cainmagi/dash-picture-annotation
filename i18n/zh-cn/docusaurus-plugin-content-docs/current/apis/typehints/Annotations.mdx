@@ -1,0 +1,46 @@
+---
+id: Annotations
+title: Annotations
+sidebar_label: Annotations
+slug: /apis/typehints/Annotations
+description: 标记数据的总集。
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Annotations" />
+
+```python
+Annotations(
+    timestamp: int,
+    data: [AnnoItem],
+)
+```
+
+`Annotations`是`TypedDict`。
+
+标记数据的总集。
+
+该字典包含了所有的标记数据。
+
+## 别名 {#aliases}
+
+该类型可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Annotations
+dpa.typehints.Annotations
+```
+
+## 关键字 {#keywords}
+
+|   关键字    |                       类型                        |               必选                | <center>说明</center>                                                                                                                                                                           |
+| :---------: | :-----------------------------------------------: | :-------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timestamp` |                       `str`                       |                                   | 用来追踪“用户交互修改数据”这一事件的时间戳。须知该属性是必要的，因为它确保了用户触发的修改不会被忽略。从服务端设置数据时，可以将该值置为`0`，因为接下来的用户交互事件会使用一个更大的值取代它。 |
+|   `data`    | <code>{`[`}[AnnoItem](./AnnoItem.mdx){`]`}</code> | <InlineIcon icon={vsiCheckIcon}/> | 一组标记数据项。这些值从JSON数据解码而来，支持原处修改。使用这些值来配置标记。                                                                                                                |

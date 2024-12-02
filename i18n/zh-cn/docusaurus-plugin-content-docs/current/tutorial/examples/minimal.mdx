@@ -1,0 +1,76 @@
+---
+id: minimal
+sidebar_label: 最小范例
+title: 范例：最小范例
+description: DashPictureAnnotationde的最小范例。
+slug: /examples/minimal
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# 最小范例
+
+<div className="float-right indark-inv">
+
+|                   最小范例                   |
+| :------------------------------------------: |
+| ![最小范例](/img/examples/demo-minimal.webp) |
+
+</div>
+
+查看以下链接，以阅览最小范例。
+
+<p>
+  <DarkButton to={demoURL("minimal.py")} icon={mdiLanguagePython}>
+    {"minimal.py"}
+  </DarkButton>
+</p>
+
+该范例提供了以下功能：
+
+1. 一个基础的[`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx)，允许：
+   1. 透过拖拽的方式，创建、修改、或移除标记框。
+   2. 使用文本输入框修改标记的文字标注。
+2. 每当标记数据改变时，数据的变化会反馈给标记器下方的文字。
+3. 标记器在初始化的时候，已经带有一个标记框。默认情况下（当页面刷新时），标记数据会重载入成这一初始化的状态。
+
+## 定义布局 {#define-the-layout}
+
+布局的核心部分如下：
+
+```python
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=default_data,
+    image="/assets/test_image.svg",
+    options=None,
+    clearable_dropdown=True,
+)
+```
+
+其中图片来自于静态资源目录。默认的标记数据已经硬编码到了脚本中。由于`options=None`，选单（下拉菜单）并未启用。
+
+## 定义callback {#define-the-callbacks}
+
+对callback的定义非常简单。它仅仅需要做的时捕获标记数据的变化，并将数据以序列化JSON字符串的形式、传递给`<div id="output">`元素。
+
+```python showLineNumbers
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data) -> Optional[str]:
+    if data is None:
+        return None
+    # highlight-next-line
+    return json.dumps(data)
+```
+
+此callback设计成了、会在应用初始化的时候触发一次（参见选项[`prevent_initial_call`<IconExternalLink/>][link-prevent-initial-call])）。
+
+[link-prevent-initial-call]: https://dash.plotly.com/advanced-callbacks#prevent-callback-execution-upon-initial-component-render

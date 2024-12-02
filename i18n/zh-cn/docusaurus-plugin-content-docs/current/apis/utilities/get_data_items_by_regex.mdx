@@ -1,0 +1,142 @@
+---
+id: get_data_items_by_regex
+title: get_data_items_by_regex
+sidebar_label: get_data_items_by_regex
+slug: /apis/utilities/get_data_items_by_regex
+description: 按照正则表达式匹配文字标注，以获取一个或多个标记数据项。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_items_by_regex" />
+
+```python
+items: [AnnoItem] = get_data_items_by_regex(
+    data: Annotations | [AnnoItem],
+    comment_regex: str | Pattern | None = None,
+    n: int | None = None,
+)
+```
+
+按照正则表达式匹配文字标注，以获取一个或多个标记数据项。
+
+正则表达式匹配透过`re.match`完成。
+
+注意，该方法不会验证所返回的标记数据项是否格式正确。即使数据项格式不妥当，**依然**会返回之。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_items_by_regex
+dpa.utilities.get_data_items_by_regex
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|      参数       |                                                    类型                                                     |               必选                | <center>说明</center>                                                                                                                                      |
+| :-------------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `data`      | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | 要检索的标记数据。                                                                                                                                         |
+| `comment_regex` |               <code>{`str \| `}[Pattern<IconExternalLink/>][link-pattern]{` \| None`}</code>                |                                   | <p>用来匹配标记数据中文字标注的正则表达式。所有包含能匹配上文字标注的数据项都可以返回。</p><p>若此处使用`None`，则会返回所有不含文字标注的标记数据项。</p> |
+|       `n`       |                                                `int \| None`                                                |                                   | <p>限制要检索到的数据的最大数目。若不提供此值，则会试图返回所有匹配上文字标注`comment`的标记数据项。</p><p>若提供了一个非正值，则该值会被忽略掉。</p>               |
+
+### 输出 {#returns}
+
+|  参数   |                             类型                             | <center>说明</center>                                                        |
+| :-----: | :----------------------------------------------------------: | :--------------------------------------------------------------------------- |
+| `items` | <code>{`[`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | 所定位到的标记数据项。任何针对这些数据项内容的修改，都是对`data`的原处修改。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 按照正则表达式检索一个标记数据项 {#-get-an-annotation-item-by-quering-the-comment-with-an-regular-expression}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_comment_with_regex.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": pos, "width": 0, "height": 0, "type": "RECT"}
+
+data = [
+    {"id": "a", "mark": mark(0)},
+    {"id": "b", "mark": mark(1)},
+    {"id": "c", "mark": mark(2), "comment": "type-1"},
+    {"id": "d", "mark": mark(3), "comment": "type-2"},
+    {"id": "d", "mark": mark(4), "comment": "type-2"},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_items_by_regex(data))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d"))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped, r"type-\d"))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d", 1))
+pprint.pprint(dpa.get_data_items_by_regex(data_wrapped, r"type-\d", 1))
+pprint.pprint(dpa.get_data_items_by_regex(data, r"type-\d{2,}"))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+()
+```
+
+</TabItem>
+
+</Tabs>
+
+[link-pattern]: https://docs.python.org/3/library/re.html#re.Pattern

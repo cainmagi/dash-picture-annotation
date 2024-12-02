@@ -1,0 +1,588 @@
+---
+id: sanitize_data
+title: sanitize_data
+sidebar_label: sanitize_data
+slug: /apis/utilities/sanitize_data
+description: 针对一组标记数据，进行完全清理。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+import JSONView from "@site/src/components/JSONView";
+
+<APITopBar type="func" source="utilities.sanitize_data" />
+
+```python
+sanitized_data: Annotations = sanitize_data(
+    data: Annotations | Sequence[th.AnnoItem],
+    deduplicate: "add" | "drop" = "drop",
+)
+```
+
+针对一组标记数据，进行完全清理。
+
+数据清理将会确保：
+
+1. 所含的时间戳对应调用该方法的时刻。
+2. `data`字段的所有数据项均是可标记为`AnnoItem`的字典。
+3. 任何包含值为`None`的文字标注的项，会标准化为不含文字标注的数据项。
+4. 标记数据的边界框总是含有正值的宽和高（负值的宽或高表示起始点反向）。
+5. 标记数据项将会去重。换言之，所有的ID都会得到清理。
+
+该方法可以在需要保存标记数据的时候调用。运行可能会话一点时间，所以该方法可能不适合用来实时地清理标记数据。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_data
+dpa.utilities.sanitize_data
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|     参数      |                                                    类型                                                     |               必选                | <center>说明</center>                                                                                                    |
+| :-----------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------------------------------------------------------------------------------------------ |
+|    `data`     | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | 要清理的标记数据。注意该方法不会原处修改此输入值本身。                                                                   |
+| `deduplicate` |                                              `"add" \| "drop"`                                              | <InlineIcon icon={vsiCheckIcon}/> | 针对ID使用的去重方法。`"add"`表示透过添加后缀的方式保留重复的 ID。`"drop"`表示仅保留那些具有重复ID的第一次出现的项。 |
+
+### 输出 {#returns}
+
+|       参数       |                     类型                      | <center>说明</center>  |
+| :--------------: | :-------------------------------------------: | :--------------------- |
+| `sanitized_data` | [`Annotations`](../typehints/Annotations.mdx) | 数据经过清理后的副本。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 清理一组数据（`drop`模式） {#-sanitize-a-collection-of-data-drop-mode}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '输入数据', value: 'data-input', },
+    { label: '代码', value: 'codes', },
+    { label: '输出数据', value: 'data-output', },
+  ]
+}>
+
+<TabItem value="data-input">
+
+**`data-input.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    data: [
+      {
+        id: undefined,
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: undefined,
+      },
+      {
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 152.14361702127658,
+          y: 62.765957446808514,
+          width: -125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: 62.765957446808514,
+          width: 125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 528.1117021276596,
+          y: 62.765957446808514,
+          width: -125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: null,
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+<TabItem value="codes">
+
+以下代码会清理数据，但所有包含已重复ID的项均会删去。对任一重复ID，只保留其第一次出现的数据项。
+
+```python title="sanitize_data_drop.py" showLineNumbers
+import json
+import dash_picture_annotation as dpa
+
+
+with open("./data-input.json", "r") as fobj:
+    data = json.load(fobj)
+
+with open("./sanitized-data.json", "w") as fobj:
+    json.dump(dpa.sanitize_data(data), fobj, indent=2, ensure_ascii=False)
+```
+
+</TabItem>
+
+<TabItem value="data-output">
+
+**`sanitized-data.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    timestamp: 1730913816961,
+    data: [
+      {
+        id: "67199d",
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "a22c54",
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 26.611702127659555,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 402.57978723404256,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "d345c5",
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> 清理一组数据（`add`模式） {#-sanitize-a-collection-of-data-add-mode}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '输入数据', value: 'data-input', },
+    { label: '代码', value: 'codes', },
+    { label: '输出数据', value: 'data-output', },
+  ]
+}>
+
+<TabItem value="data-input">
+
+**`data-input.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    data: [
+      {
+        id: undefined,
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: undefined,
+      },
+      {
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 152.14361702127658,
+          y: 62.765957446808514,
+          width: -125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: 62.765957446808514,
+          width: 125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 528.1117021276596,
+          y: 62.765957446808514,
+          width: -125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: null,
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+<TabItem value="codes">
+
+以下代码会清理、并保留全体数据。对任一重复ID，会透过随机生成、并添加后缀的方式去重。
+
+```python title="sanitize_data_add.py" showLineNumbers
+import json
+import dash_picture_annotation as dpa
+
+
+with open("./data-input.json", "r") as fobj:
+    data = json.load(fobj)
+
+with open("./sanitized-data.json", "w") as fobj:
+    json.dump(dpa.sanitize_data(data, "add"), fobj, indent=2, ensure_ascii=False)
+```
+
+</TabItem>
+
+<TabItem value="data-output">
+
+**`sanitized-data.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    timestamp: 1730915309229,
+    data: [
+      {
+        id: "1e5a53",
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3fc004",
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 26.611702127659555,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 402.57978723404256,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxKafa456",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK60cfab",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "be34ff",
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+</Tabs>

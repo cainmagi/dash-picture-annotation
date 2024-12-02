@@ -1,0 +1,182 @@
+---
+id: image
+sidebar_label: 图片
+title: 定制图片
+description: 透过不同的方式定制图片内容。
+slug: /usages/image
+---
+
+import {DFCIcon} from "@site/src/components/icons/DFC";
+import InlineIcon from "@site/src/components/InlineIcon";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+# 定制图片
+
+本指南展示了如何设置标记器使用的图片。属性[`image`](../../apis/DashPictureAnnotation.mdx#component-properties)有多种设置方式。下例展示了配置图片的一个最小范例。其中提供了一个按钮，按下时触发图片的替换。标记器初始化为`image=None`。
+
+```python title="demo_image.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-image", children="Set image")),
+        dpa.DashPictureAnnotation(id="annotator", data=None, image=None),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image = ...  # Do something to get the image.
+        return image
+    return dash.no_update
+
+
+app.run()
+```
+
+组件加载后，由于`image=None`，标记器会渲染成一个占位符，显示为“无可用图片”。在此情况下，标记器是不可用的。
+
+## 从assets加载图片 {#load-the-image-by-assets}
+
+最基础的图片配置方案是使用静态资源（assets）文件夹。透过将dash应用配置成如下形式：
+
+```python
+dash = Dash(assets_folder="path/to/the/assets")
+```
+
+可以将图片放置在dashboard运行的服务器assets目录下。在callback中，就可以将图片定义为指向资源文件的站点路径。
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image = "/a-test-image.png"
+        return image
+    return dash.no_update
+```
+
+按下按钮时，就会载入`path/to/the/assets/a-test-image.png`图片并展示给用户。此时标记器转换为可用状态。
+
+显然，这种方案并非特别有用，因为它只能从静态资源目录下加载图片。换言之，所有的图片需要在dashboard运行前、预先准备就绪。这就不适应实际业务中，处理动态生成数据的需求。
+
+## 从编码数据字符串加载图片 {#load-the-image-by-encoded-data-string}
+
+另一种可行的思路，是使用编码数据字符串动态加载图片。类似的数据字符串，可以取代`<img src=...>`中的URL。它同样也可以用在本项目的标记器中。
+
+:::tip
+
+要了解更多信息，参见[数据URL文档<IconExternalLink/>][link-dataurl]。
+
+:::
+
+```python showLineNumbers
+import base64
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-start
+        with open("a-image-file.png", "rb") as fobj:
+            image = base64.b64encode(fobj.read()).decode("ascii")
+        return "data:image/{0};base64,{1}".format("png", get_image())
+        # highlight-end
+    return dash.no_update
+```
+
+此例中，从一个`PNG`文件加载了图片，随后将其编码成了Base64字符串。需要注意的是：
+
+1. Base64编码对于绝大多数类型的图片都是必要的，但`image/svg+xml`除外。换言之，使用这种图片加载方法时，在大多时候都需要使用Base64编码。
+2. 返回数据URL时，形如`data:image/...;base64,`的前缀是必要的。特别地，`image/...`的部分代表所载入图片的mimetype。其需要和所读取的图片文件保持一致。
+
+:::tip
+
+要了解更多信息，参见[MiME type文档<IconExternalLink/>][link-mimetype]。
+
+:::
+
+此方案最大的好处，是允许图片的动态加载。换言之，可以从[`PIL.Image.Image`<IconExternalLink/>][link-image]或一个形如[`io.BytesIO`<IconExternalLink/>][link-bytesio]的IO对象加载图片。
+
+:::danger
+
+需要特别小心的是，这类数据URL的长度是有限的。不同的浏览器有不同的长度限制。参见[数据URL文档<IconExternalLink/>][link-dataurllim]。在某些情况下，哪怕数据长度没有超出限制，也可能会存在一些预期外的表现。因此，建议用户仅在**图片尺寸不超过`8 MB`**的情况下，使用该方案。
+
+:::
+
+## 从`dash-file-cache`加载图片 {#load-the-image-by-dash-file-cache}
+
+既然数据URL有尺寸限制，更好、更安全的做法，当然是设计一个向浏览动态传送图片的服务。最合适的实现方式，是使用[`flask.View`][link-flaskview]写一个`flask`服务。然而，写服务这件事本身有一点点复杂。如果用户不愿自己来写这种服务，可以尝试使用本项目的友邻项目：[<InlineIcon icon={DFCIcon}/>**Dash File Cache**<IconExternalLink/>][link-dfc]。
+
+```python title="demo_with_dfc.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+# highlight-next-line
+import dash_file_cache as dfc
+
+
+app = dash.Dash()
+# highlight-start
+service = dfc.ServiceData(cache=dfc.CacheFile("./temp"))
+service.serve(app)
+# highlight-end
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-image", children="Set image")),
+        dpa.DashPictureAnnotation(id="annotator", data=None, image=None),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "image"),
+    Input("btn-image", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_image(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        image: str = service.register("path/to-a-image.png", mime_type="image/png")
+        return image
+    return dash.no_update
+
+
+app.run()
+```
+
+上例中，使用实例[`dfc.ServiceData(...)`<IconExternalLink/>][link-dfcservice]提供服务。该实例可以将一个文件置入缓存中，并返回用来访问该缓存文件的地址。因为文件已经被缓存、且是透过文件流的方式传递给用户，故而在此情况下，文件的大小不再受限。
+
+[link-dataurl]: https://developer.mozilla.org/zh-CN/docs/Web/URI/Schemes/data
+[link-mimetype]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types/Common_types
+[link-image]: https://www.osgeo.cn/pillow/reference/Image.html#PIL.Image.Image
+[link-bytesio]: https://docs.python.org/zh-cn/3/library/io.html#io.BytesIO
+[link-dataurllim]: https://developer.mozilla.org/zh-CN/docs/Web/URI/Schemes/data#length_limitations
+[link-flaskview]: https://flask.palletsprojects.com/zh-cn/stable/views/
+[link-dfc]: https://cainmagi.github.io/dash-file-cache/zh-cn/
+[link-dfcservice]: https://cainmagi.github.io/dash-file-cache/zh-cn/docs/usages/service

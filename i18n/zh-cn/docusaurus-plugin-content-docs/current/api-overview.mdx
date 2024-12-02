@@ -1,0 +1,74 @@
+---
+id: api-overview
+sidebar_label: 总览
+title: API总览
+description: 对所有API的总览。
+slug: /apis
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+import ThemedImage from "@theme/ThemedImage";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+# API总览
+
+<APITopBar type="package" source="." />
+
+本组件包是对React项目[React Picture Annotation<IconExternalLink/>][git-react-picture-annotation]的Dash移植版，用以提供针对图片的简易标记编辑器。
+
+<div className="mb-default">
+  <ThemedImage
+    alt="Docusaurus themed image"
+    sources={{
+      light: useBaseUrl("/img/overview-light.svg"),
+      dark: useBaseUrl("/img/overview-dark.svg"),
+    }}
+  />
+</div>
+
+上图展示了整个模块的大体结构。其中，核心功能是`DashPictureAnnotation`组件。另外，提供了一些用来处理标记数据的类型（typehints）和工具。
+
+## 模块 {#modules}
+
+|                                            成员                                            | <center>说明</center>          |
+| :----------------------------------------------------------------------------------------: | :----------------------------- |
+| [<IconObjType type="module" hasText={true} text="typehints"/>](./apis/typehints/index.mdx) | 项目中使用的额外类型标记。     |
+| [<IconObjType type="module" hasText={true} text="utilities"/>](./apis/utilities/index.mdx) | 用来处理标记数据与结果的工具。 |
+
+## 类 {#classes}
+
+|                                                    成员                                                     | <center>说明</center>                                                                                                                                           |
+| :---------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [<IconObjType type="class" hasText={true} text="DashPictureAnnotation"/>](./apis/DashPictureAnnotation.mdx) | `DashPictureAnnotation`组件是对React项目[`react-picture-annotation/ReactPictureAnnotation`<IconExternalLink/>][link-react-picture-annotation]的Dash移植版。 |
+
+## 别名 {#aliases}
+
+|                                    成员                                     | <center>别名取自</center>                                                                     |
+| :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------- |
+|          <IconObjType type="type" hasText={true} text="AnnoMark"/>          | [`dpa.typehints.AnnoMark`](./apis/typehints/AnnoMark.mdx)                                     |
+|          <IconObjType type="type" hasText={true} text="AnnoItem"/>          | [`dpa.typehints.AnnoItem`](./apis/typehints/AnnoItem.mdx)                                     |
+|        <IconObjType type="type" hasText={true} text="Annotations"/>         | [`dpa.typehints.Annotations`](./apis/typehints/Annotations.mdx)                               |
+|         <IconObjType type="type" hasText={true} text="AnnoStyle"/>          | [`dpa.typehints.AnnoStyle`](./apis/typehints/AnnoStyle.mdx)                                   |
+|    <IconObjType type="type" hasText={true} text="DashSelectOptionItem"/>    | [`dpa.typehints.DashSelectOptionItem`](./apis/typehints/DashSelectOptionItem.mdx)             |
+|            <IconObjType type="type" hasText={true} text="Size"/>            | [`dpa.typehints.Size`](./apis/typehints/Size.mdx)                                             |
+|         <IconObjType type="type" hasText={true} text="NSAnnoItem"/>         | [`dpa.typehints.NSAnnoItem`](./apis/typehints/NSAnnoItem.mdx)                                 |
+|       <IconObjType type="type" hasText={true} text="NSAnnotations"/>        | [`dpa.typehints.NSAnnotations`](./apis/typehints/NSAnnotations.mdx)                           |
+|       <IconObjType type="func" hasText={true} text="is_sequence_of"/>       | [`dpa.typehints.is_sequence_of`](./apis/typehints/is_sequence_of.mdx)                         |
+|        <IconObjType type="func" hasText={true} text="is_anno_mark"/>        | [`dpa.typehints.is_anno_mark`](./apis/typehints/is_anno_mark.mdx)                             |
+|        <IconObjType type="func" hasText={true} text="is_anno_item"/>        | [`dpa.typehints.is_anno_item`](./apis/typehints/is_anno_item.mdx)                             |
+|       <IconObjType type="func" hasText={true} text="is_annotations"/>       | [`dpa.typehints.is_annotations`](./apis/typehints/is_annotations.mdx)                         |
+| <IconObjType type="func" hasText={true} text="is_dash_select_option_item"/> | [`dpa.typehints.is_dash_select_option_item`](./apis/typehints/is_dash_select_option_item.mdx) |
+|       <IconObjType type="func" hasText={true} text="get_data_item"/>        | [`dpa.utilities.get_data_item`](./apis/utilities/get_data_item.mdx)                           |
+| <IconObjType type="func" hasText={true} text="get_data_item_with_default"/> | [`dpa.utilities.get_data_item_with_default`](./apis/utilities/get_data_item_with_default.mdx) |
+|       <IconObjType type="func" hasText={true} text="get_data_items"/>       | [`dpa.utilities.get_data_items`](./apis/utilities/get_data_items.mdx)                         |
+|  <IconObjType type="func" hasText={true} text="get_data_items_by_regex"/>   | [`dpa.utilities.get_data_items_by_regex`](./apis/utilities/get_data_items_by_regex.mdx)       |
+|        <IconObjType type="func" hasText={true} text="get_all_ids"/>         | [`dpa.utilities.get_all_ids`](./apis/utilities/get_all_ids.mdx)                               |
+|      <IconObjType type="func" hasText={true} text="get_all_comments"/>      | [`dpa.utilities.get_data_item`](./apis/utilities/get_all_comments.mdx)                        |
+|     <IconObjType type="func" hasText={true} text="compare_anno_marks"/>     | [`dpa.utilities.compare_anno_marks`](./apis/utilities/compare_anno_marks.mdx)                 |
+|     <IconObjType type="func" hasText={true} text="sanitize_data_item"/>     | [`dpa.utilities.sanitize_data_item`](./apis/utilities/sanitize_data_item.mdx)                 |
+|       <IconObjType type="func" hasText={true} text="sanitize_data"/>        | [`dpa.utilities.get_data_item`](./apis/utilities/sanitize_data.mdx)                           |
+
+[git-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation
+[link-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation/blob/master/src/ReactPictureAnnotation.tsx

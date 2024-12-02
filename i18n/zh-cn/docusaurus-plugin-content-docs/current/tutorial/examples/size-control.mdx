@@ -1,0 +1,75 @@
+---
+id: size-control
+sidebar_label: 尺寸控制
+title: 范例：控制标记框尺寸
+description: 以下范例，展示了如何透过设置最小标记框尺寸、从而防止不良标记框的出现。
+slug: /examples/size-control
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# 范例：控制标记框尺寸
+
+<div className="float-right indark-inv">
+
+|                     控制标记框尺寸的范例                     |
+| :----------------------------------------------------------: |
+| ![控制标记框尺寸的范例](/img/examples/demo-sizecontrol.webp) |
+
+</div>
+
+查看以下链接，以阅览使用控制标记框尺寸的范例。
+
+<p>
+  <DarkButton to={demoURL("size_control.py")} icon={mdiLanguagePython}>
+    {"size_control.py"}
+  </DarkButton>
+</p>
+
+该范例提供了以下功能：
+
+1. 一个基础的[`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx)，允许：
+   1. 透过拖拽的方式，创建、修改、或移除标记框。
+   2. 使用文本输入框修改标记的文字标注。
+2. 每当标记数据改变时，数据的变化会反馈给标记器下方的文字。
+3. 配置了标记框所需要的最小宽度和高度值。若创建、或修改一个标记时，其宽度或高度小于指定的阈值，则对应的标记会被直接移除。
+
+## 定义布局 {#define-the-layout}
+
+相比[最小范例](./minimal.mdx)，此处主要的修改是，在组件定义时设置了`size_minimal`属性：
+
+```python
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=None,
+    image="/assets/test_image.svg",
+    options=None,
+    clearable_dropdown=True,
+    # highlight-next-line
+    size_minimal=20,
+)
+```
+
+该属性设计成用来控制标记框最小尺寸的工具。某些时候，用户有可能会由于错误地点击标记器，导致创建新的标记框，且该标记框满足宽高均为0（即`width=0`且`height=0`）。在此情况下，新建的标记既无实际意义、又无法被用户选中。相比令用户自行清理数据的方案，更好的做法当然是通过这样一个属性、来为标记框的最小宽度和高度设置限制。通过追加该属性，任何小于指定尺寸的标记框都会被直接移除。
+
+:::tip
+
+属性`size_minimal`也可以配置为形如下例的字典：
+
+```python
+dpa.DashPictureAnnotation(
+    ...
+    # highlight-next-line
+    size_minimal={"width": 20, "height": 20},
+)
+```
+
+这允许用户分别为宽度和高度、设置不同的尺寸限制。
+
+:::

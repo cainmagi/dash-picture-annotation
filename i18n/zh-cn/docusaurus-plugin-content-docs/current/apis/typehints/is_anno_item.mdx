@@ -1,0 +1,94 @@
+---
+id: is_anno_item
+title: is_anno_item
+sidebar_label: is_anno_item
+slug: /apis/typehints/is_anno_item
+description: isinstance(data, AnnoItem)的实现。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_anno_item" />
+
+```python
+flag: TypeGuard[AnnoItem] = is_anno_item(data: Any)
+```
+
+`isinstance(data, AnnoItem)`的实现。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_anno_item
+dpa.typehints.is_anno_item
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|  参数  | 类型  |               必选                | <center>说明</center> |
+| :----: | :---: | :-------------------------------: | --------------------- |
+| `data` | `Any` | <InlineIcon icon={vsiCheckIcon}/> | 要验证的值。          |
+
+### 输出 {#returns}
+
+|  参数  |  类型  | <center>说明</center>                                                      |
+| :----: | :----: | :------------------------------------------------------------------------- |
+| `flag` | `bool` | 若该值为`True`，表示`data`是[`AnnoItem`](./AnnoItem.mdx)的实例，反之亦然。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 检查某对象是否是`AnnoItem` {#-check-whether-an-object-is-an-annoitem}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_anno_item.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+mark: dpa.AnnoMark = {"x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"}
+
+print(dpa.is_anno_item({}))
+print(dpa.is_anno_item({"id": "test"}))
+print(dpa.is_anno_item({"id": "test", "mark": mark}))
+print(dpa.is_anno_item({"id": "test", "mark": mark, "comment": "test"}))
+print(dpa.is_anno_item({"id": "test", "mark": mark, "comment": "test", "x": 1}))
+print(dpa.is_anno_item({"id": "test", "mark": mark, "comment": 5}))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+False
+False
+True
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

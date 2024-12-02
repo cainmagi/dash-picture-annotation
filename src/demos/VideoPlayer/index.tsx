@@ -10,6 +10,12 @@ import {translate} from "@docusaurus/Translate";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
+import langEN from "./langs/en";
+import langZHCN from "./langs/zh-cn";
+
+videojs.addLanguage("en", langEN);
+videojs.addLanguage("zh-cn", langZHCN);
+
 export type VideoJSProps = {
   options: any;
   onReady?: (player: any) => void;

@@ -45,7 +45,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "zh-cn"],
   },
 
   presets: [
@@ -107,10 +107,10 @@ const config: Config = {
         //     },
         //   ],
         // },
-        // {
-        //   type: "localeDropdown",
-        //   position: "right",
-        // },
+        {
+          type: "localeDropdown",
+          position: "right",
+        },
         {
           href: "https://github.com/cainmagi/dash-picture-annotation",
           position: "right",

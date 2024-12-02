@@ -1,0 +1,63 @@
+---
+id: AnnoStyle
+title: AnnoStyle
+sidebar_label: AnnoStyle
+slug: /apis/typehints/AnnoStyle
+description: 标记框的CSS样式。
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.AnnoStyle" />
+
+```python
+AnnoStyle(
+    padding: float,
+    fontSize: float,
+    fontColor: str,
+    fontBackground: str,
+    fontFamily: str,
+    lineWidth: float,
+    shapeBackground: str,
+    shapeStrokeStyle: str,
+    shadowBlur: float,
+    shapeShadowStyle: str,
+    transformerBackground: str,
+    transformerSize: float,
+)
+```
+
+`AnnoStyle`是`TypedDict`。
+
+标记框的CSS样式。
+
+若该值定义为字符串，则该值会解释为标记框的默认颜色。
+
+## 别名 {#aliases}
+
+该类型可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.AnnoStyle
+dpa.typehints.AnnoStyle
+```
+
+## 关键字 {#keywords}
+
+|         关键字          |  类型   | 必选 | <center>说明</center>                  |
+| :---------------------: | :-----: | :--: | :------------------------------------- |
+|        `padding`        | `float` |      | 文字填充。                             |
+|       `fontSize`        | `float` |      | 文字大小。                             |
+|       `fontColor`       |  `str`  |      | 文字颜色。                             |
+|    `fontBackground`     |  `str`  |      | 文字背景色。                           |
+|      `fontFamily`       |  `str`  |      | 文字所用的字体名。                     |
+|       `lineWidth`       | `float` |      | 标记框笔画宽度。                       |
+|    `shapeBackground`    |  `str`  |      | 标记框内部的背景色。                   |
+|   `shapeStrokeStyle`    |  `str`  |      | 标记框笔画颜色。                       |
+|      `shadowBlur`       | `float` |      | 标记框阴影散度。                       |
+|   `shapeShadowStyle`    |  `str`  |      | 标记框阴影颜色。                       |
+| `transformerBackground` |  `str`  |      | 选中标记框时，显示在周围的控制点颜色。 |
+|    `transformerSize`    | `float` |      | 选中标记框时，显示在周围的控制点大小。 |
