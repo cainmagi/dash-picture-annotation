@@ -36,7 +36,7 @@ defined when the component is loaded.
 
 Users can interact with the annotator with
 
-1. Dragging and dropping annotation boxes;
+1. Dragging and dropping for creating new annotation boxes;
 2. Selecting an annotation box and specify its comment;
 3. Selecting an annotation box, resizing, and relocating it;
 4. Delete any annotation box.
@@ -44,7 +44,7 @@ Users can interact with the annotator with
 ## Catch the update of the annotation data
 
 Every time when the mouse is released, the annotation data will be updated. This update
-will fire a dash callback, use the following codes to catch the callback.
+will fire a dash callback. Use the following codes to catch the callback.
 
 ```python showLineNumbers
 app.layout = html.Div(
@@ -78,7 +78,7 @@ value captured by the callback will be exactly the same as the value used for
 initializing the component.
 
 `data` can be updated by a callback using `Output("annotator", "data")`. In this case,
-users may not provide a value typed by
+users may provide a value not typed by
 [`dpa.Annotations`](../../apis/typehints/Annotations.mdx). The subsequently fired
 callback using this value as the input will be influenced.
 

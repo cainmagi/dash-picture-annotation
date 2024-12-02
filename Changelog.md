@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.1.1 @ 12/01/2024
+
+#### :wrench: Fix
+
+1. Fix: Correct typos and ambiguity in the whole document.
+
 ### 0.1.0 @ 11/29/2024
 
 #### :wrench: Fix

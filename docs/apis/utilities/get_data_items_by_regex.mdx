@@ -3,7 +3,7 @@ id: get_data_items_by_regex
 title: get_data_items_by_regex
 sidebar_label: get_data_items_by_regex
 slug: /apis/utilities/get_data_items_by_regex
-description: Get one or several annotation items by exactly matching the comment.
+description: Get one or several annotation items by matching the comment with a regular expression.
 ---
 
 import Tabs from "@theme/Tabs";
@@ -25,12 +25,12 @@ items: [AnnoItem] = get_data_items_by_regex(
 )
 ```
 
-Get one or several annotation items by exactly matching the comment.
+Get one or several annotation items by matching the comment with a regular expression.
 
 The regex is done by `re.match`.
 
 Note that this method will not validate the format of each returned annotation
-items. Not well-formatted items will STILL be returned.
+items. Not well-formatted items will **STILL** be returned.
 
 ## Aliases
 
@@ -51,8 +51,8 @@ dpa.utilities.get_data_items_by_regex
 |    Argument     |                                                    Type                                                     |             Required              | <center>Description</center>                                                                                                                                                                                               |
 | :-------------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |     `data`      | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is queried.                                                                                                                                                                                       |
-| `comment_regex` |               <code>{`str \| `}[Pattern<IconExternalLink/>][link-pattern]{` \| None`}</code>               |                                   | <p>The regular expression used for matching the comment of the annoatations. All comments matching the regex will be returned.</p><p>If using `None`, will return the annotations without comments.</p>                    |
-|       `n`       |                                                `int \| None`                                                |                                   | <p>Limit the maximal number of the items to be found. If not provided, will try to return all annotation items with a specified `comment`.</p><p>Specifying a non-positive value will cause this number to be ignored.</p> |
+| `comment_regex` |               <code>{`str \| `}[Pattern<IconExternalLink/>][link-pattern]{` \| None`}</code>               |                                   | <p>The regular expression used for matching the comment of the annoatations. All comments matching the regex can be returned.</p><p>If using `None`, will return the annotations without comments.</p>                    |
+|       `n`       |                                                `int \| None`                                                |                                   | <p>Limit the maximal number of the items to be found. If not provided, will try to return all annotation items the `comment` matched.</p><p>Specifying a non-positive value will cause this number to be ignored.</p> |
 
 ### Returns
 

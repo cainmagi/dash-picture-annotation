@@ -67,7 +67,7 @@ dash = Dash(assets_folder="path/to/the/assets")
 
 The images can be put into the assets folder on which server device the dashboard
 is running. In the callback, the image can be specified by the site path to the
-asset image.
+asset file.
 
 ```python showLineNumbers
 @app.callback(
@@ -140,7 +140,7 @@ See more information in the [MiME type documentation<IconExternalLink/>][link-mi
 
 The most important benefit of using this method is to allow the image to be loaded
 dynamically. In other words, the image can be loaded from a
-[`PIL.Image.Image`<IconExternalLink/>][link-image] or an io object like
+[`PIL.Image.Image`<IconExternalLink/>][link-image] or an IO object like
 [`io.BytesIO`<IconExternalLink/>][link-bytesio].
 
 :::danger

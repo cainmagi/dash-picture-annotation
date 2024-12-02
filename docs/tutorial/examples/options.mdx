@@ -1,8 +1,8 @@
 ---
 id: options
 sidebar_label: Options
-title: Example of using the drop down menu
-description: The example of letting the annotation comment controlled by a drop down menu.
+title: Example of using the dropdown menu
+description: The example of letting the annotation comment controlled by a dropdown menu.
 slug: /examples/options
 ---
 
@@ -13,17 +13,17 @@ import mdiLanguagePython from "@iconify-icons/mdi/language-python";
 import {demoURL} from "@site/src/envs/variables";
 import DarkButton from "@site/src/components/DarkButton";
 
-# Example of using the drop down menu
+# Example of using the dropdown menu
 
 <div className="float-right indark-inv">
 
-|                   Example of using the drop down menu                   |
+|                   Example of using the dropdown menu                   |
 | :---------------------------------------------------------------------: |
-| ![Example of using the drop down menu](/img/examples/demo-options.webp) |
+| ![Example of using the dropdown menu](/img/examples/demo-options.webp) |
 
 </div>
 
-Check the following link to review the demo of using the drop down menu.
+Check the following link to review the demo of using the dropdown menu.
 
 <p>
   <DarkButton to={demoURL("options.py")} icon={mdiLanguagePython}>
@@ -35,14 +35,14 @@ This demo provides the following features:
 
 1. A basic [`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx) allowing
    1. Creating, modify, or removing annotation boxes by dragging and dropping.
-   2. Modify the annotation label by an input box.
+   2. Modify the annotation label by an input box or a dropdown menu.
 2. Every time the annotation data is changed, the changed results will be reflected
    by the text below the annotator window.
 3. Two controlling buttons:
-   - <kbd>Toggle options</kbd>: Toggle the drop down menu when specifying the
+   - <kbd>Toggle options</kbd>: Toggle the dropdown menu when specifying the
      comment of the annotations.
    - <kbd>Toggle options clearable</kbd>: Toggle the clerable state of the
-     selected value when the drop down menu is activated.
+     selected value when the dropdown menu is activated.
 
 ## Define the layout
 
@@ -73,7 +73,7 @@ Compared to the [minimal demo](./minimal.mdx), there are two additional buttons.
 )
 ```
 
-We add two buttons, and the placeholders of the input box and the drop down menu are
+We add two buttons, and the placeholders of the input box and the dropdown menu are
 also specified.
 
 ## Define the callbacks
@@ -128,7 +128,7 @@ The second branch determines whether the property `clearable_dropdown` is enable
 not. If this property is enabled, a button used for removing the current selected
 option item will be provided.
 
-When the drop down menu is activated, users can only specify the comment by selecting
+When the dropdown menu is activated, users can only specify the comment by selecting
 the provided candidates. If using the default specifier (a `<input>` tag), the comment
 can be changed to an arbitrary value.
 

@@ -33,6 +33,8 @@ import VideoPlayer from "@site/src/demos/VideoPlayer";
 
 Dash Picture Annotation is a [Dash component<IconExternalLink/>][link-dash-component] library.
 
+Dash porting version of the React project React Picture Annotation. Provide a simple annotation window for a single picture.
+
 The following two figures compare the demos of the original React version and the ported Dash version. Since this project is just a dash component wrapper on the original React component, the performance is the same.
 
 |                                  React Picture Annotation                                  |                                 Dash Picture Annotation                                  |
@@ -71,9 +73,10 @@ dpa.DashPictureAnnotation(
 )
 ```
 
-where the `data` is typed by `dpa.Annotations`. It should be formatted like this:
+where the `data` is typed by [`dpa.Annotations`](./apis/typehints/Annotations.mdx).
+It should be formatted like this:
 
-```json
+```json showLineNumbers
 {
   "timestamp": 0,
   "data": [
