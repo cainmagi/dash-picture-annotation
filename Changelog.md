@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.1.2 @ 12/02/2024
+
+#### :wrench: Fix
+
+1. Fix: Correct a typo in the code highlight in the page `/docs/examples/options`.
+
 ### 0.1.1 @ 12/01/2024
 
 #### :mega: New
