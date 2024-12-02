@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.1.2 @ 12/01/2024
+
+#### :wrench: Fix
+
+1. Fix: Correct typos in the docstrings.
+
 ### 0.1.1 @ 11/10/2024
 
 #### :floppy_disk: Change

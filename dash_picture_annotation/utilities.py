@@ -201,13 +201,13 @@ def get_data_items_by_regex(
 
     comment_regex: `str | re.Pattern | None`
         The regular expression used for matching the comment of the annoatations.
-        All comments matching the regex will be returned.
+        All comments matching the regex can be returned.
 
         If using `None`, will return the annotations without comments.
 
     n: `int | None`
         Limit the maximal number of the items to be found. If not provided, will try
-        to return all annotation items with a specified `comment`.
+        to return all annotation items with the `comment` matched.
 
         Specifying a non-positive value will cause this number to be ignored.
 
@@ -258,7 +258,7 @@ def get_all_ids(data: Union[th.Annotations, Sequence[th.AnnoItem]]) -> Tuple[str
     Arguments
     ---------
     data: `Annotations | [AnnoItem]`
-        The annotation data that is checked.
+        The annotation data that is queried.
 
     Returns
     -------
@@ -289,7 +289,7 @@ def get_all_comments(
     Arguments
     ---------
     data: `Annotations | [AnnoItem]`
-        The annotation data that is checked.
+        The annotation data that is queried.
 
     Returns
     -------

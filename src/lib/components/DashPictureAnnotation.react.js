@@ -229,9 +229,9 @@ DashPictureAnnotation.propTypes = {
   ]),
 
   /**
-   * The ID of the currently selected annotator.
+   * The ID of the currently selected annotation.
    * This property is read-only. It will be automatically set when users select an
-   * annotator. A valid ID is a string. When no annotator is selected, this property
+   * annotation. A valid ID is a string. When no annotation is selected, this property
    * returns `None`.
    */
   selected_id: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
@@ -276,11 +276,11 @@ DashPictureAnnotation.propTypes = {
     PropTypes.number,
     PropTypes.shape({
       /**
-       * Requirement of the minimal width of an annotator.
+       * Requirement of the minimal width of an annotation.
        */
       width: PropTypes.number,
       /**
-       * Requirement of the minimal height of an annotator.
+       * Requirement of the minimal height of an annotation.
        */
       height: PropTypes.number,
     }),

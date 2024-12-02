@@ -82,7 +82,7 @@ class _AnnoItem(TypedDict):
     is currently selected by users."""
 
     mark: AnnoMark
-    """The boudning box and the shape information of thie annotation item."""
+    """The boudning box and the shape information of this annotation item."""
 
 
 class AnnoItem(_AnnoItem, total=False):
@@ -200,10 +200,10 @@ class Size(TypedDict, total=False):
     """
 
     width: float
-    """Requirement of the minimal width of an annotator."""
+    """Requirement of the minimal width of an annotation."""
 
     height: float
-    """Requirement of the minimal height of an annotator."""
+    """Requirement of the minimal height of an annotation."""
 
 
 NSAnnoItem = Union[AnnoItem, AnnoMark, Mapping[str, Any]]
