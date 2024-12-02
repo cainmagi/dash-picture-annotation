@@ -9,6 +9,7 @@
 #### :wrench: Fix
 
 1. Fix: Correct typos in the docstrings.
+2. Fix: Add `examples/*` to the include list of `MANIFEST.in`.
 
 ### 0.1.1 @ 11/10/2024
 

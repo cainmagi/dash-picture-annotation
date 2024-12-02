@@ -22,3 +22,4 @@ include version/__init__.py
 include tests/*.json
 include tests/assets/*.webp
 include tests/assets/*.svg
+include examples/*
