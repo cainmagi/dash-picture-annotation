@@ -25,6 +25,7 @@ RUN bash /app/install.sh $INSTALL_MODE
 # Copy codes
 COPY ./dash_picture_annotation /app/dash_picture_annotation
 COPY ./src /app/src
+COPY ./examples /app/examples
 COPY ./tests /app/tests
 COPY ./version /app/version
 COPY ./*.* /app/

@@ -35,7 +35,7 @@ RUN_REACT=false
 RUN_PYTHON=false
 RUN_DEMO=false
 WITH_DASH=false
-DEMO_NAME=""
+DEMO_NAME="default"
 
 # Pass options from command line
 for ARGUMENT in "$@"
@@ -108,7 +108,7 @@ fi
 if $RUN_DEMO
 then
     # Run python demo.
-    if [ "x${}" = "x" ]; then
+    if [ "x${DEMO_NAME}" = "xdefault" ] || [ "x${DEMO_NAME}" = "x" ]; then
         msg "Run the default Python Plotly-Dash demo app."
         ${PYTHON} usage.py || fail
         exit 0

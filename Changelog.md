@@ -10,6 +10,7 @@
 
 1. Fix: Correct typos in the docstrings.
 2. Fix: Add `examples/*` to the include list of `MANIFEST.in`.
+3. Fix: The `examples/*` should be included in the Dockerfile. The configurations related to it has been corrected.
 
 ### 0.1.1 @ 11/10/2024
 
