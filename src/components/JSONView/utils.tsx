@@ -2,7 +2,7 @@
  * Utilities
  *
  * Author: Yuchen Jin (cainmagi)
- * GitHub: https://github.com/cainmagi/dash-json-grid
+ * GitHub: https://github.com/cainmagi/dash-picture-annotation
  * License: MIT
  */
 

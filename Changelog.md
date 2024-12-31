@@ -8,6 +8,12 @@
 
 #### :wrench: Fix
 
+1. Fix: Correct typos, where the "*Dash Picture Annotation*" is not correctly named.
+
+### 0.1.2 @ 12/02/2024
+
+#### :wrench: Fix
+
 1. Fix: Correct a typo in the code highlight in the page `/docs/examples/options`.
 2. Fix: Correct a style issue in the page `/docs/usages/image` of the zh-cn document.
 3. Fix: Correct a bad-located link in `/zh-cn/docs/usages/image`.
