@@ -10,6 +10,10 @@
 
 1. Fix: Correct typos, where the "*Dash Picture Annotation*" is not correctly named.
 
+#### :floppy_disk: Change
+
+1. Bump the yarn version from `4.5.3` to `4.6.0`.
+
 ### 0.1.2 @ 12/02/2024
 
 #### :wrench: Fix
