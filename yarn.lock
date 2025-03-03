@@ -3216,6 +3216,7 @@ __metadata:
     react: "npm:~18.2.0"
     react-docgen: "npm:^5.4.3"
     react-dom: "npm:~18.2.0"
+    react-image-size: "npm:^2.4.0"
     react-picture-annotation: "npm:~1.2.0"
     react-select: "npm:^5.8.0"
     react-use: "npm:^17.5.1"
@@ -6513,6 +6514,16 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 10c0/66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
+  languageName: node
+  linkType: hard
+
+"react-image-size@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "react-image-size@npm:2.4.0"
+  peerDependencies:
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  checksum: 10c0/7601a19571a4f154cd3d7546b8d89582220fe7b72e8494f69f674f33ec3bc19813d43bfb67c0fcb865fb4b2268aab922a30404867d9c7e17f987691f94411af5
   languageName: node
   linkType: hard
 

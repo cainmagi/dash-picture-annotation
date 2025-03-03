@@ -4,6 +4,13 @@
 
 ## CHANGELOG
 
+### 0.2.0 @ 03/03/2025
+
+#### :floppy_disk: Change
+
+1. Bump the `yarn` version from `4.5.3` to `4.7.0`.
+2. Add the dependency `react-image-size`.
+
 ### 0.1.2 @ 12/01/2024
 
 #### :wrench: Fix
