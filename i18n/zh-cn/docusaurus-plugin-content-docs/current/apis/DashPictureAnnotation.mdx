@@ -36,6 +36,7 @@ comp = DashPictureAnnotation(
     clearable_dropdown: bool = False,
     disabled: bool = False,
     is_color_dynamic: bool = False,
+    init_scale: float | Scale | None = 1.0,
     size_minimal: float | Size | None = {"width": 0, "height": 0}
     loading_state: LoadingState
 )
@@ -80,6 +81,7 @@ comp = DashPictureAnnotation(
 |  `clearable_dropdown`  |                                                                       `bool`                                                                       | 二值量。启用、且使用下拉菜单时，允许清除当前选中的文字标注。                                                                                                                                              |
 |       `disabled`       |                                                                       `bool`                                                                       | 二值量。启用时，禁用标记器（使其无法点击）。                                                                                                                                                              |
 |   `is_color_dynamic`   |                                                                       `bool`                                                                       | 二值量。启用时，令所有标记框的颜色，按照其对应的文字标注内容、动态计算。那些没有附上文字标注的标记框，则不会受到影响。                                                                                    |
+|      `init_scale`      |                                     <code>{"float \| "}[Scale](../apis/typehints/Scale.mdx){" \| None"}</code>                                     | <p>图片的初始比例尺。该值只能由用户设置。鼠标滚轮对比例尺的影响不会反映到该值。</p><p>须知，要令该值起效，需要每次更新该值时、提供一个不同于上一次使用的值。</p>                                          |
 |     `size_minimal`     |                                      <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                      | <p>针对标记框尺寸的最小需求。任何新创建的标记框，若尺寸小于该值，则会被舍弃。</p><p>若该值设置为一个标量，则该值会被同时用在宽（`width`）和高（`height`）的限制上。</p><p>若该值留空或无效，使用`0`。</p> |
 |    `loading_state`     |                                                [`LoadingState`<IconExternalLink/>][link-loadstate]                                                 | Dash的加载状态字典。用户不应手动设置该值。                                                                                                                                                               |
 
@@ -103,6 +105,7 @@ comp = DashPictureAnnotation(
 |  `clearable_dropdown`  |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
 |       `disabled`       |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
 |   `is_color_dynamic`   |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
+|      `init_scale`      |                                   <code>{"float \| "}[Scale](../apis/typehints/Scale.mdx){" \| None"}</code>                                    |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |            `1.0`                |
 |     `size_minimal`     |                                    <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                     |                                   | <InlineIcon icon={vsiCheckIcon}/> |      | `{"width": 0, "height": 0}` |
 |    `loading_state`     |                                               [`LoadingState`<IconExternalLink/>][link-loadstate]                                               |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
 

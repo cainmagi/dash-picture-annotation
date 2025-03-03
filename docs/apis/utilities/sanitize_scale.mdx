@@ -1,0 +1,101 @@
+---
+id: sanitize_scale
+title: sanitize_scale
+sidebar_label: sanitize_scale
+slug: /apis/utilities/sanitize_scale
+description: Perform the sanitization on the annotated image scaling factor.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.sanitize_scale" />
+
+```python
+sanitized_scale: Scale = sanitize_scale(
+    scale: float | Mapping[str, Any],
+    offset_x: float | None = None,
+    offset_y: float | None = None,
+)
+```
+
+Perform the sanitization on the annotated image scaling factor.
+
+The sanitization will ensure that:
+
+1. A dictionary containing at least the scaling ratio will be returned.
+2. Optional offsets can be configured.
+3. A timestamp will be attached to the sanitized configuration. It ensures that the scaling event will be always triggered even if the configuration does not change.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_scale
+dpa.utilities.sanitize_scale
+```
+
+## Arguments
+
+### Requires
+
+|  Argument  |             Type             |             Required              | <center>Description</center>                                                                                                                                         |
+| :--------: | :--------------------------: | :-------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `scale`   | `float \| Mapping[str, Any]` | <InlineIcon icon={vsiCheckIcon}/> | The scaling factor value (`float`) or a full scaling configuration dictionary.                                                                                       |
+| `offset_x` |       `float \| None`        |                                   | The relative offset ratio along the X axis. This value will be added to the returned value only when it is configured and `"offset_x"` is not configured in `scale`. |
+| `offset_y` |       `float \| None`        |                                   | The relative offset ratio along the Y axis. This value will be added to the returned value only when it is configured and `"offset_y"` is not configured in `scale`. |
+
+### Returns
+
+|     Argument      |              Type               | <center>Description</center>                                   |
+| :---------------: | :-----------------------------: | :------------------------------------------------------------- |
+| `sanitized_scale` | [Scale](../typehints/Scale.mdx) | The santized scaling factor with a newly configured timestamp. |
+
+## Examples
+
+### <IconObjType type="term"/> Sanitize a scale
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="sanitize_scale.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+pprint.pprint(dpa.sanitize_scale(1.0))
+pprint.pprint(dpa.sanitize_scale(1.0, offset_x=0.1, offset_y=0.9))
+pprint.pprint(dpa.sanitize_scale({"scale": 0.8, "offset_x": 0.1}, offset_y=0.9))
+pprint.pprint(dpa.sanitize_scale({"scale": 0.8, "offset_x": 0.1}, offset_x=0.3, offset_y=0.9))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'scale': 1.0, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 1.0, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 0.8, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 0.8, 'timestamp': 1741041589212}
+```
+
+</TabItem>
+
+</Tabs>

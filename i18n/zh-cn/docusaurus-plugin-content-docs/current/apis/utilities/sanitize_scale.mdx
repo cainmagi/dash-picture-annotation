@@ -1,0 +1,101 @@
+---
+id: sanitize_scale
+title: sanitize_scale
+sidebar_label: sanitize_scale
+slug: /apis/utilities/sanitize_scale
+description: 针对标记图片的比例尺参数、进行清理。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.sanitize_scale" />
+
+```python
+sanitized_scale: Scale = sanitize_scale(
+    scale: float | Mapping[str, Any],
+    offset_x: float | None = None,
+    offset_y: float | None = None,
+)
+```
+
+针对标记图片的比例尺参数、进行清理。
+
+数据清理将会确保：
+
+1. 将会返回一个至少包含了缩放比例的字典。
+2. 可以设置可选的偏移量。
+3. 清理后的数据会附加一个时间戳。该时间戳能确保即使该设置不变的情况下，也能总是触发缩放事件。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_scale
+dpa.utilities.sanitize_scale
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|    参数    |             类型             |               必选                | <center>说明</center>                                                                    |
+| :--------: | :--------------------------: | :-------------------------------: | ---------------------------------------------------------------------------------------- |
+|  `scale`   | `float \| Mapping[str, Any]` | <InlineIcon icon={vsiCheckIcon}/> | 缩放比例值（`float`）或一个完整的配置字典。                                              |
+| `offset_x` |       `float \| None`        |                                   | 沿 X 轴的相对偏移量。该值当且仅当参数`scale`未提供`"offset_x"`属性时，才会合并到结果中。 |
+| `offset_y` |       `float \| None`        |                                   | 沿 Y 轴的相对偏移量。该值当且仅当参数`scale`未提供`"offset_y"`属性时，才会合并到结果中。 |
+
+### 输出 {#returns}
+
+|       参数        |              类型               | <center>说明</center>                            |
+| :---------------: | :-----------------------------: | :----------------------------------------------- |
+| `sanitized_scale` | [Scale](../typehints/Scale.mdx) | 清理后的比例尺设置，其中包含一个新配置的时间戳。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 清理一个比例尺 {#-sanitize-a-scale}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="sanitize_scale.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+pprint.pprint(dpa.sanitize_scale(1.0))
+pprint.pprint(dpa.sanitize_scale(1.0, offset_x=0.1, offset_y=0.9))
+pprint.pprint(dpa.sanitize_scale({"scale": 0.8, "offset_x": 0.1}, offset_y=0.9))
+pprint.pprint(dpa.sanitize_scale({"scale": 0.8, "offset_x": 0.1}, offset_x=0.3, offset_y=0.9))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'scale': 1.0, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 1.0, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 0.8, 'timestamp': 1741041589211}
+{'offset_x': 0.1, 'offset_y': 0.9, 'scale': 0.8, 'timestamp': 1741041589212}
+```
+
+</TabItem>
+
+</Tabs>

@@ -445,5 +445,9 @@
   "theme.contentVisibility.draftBanner.message": {
     "message": "本页尚待完稿。其仅对开发者可见，并从发布版中自动排除。",
     "description": "The draft content banner message"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "{heading}的直接链接",
+    "description": "Title for link to heading"
   }
 }

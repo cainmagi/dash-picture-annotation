@@ -1,0 +1,58 @@
+---
+id: Scale
+title: Scale
+sidebar_label: Scale
+slug: /apis/typehints/Scale
+description: The initial image scale.
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Scale" />
+
+```python
+Scale(
+    scale: float,
+    offset_x: float,
+    offset_y: float,
+    timestamp: int,
+)
+```
+
+`Scale`是`TypedDict`。
+
+图片的初始比例尺。该值只能由用户设置。鼠标滚轮对比例尺的影响不会反映到该值。须知，要令该值起效，需要每次更新该值时、提供一个不同于上一次使用的值。
+
+若该值设置为一个标量，则该值会被用在属性`scale`上。
+
+属性`offset_x`和`offset_y`的默认值是`0.5`。
+
+时间戳是可选属性。它主要用来让组件确认当前给定的`Scale`是最新的版本。
+
+:::warning
+
+强烈建议透过[`dpa.utilities.sanitize_scale()`](../utilities/sanitize_scale.mdx)
+来设置该值，亦即是设置`init_scale`属性。
+
+:::
+
+## 别名 {#aliases}
+
+该类型可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Scale
+dpa.typehints.Scale
+```
+
+## 关键字 {#keywords}
+
+|   关键字    |  类型   | 必选 | <center>说明</center>                                                            |
+| :---------: | :-----: | :--: | :------------------------------------------------------------------------------- |
+|   `scale`   | `float` |      | 相对于标记图片的初始比例尺的相对尺寸。若未设置，则使用`1.0`。                    |
+| `offset_x`  | `float` |      | 相对 X 轴偏移。若未设置，则使用`0.5`（沿宽度正中）。                             |
+| `offset_y`  | `float` |      | 相对 Y 轴偏移。若未设置，则使用`0.5`（沿高度正中）。                             |
+| `timestamp` |  `int`  |      | 可选的时间戳值。该值不会实际使用到。若设置该值，该值可令组件确认比例尺需要更新。 |

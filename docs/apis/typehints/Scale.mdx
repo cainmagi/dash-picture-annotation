@@ -1,0 +1,61 @@
+---
+id: Scale
+title: Scale
+sidebar_label: Scale
+slug: /apis/typehints/Scale
+description: The initial image scale.
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Scale" />
+
+```python
+Scale(
+    scale: float,
+    offset_x: float,
+    offset_y: float,
+    timestamp: int,
+)
+```
+
+`Scale` is a `TypedDict`.
+
+The initial image scale. This value can only be configured by users. The scaling
+reflected by the wheel event will not influence this value. Note that this value
+needs to be updated by a different value to make it take effect.
+
+If this value is configured as a scalar, will use it as the property `scale`.
+
+The default values of `offset_x` and `offset_y` are `0.5`.
+
+The timestamp is optional. It can be used for letting component know that the given
+`Scale` is the newest.
+
+:::warning
+
+It is strongly recommended that this value, i.e. the property `init_scale`, should be
+given by [`dpa.utilities.sanitize_scale()`](../utilities/sanitize_scale.mdx).
+
+:::
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Scale
+dpa.typehints.Scale
+```
+
+## Keywords
+
+|   Keyword   |  Type   | Required | <center>Description</center>                                                                                                                                       |
+| :---------: | :-----: | :------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|   `scale`   | `float` |          | The scale related to the initial scale of the annotated image. If not specified, will use `1.0`.                                                                   |
+| `offset_x`  | `float` |          | The relative X offset. If not specified, will use `0.5` (center of the width).                                                                                     |
+| `offset_y`  | `float` |          | The relative Y offset. If not specified, will use `0.5` (center of the height).                                                                                    |
+| `timestamp` |  `int`  |          | An optional timestamp value. This value will not be actually used. If it is configured, it can be used for letting the component know the scale should be updated. |
