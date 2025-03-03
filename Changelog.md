@@ -4,6 +4,12 @@
 
 ## CHANGELOG
 
+### 0.2.1 @ 03/03/2025
+
+#### :wrench: Fix
+
+1. Fix: The docstring/notation of the property `init_scale` is not correct. Now, add the missing notations.
+
 ### 0.2.0 @ 03/03/2025
 
 #### :mega: New

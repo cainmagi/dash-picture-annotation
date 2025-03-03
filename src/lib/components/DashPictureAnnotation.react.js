@@ -287,12 +287,13 @@ DashPictureAnnotation.propTypes = {
       /**
        * The relative Y offset. If not specified, will use `0.5` (center of the height).
        */
-      timestamp: PropTypes.number,
+      offset_y: PropTypes.number,
       /**
        * An optional timestamp value. This value will not be actually used, if it is
        * configured, it can be used for letting the component know the scale should
        * be updated.
        */
+      timestamp: PropTypes.number,
     })
   ]),
 
