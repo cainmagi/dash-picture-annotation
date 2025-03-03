@@ -1,0 +1,36 @@
+---
+id: index
+title: typehints
+sidebar_label: typehints
+slug: /apis/typehints
+description: Extra typehints used by this project.
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="module" source="typehints" />
+
+Extra typehints used by this project.
+
+## Typehints
+
+|                                               Member                                                |    Type     | <center>Description</center>                       |
+| :-------------------------------------------------------------------------------------------------: | :---------: | :------------------------------------------------- |
+|             [<IconObjType type="type" hasText={true} text="AnnoMark"/>](./AnnoMark.mdx)             | `TypedDict` | The `mark` property in the annotation item.        |
+|             [<IconObjType type="type" hasText={true} text="AnnoItem"/>](./AnnoItem.mdx)             | `TypedDict` | Annotation item.                                   |
+|          [<IconObjType type="type" hasText={true} text="Annotations"/>](./Annotations.mdx)          | `TypedDict` | The collection of annotations.                     |
+|            [<IconObjType type="type" hasText={true} text="AnnoStyle"/>](./AnnoStyle.mdx)            | `TypedDict` | The css-styles of the annotation marker (box).     |
+| [<IconObjType type="type" hasText={true} text="DashSelectOptionItem"/>](./DashSelectOptionItem.mdx) | `TypedDict` | The option item of a Dash selectable component.    |
+|                 [<IconObjType type="type" hasText={true} text="Size"/>](./Size.mdx)                 | `TypedDict` | The requirement of the minimal annotation size.    |
+|           [<IconObjType type="type" hasText={true} text="NSAnnoItem"/>](./NSAnnoItem.mdx)           | `TypedDict` | The type of a not sanitized annotation item.       |
+|        [<IconObjType type="type" hasText={true} text="NSAnnotations"/>](./NSAnnotations.mdx)        | `TypedDict` | The type of a not sanitized annotation collection. |
+
+## Functions
+
+|                                                     Member                                                      | <center>Description</center>                                                  |
+| :-------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------- |
+|             [<IconObjType type="func" hasText={true} text="is_sequence_of"/>](./is_sequence_of.mdx)             | Check whether `data` is `Sequence[T]`, where `T` is specified by `validator`. |
+|               [<IconObjType type="func" hasText={true} text="is_anno_mark"/>](./is_anno_mark.mdx)               | Implementation of `isinstance(data, AnnoMark)`.                               |
+|               [<IconObjType type="func" hasText={true} text="is_anno_item"/>](./is_anno_item.mdx)               | Implementation of `isinstance(data, AnnoItem)`.                               |
+|             [<IconObjType type="func" hasText={true} text="is_annotations"/>](./is_annotations.mdx)             | Implementation of `isinstance(data, Annotations)`.                            |
+| [<IconObjType type="func" hasText={true} text="is_dash_select_option_item"/>](./is_dash_select_option_item.mdx) | Implementation of `isinstance(data, DashSelectOptionItem)`.                   |

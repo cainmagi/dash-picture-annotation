@@ -1,0 +1,270 @@
+---
+id: data
+sidebar_label: Data
+title: Using annotation data
+description: A guide showing how to use the annotation data of DashPictureAnnotation.
+slug: /usages/data
+---
+
+# Using annotation data
+
+This package contains a sole component named
+[`dpa.DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx). To use this
+component, we can start from a minimal example:
+
+```python showLineNumbers
+import dash
+from dash import html
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+app.layout = html.Div(
+    (
+        dpa.DashPictureAnnotation(
+            id="annotator",
+            data=None,
+            image="/site-address/to/an/image",
+        ),
+    )
+)
+```
+
+Here, we let the `data` initialized by `None`, which means that no annotations are
+defined when the component is loaded.
+
+Users can interact with the annotator with
+
+1. Dragging and dropping for creating new annotation boxes;
+2. Selecting an annotation box and specify its comment;
+3. Selecting an annotation box, resizing, and relocating it;
+4. Delete any annotation box.
+
+## Catch the update of the annotation data
+
+Every time when the mouse is released, the annotation data will be updated. This update
+will fire a dash callback. Use the following codes to catch the callback.
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        # highlight-next-line
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data: dpa.Annotations | None) -> Optional[str]:
+    if data is None:
+        return None
+    return json.dumps(data)
+```
+
+Typically, the `data` returned by the annotator is typed by
+[`dpa.Annotations`](../../apis/typehints/Annotations.mdx). However
+there are two exceptions:
+
+:::warning
+
+`data` can be initialized by `None` or an unexpected value. Passing a `data` that
+cannot be typed by [`dpa.Annotations`](../../apis/typehints/Annotations.mdx) to the
+initialization of `DashPictureAnnotation` is allowed. In this case, the firstly loaded
+value captured by the callback will be exactly the same as the value used for
+initializing the component.
+
+`data` can be updated by a callback using `Output("annotator", "data")`. In this case,
+users may provide a value not typed by
+[`dpa.Annotations`](../../apis/typehints/Annotations.mdx). The subsequently fired
+callback using this value as the input will be influenced.
+
+:::
+
+Fortunately, the above example will not cause such issues because
+
+1. The `data` is initialized by `None`, such a value is already correctly handled by
+   the callback.
+2. The `data` would not be updated by any callback. In other words, it is only updated
+   by user interactions. All updates fired by user interactions provide a `data`
+   typed by `dpa.Annotations`.
+
+## Sanitization
+
+The robustness of the callbacks capturing or updating the annotation can be improved
+by sanitization. Take the above codes as an example, we make a few modifications to
+let the data sanitized.
+
+```python showLineNumbers
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data: dpa.Annotations | None) -> Optional[str]:
+    if data is None:
+        return None
+    # highlight-start
+    if not dpa.is_annotations(data):
+        return json.dumps(dpa.sanitize_data(data))
+    # highlight-end
+    return json.dumps(data)
+```
+
+This modification ensures that the returned value is always serializable even if
+another callback modifies `data` without following the typehint `dpa.Annotations`.
+The added lines provide the following functionalities:
+
+1. Check whether the `data` is formatted as `dpa.Annotations`. If not, use
+   [`dpa.sanitize_data(...)`](../../apis/utilities/sanitize_data.mdx) to sanitize the
+   data.
+2. If the `data` is already formatted as `dpa.Annotation`, return the serialized JSON
+   string directly.
+
+To verify this, users can modify the initialization and let `data=1` which supposes
+to be not JSON-serializable. With the sanitization, the callback stills works.
+
+:::tip
+
+When defining a callback updating `data`, or saving the `data` as a file, the method
+[`dpa.sanitize_data`](../../apis/utilities/sanitize_data.mdx) can be used, too. It can
+exempt the inappropriate modifications made by users.
+
+:::
+
+## Add a reset button
+
+The property `data` can be set by either the user interaction or the callback.
+By adding another callback fired by a reset button, we can implement the feature of
+clearing all annotations.
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-reset", children="Reset")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "data"),
+    Input("btn-reset", "n_clicks"),
+    prevent_initial_call=True,
+)
+def reset_data(n_clicks: Optional[int]):
+    if n_clicks:
+        return dpa.sanitize_data([])
+    return dash.no_update
+```
+
+In this example, we provides a button triggering the updating of the data. By using
+[`dpa.sanitize_data`](../../apis/utilities/sanitize_data.mdx), the updated value will
+be sanitized and typed by [`dpa.Annotations`](../../apis/typehints/Annotations.mdx).
+Clicking this button will remove all annotations.
+
+## Get or change data by IDs
+
+Each annotation box created by user interactions will by marked by a randomly-generated
+ID. These unique IDs can be used for locating a specific annotation box. Suppose that
+a new button is added for getting an annotation box for with a specific ID, and update
+the annotation's comment. We can use
+[`dpa.get_data_item`](../../apis/utilities/get_data_item.mdx) to locate the item by
+its ID.
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-getbyid", children="Get by ID")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "data"),
+    Input("btn-getbyid", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def change_data_by_id(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_ids = dpa.get_all_ids(data)  # A sequence of IDs.
+        data_item = dpa.get_data_item(data, all_ids[-1])
+        # highlight-next-line
+        data_item["comment"] = "new-comment"
+        return data
+    return dash.no_update
+```
+
+In this example, we modify the located data item. Any modification on the item will
+make the data changed in place. Therefore, returning the data directly will make the
+annotations changed.
+
+## Get or search data by comment
+
+Another useful functionality is to query the data by the comment. Since different
+annotation data items may have the same comment, the method
+[`dpa.get_data_items`](../../apis/utilities/get_data_items.mdx) is used for locating
+all annotation items with a specific comment, for example
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-getbycomment", children="Get by comment")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+        # highlight-next-line
+        html.Div(id="comment-ids"),
+    )
+)
+
+
+@app.callback(
+    Output("comment-ids", "children"),
+    Input("btn-getbycomment", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def get_data_by_comment(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_comments = dpa.get_all_comments(data)  # A frozen set of comments.
+        # highlight-next-line
+        data_items = dpa.get_data_items(data, next(iter(all_comments)))
+        comment_ids = dpa.get_all_ids(data_items)  # A sequence of ids of `data_items`.
+        return json.dumps(comment_ids)
+    return dash.no_update
+```
+
+[`dpa.get_data_items`](../../apis/utilities/get_data_items.mdx) can only locate the
+items with a specific comment. There is another version used for searching the comments
+by the regular expression, see
+[`dpa.get_data_items_by_regex`](../../apis/utilities/get_data_items_by_regex.mdx).
+
+```python showLineNumbers
+@app.callback(
+    Output("comment-ids", "children"),
+    Input("btn-getbycomment", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def get_data_by_comment(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_comments = dpa.get_all_comments(data)  # A frozen set of comments.
+        # highlight-next-line
+        data_items = dpa.get_data_items_by_regex(data, r"^type-.*"))
+        comment_ids = dpa.get_all_ids(data_items)  # A sequence of ids of `data_items`.
+        return json.dumps(comment_ids)
+    return dash.no_update
+```
+
+The above version will find all items with a comment starting with `type-`.
+
+Certainly, changing `data_items` will make the `data` changed in place. The usages are
+the same as the example of using `get_data_item`.

@@ -1,0 +1,50 @@
+---
+id: DashSelectOptionItem
+title: DashSelectOptionItem
+sidebar_label: DashSelectOptionItem
+slug: /apis/typehints/DashSelectOptionItem
+description: The option item of a Dash selectable component.
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.DashSelectOptionItem" />
+
+```python
+DashSelectOptionItem(
+    label: str,
+    value: Any,
+    disabled: bool,
+)
+```
+
+`DashSelectOptionItem` is a `TypedDict`.
+
+The option item of a Dash selectable component.
+
+The available options of the annotator. The usage is like the selector component
+`dcc.Dropdown(options=...)`. Each item represents an available choice of the
+annotation type.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.DashSelectOptionItem
+dpa.typehints.DashSelectOptionItem
+```
+
+## Keywords
+
+|  Keyword   |  Type  |             Required              | <center>Description</center>                                          |
+| :--------: | :----: | :-------------------------------: | :-------------------------------------------------------------------- |
+|  `label`   | `str`  | <InlineIcon icon={vsiCheckIcon}/> | Label (displayed text) of the option.                                 |
+|  `value`   | `Any`  | <InlineIcon icon={vsiCheckIcon}/> | The value of the option which will be applied to the annotation data. |
+| `disabled` | `bool` |                                   | A flag. If specified, this option item will be not selectable.        |

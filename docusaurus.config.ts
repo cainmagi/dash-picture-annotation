@@ -61,11 +61,11 @@ const config: Config = {
           editLocalizedFiles: true,
           // versions
           lastVersion: "current",
-          // versions: {
-          //   current: {
-          //     label: "0.1.0",
-          //   },
-          // },
+          versions: {
+            current: {
+              label: "0.2.1",
+            },
+          },
         },
         theme: {
           customCss: "./src/css/custom.scss",
@@ -96,17 +96,17 @@ const config: Config = {
           position: "left",
           label: "APIs",
         },
-        // {
-        //   type: "docsVersionDropdown",
-        //   position: "right",
-        //   dropdownActiveClassDisabled: true,
-        //   dropdownItemsAfter: [
-        //     {
-        //       to: "/versions",
-        //       label: "All versions",
-        //     },
-        //   ],
-        // },
+        {
+          type: "docsVersionDropdown",
+          position: "right",
+          dropdownActiveClassDisabled: true,
+          dropdownItemsAfter: [
+            {
+              to: "/versions",
+              label: "All versions",
+            },
+          ],
+        },
         {
           type: "localeDropdown",
           position: "right",

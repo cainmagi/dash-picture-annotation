@@ -1,0 +1,102 @@
+---
+id: is_anno_mark
+title: is_anno_mark
+sidebar_label: is_anno_mark
+slug: /apis/typehints/is_anno_mark
+description: isinstance(data, AnnoMark)的实现。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_anno_mark" />
+
+```python
+flag: TypeGuard[AnnoMark] = is_anno_mark(data: Any)
+```
+
+`isinstance(data, AnnoMark)`的实现。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_anno_mark
+dpa.typehints.is_anno_mark
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|  参数  | 类型  |               必选                | <center>说明</center> |
+| :----: | :---: | :-------------------------------: | --------------------- |
+| `data` | `Any` | <InlineIcon icon={vsiCheckIcon}/> | 要验证的值。          |
+
+### 输出 {#returns}
+
+|  参数  |  类型  | <center>说明</center>                                                      |
+| :----: | :----: | :------------------------------------------------------------------------- |
+| `flag` | `bool` | 若该值为`True`，表示`data`是[`AnnoMark`](./AnnoMark.mdx)的实例，反之亦然。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 检查某对象是否是`AnnoMark` {#-check-whether-an-object-is-an-annomark}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_annomark.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+print(dpa.is_anno_mark({}))
+print(dpa.is_anno_mark({"x": 1, "y": 2}))
+print(
+    dpa.is_anno_mark(
+        {"x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"}
+    )
+)
+print(
+    dpa.is_anno_mark(
+        {"id": "test", "x": 1, "y": 2, "width": 1, "height": 1, "type": "RECT"}
+    )
+)
+print(
+    dpa.is_anno_mark(
+        {"x": 1, "y": 2, "width": 1, "height": 1, "type": "rect"}
+    )
+)
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+False
+False
+True
+True
+False
+```
+
+</TabItem>
+
+</Tabs>

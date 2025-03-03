@@ -1,0 +1,96 @@
+---
+id: get_all_ids
+title: get_all_ids
+sidebar_label: get_all_ids
+slug: /apis/utilities/get_all_ids
+description: Get the list of all IDs in the annotation data. The returne IDs are ordered as the order of the items in data.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_all_ids" />
+
+```python
+ids: [str] = get_all_ids(data: Annotations | [AnnoItem])
+```
+
+Get the list of all IDs in the annotation data. The returne IDs are ordered as the
+order of the items in `data`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_all_ids
+dpa.utilities.get_all_ids
+```
+
+## Arguments
+
+### Requires
+
+| Argument |                                                      Type                                                       |             Required              | <center>Description</center>         |
+| :------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------ |
+|  `data`  | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is checked. |
+
+### Returns
+
+| Argument |  Type   | <center>Description</center>                         |
+| :------: | :-----: | :--------------------------------------------------- |
+|  `ids`   | `[str]` | The ordered IDs of the annotation items in the data. |
+
+## Examples
+
+### <IconObjType type="term"/> Get all IDs of the data
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_all_ids.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+data = [
+    {"id": "a", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "b", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 1, "y": 1, "width": 0, "height": 0, "type": "RECT"}},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_all_ids(data))
+pprint.pprint(dpa.get_all_ids(data_wrapped))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+('a', 'b', 'c', 'c')
+('a', 'b', 'c', 'c')
+```
+
+</TabItem>
+
+</Tabs>

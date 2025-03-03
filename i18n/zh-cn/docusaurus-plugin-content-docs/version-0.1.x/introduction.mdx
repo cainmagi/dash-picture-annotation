@@ -1,0 +1,178 @@
+---
+id: introduction
+title: 简介
+description: 介绍Dash Picture Annotation。Dash Picture Annotation是单Dash组件包，用以提供针对图片的简易标记编辑器。
+slug: /
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import {IconLinkInline} from "@site/src/components/IconLink";
+
+import octClock16 from "@iconify-icons/octicon/clock-16";
+import octLaw16 from "@iconify-icons/octicon/law-16";
+import octRepoForked16 from "@iconify-icons/octicon/repo-forked-16";
+import octShareAndroid16 from "@iconify-icons/octicon/share-android-16";
+import octiconShield16 from "@iconify-icons/octicon/shield-16";
+
+import mdiResizeHorizontal from "@iconify-icons/mdi/resize-horizontal";
+import mdiFormSelect from "@iconify-icons/mdi/form-select";
+import mdiSafeSquareOutline from "@iconify-icons/mdi/safe-square-outline";
+import mdiImageFilterCenterFocus from "@iconify-icons/mdi/image-filter-center-focus";
+import mdiEditOffOutline from "@iconify-icons/mdi/edit-off-outline";
+import mdiColor from "@iconify-icons/mdi/color";
+import mdiPaletteOutline from "@iconify-icons/mdi/palette-outline";
+
+import {rawURL, repoURL, demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+import VideoPlayer from "@site/src/demos/VideoPlayer";
+
+# 简介
+
+Dash Picture Annotation是一个[Dash组件<IconExternalLink/>][link-dash-component]包。
+
+本组件包是对React项目React Picture Annotation的Dash移植版，用以提供针对图片的简易标记编辑器。
+
+以下两图对比了原React项目和本项目的范例。由于本项目仅仅是原React组件的Dash封装，它们的效果可以视作是等价的。
+
+|                                  React Picture Annotation                                  |                                 Dash Picture Annotation                                  |
+| :----------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+| <img alt="demo-react" className="ondark-inv" src={rawURL("main/display/demo-react.png")}/> | <img alt="demo-dash" className="ondark-inv" src={rawURL("main/display/demo-dash.png")}/> |
+
+相比于原项目，本项目还有以下新添加的特殊功能：
+
+1. **响应式尺寸**<InlineIcon icon={mdiResizeHorizontal}/>: 标记器（annotator）的宽度会跟随其父网页元素的宽度自动调整。
+2. **Different modes**<InlineIcon icon={mdiFormSelect}/>: 选中某个标记（annotation）时，其编辑器可以设为文本框、或下拉菜单。
+3. **Data sanitized**<InlineIcon icon={mdiSafeSquareOutline}/>: 标记数据经过了简单清理。即使向标记器传入了格式不标准的数据，也能正常使用。
+4. **Anti-mistakes**<InlineIcon icon={mdiImageFilterCenterFocus}/>: 可以透过设置标记框大小的阈值、防止用户由于误操作而创建微小的标记。
+5. **Disabled**<InlineIcon icon={mdiEditOffOutline}/>: 可以透过一个二值量禁用标记器。
+6. **Specified colors**<InlineIcon icon={mdiColor}/>: 针对某具有特定文字标注的标记，可以设置特定的标记颜色。不同的文字标注可以设置不同的颜色。
+7. **Dynamic colors**<InlineIcon icon={mdiPaletteOutline}/>: 不必专门为每种标注手动设置颜色，可以透过一个二值量、允许标记根据其文字标注的哈希量（hash code）自动计算其颜色。
+
+## Dash Picture Annotation的视频展示 {#a-video-demo-of-dash-picture-annotation}
+
+透过以下视频展示，速览本项目的特性：
+
+<VideoPlayer src="https://raw.githubusercontent.com/cainmagi/dash-picture-annotation/main/display/demo.mp4" />
+
+## 用法 {#usage}
+
+以下签名展示了本组件的基本用途。
+
+```python
+import dash_picture_annotation as dpa
+
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=default_data,  # Can be `None`
+    image="/assets/test_image.svg",  # Can be `None`
+    options=None,
+)
+```
+
+其中`data`的类型标记为[`dpa.Annotations`](./apis/typehints/Annotations.mdx)。其格式形如下例：
+
+```json showLineNumbers
+{
+  "timestamp": 0,
+  "data": [
+    {
+      "id": "N5fewQ",
+      "mark": {
+        "x": -224.45,
+        "y": 62.76,
+        "width": 125.53,
+        "height": 125.53,
+        "type": "RECT"
+      },
+      "comment": "has-a-type"
+    },
+    {
+      "id": "ibJMdK",
+      "mark": {
+        "x": -36.15,
+        "y": 62.76,
+        "width": 125.53,
+        "height": 125.53,
+        "type": "RECT"
+      }
+    },
+    {
+      "id": "...",
+      "...": "..."
+    }
+  ]
+}
+```
+
+在<IconLinkInline text="此处" href={demoURL("minimal.py")}/>查看一个完整的最小范例。
+
+在<IconLinkInline text="此处" href={demoURL()}/>查看一个完整的综合应用范例，其中展示了基本功能。
+
+## 鸣谢 {#acknowledgements}
+
+- [Kunduin/react-picture-annotation<IconExternalLink/>][git-react-picture-annotation]: 本项目的原始React版本。
+
+## 相关材料 {#related-materials}
+
+更新手记：
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/Changelog.md")} icon={octClock16}>
+      更新手记
+    </DarkButton>
+  }
+</p>
+
+本项目的许可证：
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/LICENSE")} icon={octLaw16}>
+      MIT协议
+    </DarkButton>
+  }
+</p>
+
+合作与贡献指南：
+
+<p>
+  {
+    <DarkButton
+      href={repoURL("blob/main/CONTRIBUTING.md")}
+      icon={octRepoForked16}
+    >
+      贡献本项目
+    </DarkButton>
+  }
+</p>
+
+贡献者利用规约：
+
+<p>
+  {
+    <DarkButton
+      href={repoURL("blob/main/CODE_OF_CONDUCT.md")}
+      icon={octShareAndroid16}
+    >
+      利用规约
+    </DarkButton>
+  }
+</p>
+
+漏洞防治与安全策略：
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/SECURITY.md")} icon={octiconShield16}>
+      安全策略
+    </DarkButton>
+  }
+</p>
+
+[git-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation
+[link-dash-component]: https://dash.plotly.com/plugins

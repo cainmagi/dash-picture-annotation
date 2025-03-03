@@ -1,0 +1,49 @@
+---
+id: AnnoItem
+title: AnnoItem
+sidebar_label: AnnoItem
+slug: /apis/typehints/AnnoItem
+description: Annotation item.
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.AnnoItem" />
+
+```python
+AnnoItem(
+    id: str,
+    mark: AnnoMark,
+    comment: str,
+)
+```
+
+`AnnoItem` is a `TypedDict`.
+
+Annotation item.
+
+This dictionary represents the definition of one annotation item with its bounding box
+information.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.AnnoItem
+dpa.typehints.AnnoItem
+```
+
+## Keywords
+
+|  Keyword  |             Type             |             Required              | <center>Description</center>                                                                                |
+| :-------: | :--------------------------: | :-------------------------------: | :---------------------------------------------------------------------------------------------------------- |
+|   `id`    |            `str`             | <InlineIcon icon={vsiCheckIcon}/> | The ID of the annotation item. This ID is only used for locating which item is currently selected by users. |
+|  `mark`   | [`AnnoMark`](./AnnoMark.mdx) | <InlineIcon icon={vsiCheckIcon}/> | The boudning box and the shape information of this annotation item.                                         |
+| `comment` |            `str`             |                                   | The text attached to this annotation item. Typically, this value is the type of the label.                  |

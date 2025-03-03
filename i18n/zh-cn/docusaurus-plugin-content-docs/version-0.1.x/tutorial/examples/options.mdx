@@ -1,0 +1,123 @@
+---
+id: options
+sidebar_label: 使用选项
+title: 范例：使用下拉菜单
+description: 以下范例，展示了使用下拉菜单控制标记的文字标注。
+slug: /examples/options
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# 范例：使用下拉菜单
+
+<div className="float-right indark-inv">
+
+|                   使用下拉菜单的范例                   |
+| :----------------------------------------------------: |
+| ![使用下拉菜单的范例](/img/examples/demo-options.webp) |
+
+</div>
+
+查看以下链接，以阅览使用下拉菜单的范例。
+
+<p>
+  <DarkButton to={demoURL("options.py")} icon={mdiLanguagePython}>
+    {"options.py"}
+  </DarkButton>
+</p>
+
+
+该范例提供了以下功能：
+
+1. 一个基础的[`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx)，允许：
+   1. 透过拖拽的方式，创建、修改、或移除标记框。
+   2. 使用文本输入框、或下拉菜单修改标记的文字标注。
+2. 每当标记数据改变时，数据的变化会反馈给标记器下方的文字。
+3. 两个控制按钮：
+   - 开关选单（<kbd>Toggle options</kbd>）：用来开启、关闭配置文字标注时所用的下拉菜单。
+   - 开关选单的清空功能（<kbd>Toggle options clearable</kbd>）：用来在下拉菜单可用时，开启、关闭当前选中值的“是否允许清空”的属性。
+
+## 定义布局 {#define-the-layout}
+
+相比[最小范例](./minimal.mdx)，此处还有两个额外的按钮。
+
+```python
+(
+    dpa.DashPictureAnnotation(
+        id="annotator",
+        style={"height": "80vh"},
+        data=default_data,
+        image="/assets/test_image.svg",
+        options=None,
+        clearable_dropdown=True,
+        # highlight-start
+        placeholder_input="Using free mode...",
+        placeholder_dropdown="Using selection mode...",
+        # highlight-end
+    ),
+    html.Div(
+        # highlight-start
+        html.Button(
+            children="Toggle options", id="btn-options", style=styles["mr1"]
+        ),
+        html.Button(children="Toggle options clearable", id="btn-optclear"),
+        # highlight-end
+    ),
+)
+```
+
+除了追加两个按钮以外，还分别配置了文本输入框、和下拉菜单在未提供值时显示的占位文字。
+
+## 定义callback {#define-the-callbacks}
+
+以下callback的实现同时涵盖了来自两个按钮的点击事件。此处使用dash上下文[`triggered_id`<IconExternalLink/>][link-triggered-id]来确定哪个按钮的点击触发了callback，从而进入对应的处理分支。
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "options"),
+    Output("annotator", "clearable_dropdown"),
+    Input("btn-options", "n_clicks"),
+    Input("btn-optclear", "n_clicks"),
+    State("annotator", "options"),
+    State("annotator", "clearable_dropdown"),
+    prevent_initial_call=True,
+)
+def toggle_options(
+    n_clicks_options: Optional[int],
+    n_clicks_optclear: Optional[int],
+    options: Optional[Sequence[Any]],
+    clearable_dropdown: Optional[bool],
+):
+    trigger = dash.ctx.triggered_id
+    if trigger and trigger == "btn-options" and n_clicks_options:
+        if options:
+            return None, dash.no_update
+        else:
+            return default_options, dash.no_update
+    if trigger and trigger == "btn-optclear" and n_clicks_optclear:
+        return dash.no_update, not bool(clearable_dropdown)
+    return dash.no_update, dash.no_update
+```
+
+第一个分支用来开关是否使用以下全局量`default_options`定义选单。定义该值的方式和使用[`dcc.Dropdown`][link-dccdropdown]的方式相同。
+
+```python
+default_options = [
+    {"value": "type-1", "label": "Type 1"},
+    {"value": "type-2", "label": "Type 2"},
+]
+```
+
+其中`label`和`value`分别表示选单所展示的文字、和对应使用在标记器中的文字标注。
+
+第二个分支用来开关属性`clearable_dropdown`。若属性处于启用状态，则会在下拉菜单内、当前选中的选项旁边，追加一个用来清空该选项的按钮。
+
+当下拉菜单可用时，用户只能从所提供的候选列表中，选择一个文字标注。若使用默认的文字标注编辑器（`<input>`输入框），则文字标注可以填写为任意值。
+
+[link-triggered-id]: https://dash.plotly.com/advanced-callbacks#properties-for-callback_context
+[link-dccdropdown]: https://dash.plotly.com/dash-core-components/dropdown

@@ -1,0 +1,36 @@
+---
+id: index
+title: typehints
+sidebar_label: typehints
+slug: /apis/typehints
+description: 项目中使用的额外类型标记。
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="module" source="typehints" />
+
+项目中使用的额外类型标记。
+
+## 类型 {#typehints}
+
+|                                                成员                                                 |    Type     | <center>说明</center>          |
+| :-------------------------------------------------------------------------------------------------: | :---------: | :----------------------------- |
+|             [<IconObjType type="type" hasText={true} text="AnnoMark"/>](./AnnoMark.mdx)             | `TypedDict` | 标记数据项的属性mark。        |
+|             [<IconObjType type="type" hasText={true} text="AnnoItem"/>](./AnnoItem.mdx)             | `TypedDict` | 标记数据项。                   |
+|          [<IconObjType type="type" hasText={true} text="Annotations"/>](./Annotations.mdx)          | `TypedDict` | 标记数据的总集。               |
+|            [<IconObjType type="type" hasText={true} text="AnnoStyle"/>](./AnnoStyle.mdx)            | `TypedDict` | 标记框的CSS样式。            |
+| [<IconObjType type="type" hasText={true} text="DashSelectOptionItem"/>](./DashSelectOptionItem.mdx) | `TypedDict` | Dash选单组件的一个选项。      |
+|                 [<IconObjType type="type" hasText={true} text="Size"/>](./Size.mdx)                 | `TypedDict` | 针对标记框尺寸的最小需求。     |
+|           [<IconObjType type="type" hasText={true} text="NSAnnoItem"/>](./NSAnnoItem.mdx)           | `TypedDict` | 用来标记未清理的标记数据项。   |
+|        [<IconObjType type="type" hasText={true} text="NSAnnotations"/>](./NSAnnotations.mdx)        | `TypedDict` | 用来标记未清理的全体标记数据。 |
+
+## 函数 {#functions}
+
+|                                                      成员                                                       | <center>说明</center>                                    |
+| :-------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------- |
+|             [<IconObjType type="func" hasText={true} text="is_sequence_of"/>](./is_sequence_of.mdx)             | 检查数据`data`是否是`Sequence[T]`，其中`T`由验证器确认。 |
+|               [<IconObjType type="func" hasText={true} text="is_anno_mark"/>](./is_anno_mark.mdx)               | `isinstance(data, AnnoMark)`的实现。                     |
+|               [<IconObjType type="func" hasText={true} text="is_anno_item"/>](./is_anno_item.mdx)               | `isinstance(data, AnnoItem)`的实现。                     |
+|             [<IconObjType type="func" hasText={true} text="is_annotations"/>](./is_annotations.mdx)             | `isinstance(data, Annotations)`的实现。                  |
+| [<IconObjType type="func" hasText={true} text="is_dash_select_option_item"/>](./is_dash_select_option_item.mdx) | `isinstance(data, DashSelectOptionItem)`的实现。         |

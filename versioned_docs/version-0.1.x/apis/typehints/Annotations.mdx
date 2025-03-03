@@ -1,0 +1,46 @@
+---
+id: Annotations
+title: Annotations
+sidebar_label: Annotations
+slug: /apis/typehints/Annotations
+description: The collection of annotations.
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Annotations" />
+
+```python
+Annotations(
+    timestamp: int,
+    data: [AnnoItem],
+)
+```
+
+`Annotations` is a `TypedDict`.
+
+The collection of annotations.
+
+This dictionary contain the data of annotations.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Annotations
+dpa.typehints.Annotations
+```
+
+## Keywords
+
+|   Keyword   |                        Type                         |             Required              | <center>Description</center>                                                                                                                                                                                                                                                                    |
+| :---------: | :-------------------------------------------------: | :-------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timestamp` |                        `str`                        |                                   | The time stamp recording when the user interaction changes the data. Note that this value is necessary for ensuring that the user triggered changes will not be omitted. From the server side, this value can be set by `0` because the user interaction will use a higher value to replace it. |
+|   `data`    | <code>{`[`}[AnnoItem](./AnnoItem.mdx){`]`}</code> | <InlineIcon icon={vsiCheckIcon}/> | A collection of annotation items. These items are decoded from JSON data and can be modified. Use these items to specify the annotations.                                                                                                                                                       |

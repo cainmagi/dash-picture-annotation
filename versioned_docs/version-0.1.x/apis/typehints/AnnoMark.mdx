@@ -1,0 +1,50 @@
+---
+id: AnnoMark
+title: AnnoMark
+sidebar_label: AnnoMark
+slug: /apis/typehints/AnnoMark
+description: The mark property in the annotation item.
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.AnnoMark" />
+
+```python
+AnnoMark(
+    x: float,
+    y: float,
+    width: float,
+    height: float,
+    type: "RECT",
+)
+```
+
+`AnnoMark` is a `TypedDict`.
+
+The `mark` property in the annotation item.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.AnnoMark
+dpa.typehints.AnnoMark
+```
+
+## Keywords
+
+| Keyword  |   Type   |             Required              | <center>Description</center>                                                       |
+| :------: | :------: | :-------------------------------: | :--------------------------------------------------------------------------------- |
+|   `x`    | `float`  | <InlineIcon icon={vsiCheckIcon}/> | The x (horizontal) position of the upper left corner of the annotation item.       |
+|   `y`    | `float`  | <InlineIcon icon={vsiCheckIcon}/> | The y (vertical) position of the upper left corner of the annotation item.         |
+| `width`  | `float`  | <InlineIcon icon={vsiCheckIcon}/> | The width of the bounding box.                                                     |
+| `height` | `float`  | <InlineIcon icon={vsiCheckIcon}/> | The height of the bounding box.                                                    |
+|  `type`  | `"RECT"` | <InlineIcon icon={vsiCheckIcon}/> | The type of the annotation shape. Currently, we only support `"RECT"` (rectangle). |

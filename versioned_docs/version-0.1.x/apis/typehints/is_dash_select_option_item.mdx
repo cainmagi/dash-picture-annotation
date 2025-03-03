@@ -1,0 +1,90 @@
+---
+id: is_dash_select_option_item
+title: is_dash_select_option_item
+sidebar_label: is_dash_select_option_item
+slug: /apis/typehints/is_dash_select_option_item
+description: Implementation of isinstance(data, DashSelectOptionItem).
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="typehints.is_dash_select_option_item" />
+
+```python
+flag: TypeGuard[DashSelectOptionItem] = is_dash_select_option_item(obj: Any)
+```
+
+Implementation of `isinstance(data, DashSelectOptionItem)`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.is_dash_select_option_item
+dpa.typehints.is_dash_select_option_item
+```
+
+## Arguments
+
+### Requires
+
+| Argument | Type  |             Required              | <center>Description</center> |
+| :------: | :---: | :-------------------------------: | ---------------------------- |
+|  `obj`   | `Any` | <InlineIcon icon={vsiCheckIcon}/> | The value to be verified.    |
+
+### Returns
+
+| Argument |  Type  | <center>Description</center>                                                                                    |
+| :------: | :----: | :-------------------------------------------------------------------------------------------------------------- |
+|  `flag`  | `bool` | If this value is `True`, `obj` an instance of [`DashSelectOptionItem`](./DashSelectOptionItem.mdx), vice versa. |
+
+## Examples
+
+### <IconObjType type="term"/> Check whether an object is an `DashSelectOptionItem`
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="check_is_dash_select_option_item.py" showLineNumbers
+import dash_picture_annotation as dpa
+
+
+print(dpa.is_dash_select_option_item({}))
+print(dpa.is_dash_select_option_item({"label": "x"}))
+print(dpa.is_dash_select_option_item({"label": "x", "value": 1}))
+print(dpa.is_dash_select_option_item({"label": "x", "value": 1, "disabled": True}))
+print(dpa.is_dash_select_option_item({"label": "x", "value": 1, "disabled": True, "more": "..."}))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+False
+False
+True
+True
+True
+```
+
+</TabItem>
+
+</Tabs>

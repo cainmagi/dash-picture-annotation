@@ -1,0 +1,83 @@
+---
+id: minimal
+sidebar_label: Minimal
+title: The minimal demo
+description: The minimal demo of DashPictureAnnotation.
+slug: /examples/minimal
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# The minimal Demo
+
+<div className="float-right indark-inv">
+
+|                   The minimal demo                   |
+| :--------------------------------------------------: |
+| ![The minimal demo](/img/examples/demo-minimal.webp) |
+
+</div>
+
+Check the following link to review the minimal demo.
+
+<p>
+  <DarkButton to={demoURL("minimal.py")} icon={mdiLanguagePython}>
+    {"minimal.py"}
+  </DarkButton>
+</p>
+
+This demo provides the following features:
+
+1. A basic [`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx) allowing
+   1. Creating, modify, or removing annotation boxes by dragging and dropping.
+   2. Modify the annotation label by an input box.
+2. Every time the annotation data is changed, the changed results will be reflected
+   by the text below the annotator window.
+3. The annotator is already initialized by an annotation box. By default
+   (if the page is refreshed), the annotation data will be reloaded by the initial
+   data.
+
+## Define the layout
+
+The core part of the layout is defined as follows:
+
+```python
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=default_data,
+    image="/assets/test_image.svg",
+    options=None,
+    clearable_dropdown=True,
+)
+```
+
+where the image is provided by the static assets. The default data is hard coded in
+the script. Since `options=None`, the selector (the dropdown menu) is not enabled.
+
+## Define the callbacks
+
+The definition of the callback is pretty simple. It only catches the change of the
+annotation data, and forward the data as an serialized JSON string to the
+`<div id="output">` tag.
+
+```python showLineNumbers
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data) -> Optional[str]:
+    if data is None:
+        return None
+    # highlight-next-line
+    return json.dumps(data)
+```
+
+This callback is configured to be fired when the application is initialized (see the
+option [`prevent_initial_call`<IconExternalLink/>][link-prevent-initial-call]).
+
+[link-prevent-initial-call]: https://dash.plotly.com/advanced-callbacks#prevent-callback-execution-upon-initial-component-render

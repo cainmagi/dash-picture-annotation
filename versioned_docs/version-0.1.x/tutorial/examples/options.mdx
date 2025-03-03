@@ -1,0 +1,136 @@
+---
+id: options
+sidebar_label: Options
+title: Example of using the dropdown menu
+description: The example of letting the annotation comment controlled by a dropdown menu.
+slug: /examples/options
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# Example of using the dropdown menu
+
+<div className="float-right indark-inv">
+
+|                   Example of using the dropdown menu                   |
+| :---------------------------------------------------------------------: |
+| ![Example of using the dropdown menu](/img/examples/demo-options.webp) |
+
+</div>
+
+Check the following link to review the demo of using the dropdown menu.
+
+<p>
+  <DarkButton to={demoURL("options.py")} icon={mdiLanguagePython}>
+    {"options.py"}
+  </DarkButton>
+</p>
+
+This demo provides the following features:
+
+1. A basic [`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx) allowing
+   1. Creating, modify, or removing annotation boxes by dragging and dropping.
+   2. Modify the annotation label by an input box or a dropdown menu.
+2. Every time the annotation data is changed, the changed results will be reflected
+   by the text below the annotator window.
+3. Two controlling buttons:
+   - <kbd>Toggle options</kbd>: Toggle the dropdown menu when specifying the
+     comment of the annotations.
+   - <kbd>Toggle options clearable</kbd>: Toggle the clerable state of the
+     selected value when the dropdown menu is activated.
+
+## Define the layout
+
+Compared to the [minimal demo](./minimal.mdx), there are two additional buttons.
+
+```python
+(
+    dpa.DashPictureAnnotation(
+        id="annotator",
+        style={"height": "80vh"},
+        data=default_data,
+        image="/assets/test_image.svg",
+        options=None,
+        clearable_dropdown=True,
+        # highlight-start
+        placeholder_input="Using free mode...",
+        placeholder_dropdown="Using selection mode...",
+        # highlight-end
+    ),
+    html.Div(
+        # highlight-start
+        html.Button(
+            children="Toggle options", id="btn-options", style=styles["mr1"]
+        ),
+        html.Button(children="Toggle options clearable", id="btn-optclear"),
+        # highlight-end
+    ),
+)
+```
+
+We add two buttons, and the placeholders of the input box and the dropdown menu are
+also specified.
+
+## Define the callbacks
+
+The following callback is implemented by combining the clicking events of two buttons
+together. We use the dash context
+[`triggered_id`<IconExternalLink/>][link-triggered-id] to determine which button is
+clicked, thus entering the corresponding processing branch.
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "options"),
+    Output("annotator", "clearable_dropdown"),
+    Input("btn-options", "n_clicks"),
+    Input("btn-optclear", "n_clicks"),
+    State("annotator", "options"),
+    State("annotator", "clearable_dropdown"),
+    prevent_initial_call=True,
+)
+def toggle_options(
+    n_clicks_options: Optional[int],
+    n_clicks_optclear: Optional[int],
+    options: Optional[Sequence[Any]],
+    clearable_dropdown: Optional[bool],
+):
+    trigger = dash.ctx.triggered_id
+    if trigger and trigger == "btn-options" and n_clicks_options:
+        if options:
+            return None, dash.no_update
+        else:
+            return default_options, dash.no_update
+    if trigger and trigger == "btn-optclear" and n_clicks_optclear:
+        return dash.no_update, not bool(clearable_dropdown)
+    return dash.no_update, dash.no_update
+```
+
+The first branch is used for toggling whether to use the `default_options`. The
+default options can be specified by the same rule of using a
+[`dcc.Dropdown`][link-dccdropdown].
+
+```python
+default_options = [
+    {"value": "type-1", "label": "Type 1"},
+    {"value": "type-2", "label": "Type 2"},
+]
+```
+
+where the `label` and the `value` are the displayed label and the comment value,
+respectively.
+
+The second branch determines whether the property `clearable_dropdown` is enabled or
+not. If this property is enabled, a button used for removing the current selected
+option item will be provided.
+
+When the dropdown menu is activated, users can only specify the comment by selecting
+the provided candidates. If using the default specifier (a `<input>` tag), the comment
+can be changed to an arbitrary value.
+
+[link-triggered-id]: https://dash.plotly.com/advanced-callbacks#properties-for-callback_context
+[link-dccdropdown]: https://dash.plotly.com/dash-core-components/dropdown

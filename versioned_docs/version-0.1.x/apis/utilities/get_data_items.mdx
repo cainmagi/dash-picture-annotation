@@ -1,0 +1,143 @@
+---
+id: get_data_items
+title: get_data_items
+sidebar_label: get_data_items
+slug: /apis/utilities/get_data_items
+description: Get one or several annotation items by exactly matching the comment.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_items" />
+
+```python
+items: [AnnoItem] = get_data_items(
+    data: Annotations | [AnnoItem],
+    comment: str | None = None,
+    n: int | None = None,
+)
+```
+
+Get one or several annotation items by exactly matching the comment.
+
+Note that this method will not validate the format of each returned annotation
+items. Not well-formatted items will **STILL** be returned.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_items
+dpa.utilities.get_data_items
+```
+
+## Arguments
+
+### Requires
+
+| Argument  |                                                      Type                                                       |             Required              | <center>Description</center>                                                                                                                                                                                                  |
+| :-------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `data`   | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is queried.                                                                                                                                                                                          |
+| `comment` |                                                  `str \| None`                                                  |                                   | <p>The comment of the annoatations to be selected. This value will be exactly matched in the data, which means that it is space- and case-sensitive.</p><p>If using `None`, will return the annotations without comments.</p> |
+|    `n`    |                                                  `int \| None`                                                  |                                   | <p>Limit the maximal number of the items to be found. If not provided, will try to return all annotation items with a specified `comment`.</p><p>Specifying a non-positive value will cause this number to be ignored.</p>    |
+
+### Returns
+
+| Argument |                              Type                              | <center>Description</center>                                                                             |
+| :------: | :------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------- |
+|  `items`  | <code>{`[`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | The located annotation items. Modifying the content of these items will cause the `data` to be modified. |
+
+## Examples
+
+### <IconObjType type="term"/> Get an annotation item by quering the comment
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_items_by_comment.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": pos, "width": 0, "height": 0, "type": "RECT"}
+
+data = [
+    {"id": "a", "mark": mark(0)},
+    {"id": "b", "mark": mark(1)},
+    {"id": "c", "mark": mark(2), "comment": "type-1"},
+    {"id": "d", "mark": mark(3), "comment": "type-2"},
+    {"id": "d", "mark": mark(4), "comment": "type-2"},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_items(data))
+pprint.pprint(dpa.get_data_items(data_wrapped))
+pprint.pprint(dpa.get_data_items(data, "type-1"))
+pprint.pprint(dpa.get_data_items(data_wrapped, "type-1"))
+pprint.pprint(dpa.get_data_items(data, "type-2"))
+pprint.pprint(dpa.get_data_items(data_wrapped, "type-2"))
+pprint.pprint(dpa.get_data_items(data, "type-2", 1))
+pprint.pprint(dpa.get_data_items(data_wrapped, "type-2", 1))
+try:
+    pprint.pprint(dpa.get_data_item(data, "type-3"))
+except KeyError as e:
+    print(e)
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}},
+ {'id': 'b', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 1, 'y': 1}})
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+({'comment': 'type-1',
+  'id': 'c',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 2, 'y': 2}},)
+({'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},
+ {'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 4, 'y': 4}})
+({'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},)
+({'comment': 'type-2',
+  'id': 'd',
+  'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 3, 'y': 3}},)
+'The ID "type-3" is not found in the data.'
+```
+
+</TabItem>
+
+</Tabs>

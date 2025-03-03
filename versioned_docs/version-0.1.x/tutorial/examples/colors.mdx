@@ -1,0 +1,147 @@
+---
+id: colors
+sidebar_label: Colors
+title: Example of specifying the annotation colors
+description: The example of changing the annotation styles like the annotation color.
+slug: /examples/colors
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# Example of specifying the annotation colors
+
+<div className="float-right indark-inv">
+
+|                  Example of specifying the annotation colors                   |
+| :----------------------------------------------------------------------------: |
+| ![Example of specifying the annotation colors](/img/examples/demo-colors.webp) |
+
+</div>
+
+Check the following link to review the demo of specifying the annotation colors.
+
+<p>
+  <DarkButton to={demoURL("colors.py")} icon={mdiLanguagePython}>
+    {"colors.py"}
+  </DarkButton>
+</p>
+
+This demo provides the following features:
+
+1. A basic [`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx) allowing
+   1. Creating, modify, or removing annotation boxes by dragging and dropping.
+   2. Modify the annotation label by an input box.
+2. Every time the annotation data is changed, the changed results will be reflected
+   by the text below the annotator window.
+3. Three controlling buttons:
+   - <kbd>Toggle default color</kbd>: Toggle the default color bettween `white`
+     and `black`.
+   - <kbd>Toggle specific color</kbd>: Turn on or off of the colors of some
+     specific comments.
+   - <kbd>Toggle dynamic color</kbd>: Turn on or off of the dynamic color
+     calculation. Note that the automatic color is only related to the comment
+     value.
+
+## Define the layout
+
+Compared to the [minimal demo](./minimal.mdx), there are three additional buttons.
+
+```python
+(
+    dpa.DashPictureAnnotation(...),
+    html.Div(
+        html.Button(
+            children="Toggle default color",
+            id="btn-default",
+            style=styles["mr1"],
+        ),
+        html.Button(
+            children="Toggle specific color",
+            id="btn-specific",
+            style=styles["mr1"],
+        ),
+        html.Button(
+            children="Toggle dynamic color",
+            id="btn-dynamic",
+            style=styles["mr1"],
+        ),
+    ),
+)
+```
+
+These buttons are used for firing the callbacks related to the color configurations.
+Compared to the minimal demo, the initial properties of `DashPictureAnnotation` in
+this demo do not need to be changed.
+
+## Define the callbacks
+
+The first callback is used for toggling the default color. It reads the previous
+default color, and change the value between `#000` and `#fff`.
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-default", "n_clicks"),
+    State("annotator", "style_annotation"),
+    prevent_initial_call=True,
+)
+def toggle_default_color(n_clicks: Optional[int], style_annotation: Optional[str]):
+    if n_clicks:
+        if not isinstance(style_annotation, str):
+            return "#000"
+        if style_annotation == "#fff":
+            return "#000"
+        else:
+            return "#fff"
+    return dash.no_update
+```
+
+The second callback is used for toggling the specific colors. It selects the first
+three comments in the `example_data`, and attach three comment-specific colors,
+respectively. The following callback also shows an example of using different color
+formats. For example, `hsl(180, 100%, 50%)` is equiavalent to `cyan` or `#0ff`.
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "colors"),
+    Input("btn-specific", "n_clicks"),
+    State("annotator", "colors"),
+    prevent_initial_call=True,
+)
+def toggle_specific_colors(
+    n_clicks: Optional[int], colors: Optional[Mapping[str, str]]
+):
+    if n_clicks:
+        if colors:
+            return None
+        else:
+            return dict(
+                zip(
+                    (ditem["comment"] for ditem in example_data["data"]),
+                    ("hsl(180, 100%, 50%)", "rgb(255, 0, 255)", "#ff0"),
+                )
+            )
+    return dash.no_update
+```
+
+The final callback is used for toggling the dynamic color feature. Its implementation
+is quite simple. The only thing that needs to be control is the `is_color_dynamic`
+property.
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "is_color_dynamic"),
+    Input("btn-dynamic", "n_clicks"),
+    State("annotator", "is_color_dynamic"),
+    prevent_initial_call=True,
+)
+def toggle_dynamic_color(n_clicks: Optional[int], is_color_dynamic: Optional[bool]):
+    if n_clicks:
+        return not bool(is_color_dynamic)
+    return dash.no_update
+```

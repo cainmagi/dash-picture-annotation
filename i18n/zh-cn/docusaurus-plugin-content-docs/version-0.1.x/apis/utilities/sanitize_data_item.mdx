@@ -1,0 +1,101 @@
+---
+id: sanitize_data_item
+title: sanitize_data_item
+sidebar_label: sanitize_data_item
+slug: /apis/utilities/sanitize_data_item
+description: 针对某一标记数据项，进行完全清理。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.sanitize_data_item" />
+
+```python
+sanitized_item: AnnoItem | None = sanitize_data_item(data_item: AnnoItem | AnnoMark)
+```
+
+针对某一标记数据项，进行完全清理。
+
+数据清理将会确保：
+
+1. 返回的结果是可以标记为[`AnnoItem`](../typehints/AnnoItem.mdx)的字典。
+2. 值为`None`的文字标注会移除。
+3. 标记数据的边界框总是含有正值的宽和高（负值的宽或高表示起始点反向）。
+4. 若数据项中未提供ID，会随机生成一个6个字符长的ID。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_data_item
+dpa.utilities.sanitize_data_item
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|    参数     |                                              类型                                               |               必选                | <center>说明</center>                                              |
+| :---------: | :---------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------------------------------------ |
+| `data_item` | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| `}[AnnoMark](../typehints/AnnoMark.mdx)</code> | <InlineIcon icon={vsiCheckIcon}/> | 要清理的标记数据项。若`data_item`只包含位置信息，则会为其添加ID。 |
+
+### 输出 {#returns}
+
+|       参数       |                              类型                              | <center>说明</center>                                      |
+| :--------------: | :------------------------------------------------------------: | :--------------------------------------------------------- |
+| `sanitized_item` | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| None`}</code> | 数据项经过清理后的副本。若给定数据无法清理，则返回`None`。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 清理一个数据项 {#-sanitize-a-data-item}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="sanitize_data_item.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+mark = lambda pos: {"x": pos, "y": 0, "width": 0, "height": pos, "type": "RECT"}
+mark_eq = lambda pos: {"x": pos, "y": pos, "width": 0, "height": -pos, "type": "RECT"}
+
+pprint.pprint(dpa.sanitize_data_item(mark(17.7)))
+pprint.pprint(dpa.sanitize_data_item(mark_eq(17.7)))
+pprint.pprint(dpa.sanitize_data_item({"mark": mark(-17.7), "comment": "test"}))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'id': '1f0ef8',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': 17.7, 'y': 0}}
+{'id': '2b672d',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': 17.7, 'y': 0.0}}
+{'comment': 'test',
+ 'id': 'efbef4',
+ 'mark': {'height': 17.7, 'type': 'RECT', 'width': 0, 'x': -17.7, 'y': -17.7}}
+```
+
+</TabItem>
+
+</Tabs>

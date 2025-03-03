@@ -1,0 +1,225 @@
+---
+id: data
+sidebar_label: 数据
+title: 使用标记数据
+description: 简明教程，展示如何使用DashPictureAnnotation的标记数据。
+slug: /usages/data
+---
+
+# 使用标记数据
+
+此模块包内含一个单独的组件[`dpa.DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx)。要使用该组件，可以从以下最小范例入手：
+
+```python showLineNumbers
+import dash
+from dash import html
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+app.layout = html.Div(
+    (
+        dpa.DashPictureAnnotation(
+            id="annotator",
+            data=None,
+            image="/site-address/to/an/image",
+        ),
+    )
+)
+```
+
+此处，令`data`初始化为`None`，从而在组件加载的时候，不设置任何标记。
+
+用户可以透过以下方式和标记器交互：
+
+1. 拖拽创建标记标记框；
+2. 选中某个标记框，并为其设置文字标注（comment）；
+3. 选中某个标记框，修改其大小或位置；
+4. 删除某个标记框。
+
+## 捕获标记数据的更新 {#catch-the-update-of-the-annotation-data}
+
+每当鼠标松开时，标记数据就会更新。该更新会触发一个dash callback。使用以下代码来捕获该callback。
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        # highlight-next-line
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data: dpa.Annotations | None) -> Optional[str]:
+    if data is None:
+        return None
+    return json.dumps(data)
+```
+
+通常，标记器返回的属性`data`，其类型可以标记为[`dpa.Annotations`](../../apis/typehints/Annotations.mdx)。然而，此处有两个值得关注的例外：
+
+:::warning
+
+`data`可以初始化为`None`或者某个预期之外的值。换言之，初始化`DashPictureAnnotation`时，其实允许向`data`传入一个无法标记为[`dpa.Annotations`](../../apis/typehints/Annotations.mdx)类型的值。在这种情况下，callback初次捕获到的数据，将会和初始化组件时、传入的数据完全相同。
+
+可以透过在某callback设置`Output("annotator", "data")`，来更新属性`data`。在这种情况下，用户可能会提供一个不可标记为[`dpa.Annotations`](../../apis/typehints/Annotations.mdx)的值。而透过这次更新触发的其他callback，将会受到这种不标准的输入值的影响。
+
+:::
+
+万幸的是，上例并不会引发这样的问题。这乃是由于
+
+1. 属性`data`初始化为`None`，该特殊情况已经在callback的定义里进行了妥善处理。
+2. 属性`data`不会受到来自其他callback的更新。换言之，上例中该值仅仅会受到用户交互的更新。所有由用户交互触发的callback，其`data`值都是妥善标记为`dpa.Annotations`的。
+
+## 数据清理 {#sanitization}
+
+为了提高那些用来捕获、或是更新标记数据的callback的可靠性，可以使用数据清理功能。援引上例，可以透过一些微调，来确保数据总是整理完备的。
+
+```python showLineNumbers
+@app.callback(
+    Output("output", "children"), Input("annotator", "data"), prevent_initial_call=False
+)
+def get_annotation(data: dpa.Annotations | None) -> Optional[str]:
+    if data is None:
+        return None
+    # highlight-start
+    if not dpa.is_annotations(data):
+        return json.dumps(dpa.sanitize_data(data))
+    # highlight-end
+    return json.dumps(data)
+```
+
+此处对代码的修改，保证了即便在`data`会被某个未知的callback修改为不符合`dpa.Annotations`标准的情况下，返回的值也总是可序列化的（serializable）。新追加的几行代码，提供了以下功能：
+
+1. 检验`data`的格式是否符合`dpa.Annotations`。若不符，则透过[`dpa.sanitize_data(...)`](../../apis/utilities/sanitize_data.mdx)清理数据。
+2. 若`data`已经符合`dpa.Annotation`的格式，则直接返回其JSON序列化后的字符串。
+
+要验证其效果，用户只需在初始化的时候，设置参数`data=1`即可。该值无法直接JSON序列化。但透过数据清理，callback仍然能正常工作。
+
+:::tip
+
+每当要定义一个更新属性`data`的callback，或需要将`data`保存为文件时，可以使用[`dpa.sanitize_data`](../../apis/utilities/sanitize_data.mdx)方法。它可以确保排除那些用户做出的、不适当的修改。
+
+:::
+
+## 追加重置按钮 {#add-a-reset-button}
+
+来自用户的交互、和callback，均可以更新属性`data`。透过添加一个由重置按钮触发的callback，可以实现“清除所有标记数据”的功能。
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-reset", children="Reset")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "data"),
+    Input("btn-reset", "n_clicks"),
+    prevent_initial_call=True,
+)
+def reset_data(n_clicks: Optional[int]):
+    if n_clicks:
+        return dpa.sanitize_data([])
+    return dash.no_update
+```
+
+上例中，提供了一个由按钮触发、并更新数据的callback。透过使用[`dpa.sanitize_data`](../../apis/utilities/sanitize_data.mdx)，会清理callback更新的数据，并确保其类型为[`dpa.Annotations`](../../apis/typehints/Annotations.mdx)。按下按钮会删去标记器上的所有标记。
+
+## 透过ID来获取或修改数据 {#get-or-change-data-by-ids}
+
+每次用户交互创建一个新的标记框时，其都会自带一个随机生成的ID。这些唯一ID可以用来获取某个标记框。考虑这样的场景：添加一个按钮，按下时使用某ID获取某标记框的数据，并修改其文字标注的内容。要实现它，可以使用[`dpa.get_data_item`](../../apis/utilities/get_data_item.mdx)来完成ID定位。
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-getbyid", children="Get by ID")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "data"),
+    Input("btn-getbyid", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def change_data_by_id(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_ids = dpa.get_all_ids(data)  # 一个IDs构成的序列。
+        data_item = dpa.get_data_item(data, all_ids[-1])
+        # highlight-next-line
+        data_item["comment"] = "new-comment"
+        return data
+    return dash.no_update
+```
+
+上例中，修改了所定位到的数据项。任何针对所获取的数据项的修改，都是会引起原数据改变的“原处修改”。因此，可以直接返回原处修改后的数据本身，从而修改标记器上的标记。
+
+## 透过文字标注获取或搜索数据 {#get-or-search-data-by-comment}
+
+另一有用的功能是透过文字标注来查询数据。由于不同的标记数据项、可能有相同的文字标注，方法[`dpa.get_data_items`](../../apis/utilities/get_data_items.mdx)总是会返回具备某个特定文字标注的所有标记数据项。例如，
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        # highlight-next-line
+        html.Div(html.Button(id="btn-getbycomment", children="Get by comment")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+        html.Div(id="output"),
+        # highlight-next-line
+        html.Div(id="comment-ids"),
+    )
+)
+
+
+@app.callback(
+    Output("comment-ids", "children"),
+    Input("btn-getbycomment", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def get_data_by_comment(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_comments = dpa.get_all_comments(data)  # 一个文字标注构成的不可变集合。
+        # highlight-next-line
+        data_items = dpa.get_data_items(data, next(iter(all_comments)))
+        comment_ids = dpa.get_all_ids(data_items)  # 一个由`data_items`下ID构成的序列。
+        return json.dumps(comment_ids)
+    return dash.no_update
+```
+
+方法[`dpa.get_data_items`](../../apis/utilities/get_data_items.mdx)只能用来定位具有某个特定文字标注的数据项。还有另一个、使用正则表达式搜索某些文字标注的版本，参见[`dpa.get_data_items_by_regex`](../../apis/utilities/get_data_items_by_regex.mdx)。
+
+```python showLineNumbers
+@app.callback(
+    Output("comment-ids", "children"),
+    Input("btn-getbycomment", "n_clicks"),
+    State("annotator", "data"),
+    prevent_initial_call=True,
+)
+def get_data_by_comment(n_clicks: Optional[int], data: dpa.Annotations):
+    if n_clicks:
+        all_comments = dpa.get_all_comments(data)  # 一个文字标注构成的不可变集合。
+        # highlight-next-line
+        data_items = dpa.get_data_items_by_regex(data, r"^type-.*"))
+        comment_ids = dpa.get_all_ids(data_items)  # 一个由`data_items`下ID构成的序列。
+        return json.dumps(comment_ids)
+    return dash.no_update
+```
+
+以上版本将会搜索所有“具备以`type-`开头的文字标注”的标记数据项。
+
+当然，修改`data_items`同样会使得`data`原处修改。这种用法和上面使用`get_data_item`的例子相同。

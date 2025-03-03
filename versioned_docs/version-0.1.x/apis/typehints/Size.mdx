@@ -1,0 +1,47 @@
+---
+id: Size
+title: Size
+sidebar_label: Size
+slug: /apis/typehints/Size
+description: The requirement of the minimal annotation size.
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Size" />
+
+```python
+Size(
+    label: str,
+    value: Any,
+    disabled: bool,
+)
+```
+
+`Size` is a `TypedDict`.
+
+The requirement of the minimal annotation size. Any newly created annotation
+with a size smaller than this size will be dropped.
+
+If this value is configured as a scalar, will use it for both `width` and `height`.
+
+If any of the value is not set or configured as invalid values, will use `0`.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Size
+dpa.typehints.Size
+```
+
+## Keywords
+
+| Keyword  |  Type   | Required | <center>Description</center>                       |
+| :------: | :-----: | :------: | :------------------------------------------------- |
+| `width`  | `float` |          | Requirement of the minimal width of an annotator.  |
+| `height` | `float` |          | Requirement of the minimal height of an annotator. |

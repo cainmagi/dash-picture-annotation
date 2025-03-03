@@ -1,0 +1,111 @@
+---
+id: get_data_item_with_default
+title: get_data_item_with_default
+sidebar_label: get_data_item_with_default
+slug: /apis/utilities/get_data_item_with_default
+description: Get an annotation item by its unique ID with a default value provided.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_item_with_default" />
+
+```python
+item: AnnoItem | T = get_data_item_with_default(
+    data: Annotations | [AnnoItem],
+    id: str,
+    default: T = None,
+)
+```
+
+Get an annotation item by its unique ID with a default value provided.
+
+Note that this method will not validate the format of `data`. If the item cannot
+be found, will return the default value.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_item_with_default
+dpa.utilities.get_data_item_with_default
+```
+
+## Arguments
+
+### Requires
+
+| Argument  |                                                      Type                                                       |             Required              | <center>Description</center>                           |
+| :-------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------------------------ |
+|  `data`   | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is queried.                   |
+|   `id`    |                                                      `str`                                                      | <InlineIcon icon={vsiCheckIcon}/> | The ID of the annotation item to be found.             |
+| `default` |                                                       `T`                                                       |                                   | If the ID is not found in the data, return this value. |
+
+### Returns
+
+| Argument |                  Type                   | <center>Description</center>                          |
+| :------: | :-------------------------------------: | :---------------------------------------------------- |
+|  `item`  | <code>[AnnoItem](../typehints/AnnoItem.mdx){` \| T`}</code> | The queried value or the default value given by this method. |
+
+## Examples
+
+### <IconObjType type="term"/> Get an annotation with a default value
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_id_with_default.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+data = [
+    {"id": "a", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "b", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 1, "y": 1, "width": 0, "height": 0, "type": "RECT"}},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_item_with_default(data, "a"))
+pprint.pprint(dpa.get_data_item_with_default(data_wrapped, "a"))
+pprint.pprint(dpa.get_data_item_with_default(data, "c"))
+pprint.pprint(dpa.get_data_item_with_default(data_wrapped, "c"))
+pprint.pprint(dpa.get_data_item_with_default(data, "d"))
+pprint.pprint(dpa.get_data_item_with_default(data, "d", 0))
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+None
+0
+```
+
+</TabItem>
+
+</Tabs>

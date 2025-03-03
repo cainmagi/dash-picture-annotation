@@ -1,0 +1,27 @@
+---
+id: index
+title: utilities
+sidebar_label: utilities
+slug: /apis/utilities
+description: 用来处理标记数据与结果的工具。
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="module" source="utilities" />
+
+用来处理标记数据与结果的工具。
+
+## 函数 {#functions}
+
+|                                                      成员                                                       | <center>说明</center>                                                                                |
+| :-------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------- |
+|              [<IconObjType type="func" hasText={true} text="get_data_item"/>](./get_data_item.mdx)              | 按照唯一ID获取一个标记数据项。                                                                     |
+| [<IconObjType type="func" hasText={true} text="get_data_item_with_default"/>](./get_data_item_with_default.mdx) | 按照唯一ID获取一个标记数据项，同时提供一个未命中时的默认值。                                       |
+|             [<IconObjType type="func" hasText={true} text="get_data_items"/>](./get_data_items.mdx)             | 按照精确匹配文字标注，以获取一个或多个标记数据项。                                                   |
+|    [<IconObjType type="func" hasText={true} text="get_data_items_by_regex"/>](./get_data_items_by_regex.mdx)    | 按照正则表达式匹配文字标注，以获取一个或多个标记数据项。                                             |
+|                [<IconObjType type="func" hasText={true} text="get_all_ids"/>](./get_all_ids.mdx)                | 获得一组标记数据中、由所有标记数据ID构成的列表。所返回的ID按照原标记数据`data`中各项的顺序排序。 |
+|           [<IconObjType type="func" hasText={true} text="get_all_comments"/>](./get_all_comments.mdx)           | 获得一组标记数据中的全部文字标注集合。返回的文字标注未排序。                                         |
+|         [<IconObjType type="func" hasText={true} text="compare_anno_marks"/>](./compare_anno_marks.mdx)         | 比较两个标记位置信息是否相同。                                                                       |
+|         [<IconObjType type="func" hasText={true} text="sanitize_data_item"/>](./sanitize_data_item.mdx)         | 针对某一标记数据项，进行完全清理。                                                                   |
+|              [<IconObjType type="func" hasText={true} text="sanitize_data"/>](./sanitize_data.mdx)              | 针对一组标记数据，进行完全清理。                                                                     |

@@ -1,0 +1,86 @@
+---
+id: size-control
+sidebar_label: Size Control
+title: Example of controlling the annotation size
+description: Example of configuring a minimal size of the annotation to prevent the bad annotations.
+slug: /examples/size-control
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import mdiLanguagePython from "@iconify-icons/mdi/language-python";
+
+import {demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+# Example of controlling the annotation size
+
+<div className="float-right indark-inv">
+
+|                     Example of controlling the annotation size                     |
+| :--------------------------------------------------------------------------------: |
+| ![Example of controlling the annotation size](/img/examples/demo-sizecontrol.webp) |
+
+</div>
+
+Check the following link to review the demo of controlling the annotation size.
+
+<p>
+  <DarkButton to={demoURL("size_control.py")} icon={mdiLanguagePython}>
+    {"size_control.py"}
+  </DarkButton>
+</p>
+
+This demo provides the following features:
+
+1. A basic [`DashPictureAnnotation`](../../apis/DashPictureAnnotation.mdx) allowing
+   1. Creating, modify, or removing annotation boxes by dragging and dropping.
+   2. Modify the annotation label by an input box.
+2. Every time the annotation data is changed, the changed results will be reflected
+   by the text below the annotator window.
+3. Configure a requirement of the minimal values of the annotation width and height.
+   Creating or resizing an annotation with a width or height smaller than the given
+   value will let the annotation removed.
+
+## Define the layout
+
+Compared to the [minimal demo](./minimal.mdx), the main change is to add a property
+`size_minimal` in the definition of the component:
+
+```python
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=None,
+    image="/assets/test_image.svg",
+    options=None,
+    clearable_dropdown=True,
+    # highlight-next-line
+    size_minimal=20,
+)
+```
+
+This property is motivated to control the minimal size of annotations. Sometimes, users
+may click the annotator by mistake, which may create an annotation box with `width=0`
+and `height=0`. In this case, the created annotation is meaningless and the not
+selectable. Compared to letting users to sanitize the data by themselves, it is better
+to add such a property that specify a limitation of the minimal width and height. By
+adding this property, any annotation with a size smaller than the specified value will
+be removed.
+
+:::tip
+
+The property `size_minimal` can be configured by a dictionary like this:
+
+```python
+dpa.DashPictureAnnotation(
+    ...
+    # highlight-next-line
+    size_minimal={"width": 20, "height": 20},
+)
+```
+
+which allows users to specify different limitations with respect to the width and
+height, respectively.
+
+:::

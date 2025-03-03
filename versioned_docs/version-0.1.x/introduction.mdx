@@ -1,0 +1,179 @@
+---
+id: introduction
+title: Introduction
+description: The introduction of Dash Picture Annotation.
+slug: /
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import {IconLinkInline} from "@site/src/components/IconLink";
+
+import octClock16 from "@iconify-icons/octicon/clock-16";
+import octLaw16 from "@iconify-icons/octicon/law-16";
+import octRepoForked16 from "@iconify-icons/octicon/repo-forked-16";
+import octShareAndroid16 from "@iconify-icons/octicon/share-android-16";
+import octiconShield16 from "@iconify-icons/octicon/shield-16";
+
+import mdiResizeHorizontal from "@iconify-icons/mdi/resize-horizontal";
+import mdiFormSelect from "@iconify-icons/mdi/form-select";
+import mdiSafeSquareOutline from "@iconify-icons/mdi/safe-square-outline";
+import mdiImageFilterCenterFocus from "@iconify-icons/mdi/image-filter-center-focus";
+import mdiEditOffOutline from "@iconify-icons/mdi/edit-off-outline";
+import mdiColor from "@iconify-icons/mdi/color";
+import mdiPaletteOutline from "@iconify-icons/mdi/palette-outline";
+
+import {rawURL, repoURL, demoURL} from "@site/src/envs/variables";
+import DarkButton from "@site/src/components/DarkButton";
+
+import VideoPlayer from "@site/src/demos/VideoPlayer";
+
+# Introduction
+
+Dash Picture Annotation is a [Dash component<IconExternalLink/>][link-dash-component] library.
+
+Dash porting version of the React project React Picture Annotation. Provide a simple annotation window for a single picture.
+
+The following two figures compare the demos of the original React version and the ported Dash version. Since this project is just a dash component wrapper on the original React component, the performance is the same.
+
+|                                  React Picture Annotation                                  |                                 Dash Picture Annotation                                  |
+| :----------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+| <img alt="demo-react" className="ondark-inv" src={rawURL("main/display/demo-react.png")}/> | <img alt="demo-dash" className="ondark-inv" src={rawURL("main/display/demo-dash.png")}/> |
+
+Compared to the original project, this project has the following special features that the original React project does not support:
+
+1. **Responsive sizing**<InlineIcon icon={mdiResizeHorizontal}/>: The width of the annotator can be automatically adjusted according to the parent web element.
+2. **Different modes**<InlineIcon icon={mdiFormSelect}/>: When selecting an annotation, the modifier can be configured as an input box or a dropdown menu box.
+3. **Data sanitized**<InlineIcon icon={mdiSafeSquareOutline}/>: The data is simply sanitized. Even if a not standardized data is passed to the annotator, it still works.
+4. **Anti-mistakes**<InlineIcon icon={mdiImageFilterCenterFocus}/>: A threshold of the annotation size can be configured to prevent users create a tiny annotation item by mistake.
+5. **Disabled**<InlineIcon icon={mdiEditOffOutline}/>: A flag can be configured to make the annotator disabled.
+6. **Specified colors**<InlineIcon icon={mdiColor}/>: A special color can be configured for an annotator with a specific comment. Different comments can have different colors.
+7. **Dynamic colors**<InlineIcon icon={mdiPaletteOutline}/>: Without specifying colors manually, a flag can enable the colors to be automatically calculated based on the hash code of the annotation comments.
+
+## A video demo of Dash Picture Annotation
+
+Preview a quick video demo here:
+
+<VideoPlayer src="https://raw.githubusercontent.com/cainmagi/dash-picture-annotation/main/display/demo.mp4" />
+
+## Usage
+
+The following signature shows the basic usage of this component.
+
+```python
+import dash_picture_annotation as dpa
+
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style={"height": "80vh"},
+    data=default_data,  # Can be `None`
+    image="/assets/test_image.svg",  # Can be `None`
+    options=None,
+)
+```
+
+where the `data` is typed by [`dpa.Annotations`](./apis/typehints/Annotations.mdx).
+It should be formatted like this:
+
+```json showLineNumbers
+{
+  "timestamp": 0,
+  "data": [
+    {
+      "id": "N5fewQ",
+      "mark": {
+        "x": -224.45,
+        "y": 62.76,
+        "width": 125.53,
+        "height": 125.53,
+        "type": "RECT"
+      },
+      "comment": "has-a-type"
+    },
+    {
+      "id": "ibJMdK",
+      "mark": {
+        "x": -36.15,
+        "y": 62.76,
+        "width": 125.53,
+        "height": 125.53,
+        "type": "RECT"
+      }
+    },
+    {
+      "id": "...",
+      "...": "..."
+    }
+  ]
+}
+```
+
+A full demo for a minimal example can be found <IconLinkInline text="here" href={demoURL("minimal.py")}/>.
+
+A full demo for an integrated application can be found <IconLinkInline text="here" href={demoURL()}/>, where the basic usages are displayed.
+
+## Acknowledgements
+
+- [Kunduin/react-picture-annotation<IconExternalLink/>][git-react-picture-annotation]: The original React component implementation of this project.
+
+## Related materials
+
+Changelog:
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/Changelog.md")} icon={octClock16}>
+      Changelog
+    </DarkButton>
+  }
+</p>
+
+License of this project:
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/LICENSE")} icon={octLaw16}>
+      MIT License
+    </DarkButton>
+  }
+</p>
+
+Guidelines for the contributions:
+
+<p>
+  {
+    <DarkButton
+      href={repoURL("blob/main/CONTRIBUTING.md")}
+      icon={octRepoForked16}
+    >
+      Contributing
+    </DarkButton>
+  }
+</p>
+
+Contributor covenant code of conduct:
+
+<p>
+  {
+    <DarkButton
+      href={repoURL("blob/main/CODE_OF_CONDUCT.md")}
+      icon={octShareAndroid16}
+    >
+      Code of conduct
+    </DarkButton>
+  }
+</p>
+
+Security policy:
+
+<p>
+  {
+    <DarkButton href={repoURL("blob/main/SECURITY.md")} icon={octiconShield16}>
+      Security
+    </DarkButton>
+  }
+</p>
+
+[git-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation
+[link-dash-component]: https://dash.plotly.com/plugins

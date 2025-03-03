@@ -1,0 +1,131 @@
+---
+id: DashPictureAnnotation
+title: DashPictureAnnotation
+sidebar_label: DashPictureAnnotation
+slug: /apis/DashPictureAnnotation
+description: DashPictureAnnotation组件是对React项目react-picture-annotation/ReactPictureAnnotation的Dash移植版。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+import {biSlashLg} from "@site/src/components/icons/BiSlashLg";
+import {epGuide} from "@site/src/components/icons/EpGuide";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+import DarkButton from "@site/src/components/DarkButton";
+
+<APITopBar type="class" isComponent={true} source="DashPictureAnnotation" />
+
+```python
+comp = DashPictureAnnotation(
+    id: str | {str: Any} | None,
+    class_name: str | None,
+    style: {str: str} | None = {height: "60vh"},
+    style_annotation: str | AnnoStyle | None,
+    colors: {str: str} | None,
+    image: str | None,
+    data: Annotations | None,
+    options: [DashOptionItem] | {str: Any} | None,
+    selected_id: str | None,
+    placeholder_input: str = "Input tag here",
+    placeholder_dropdown: str = "Select a tag",
+    clearable_dropdown: bool = False,
+    disabled: bool = False,
+    is_color_dynamic: bool = False,
+    size_minimal: float | Size | None = {"width": 0, "height": 0}
+    loading_state: LoadingState
+)
+```
+
+`DashPictureAnnotation`组件是对React项目[`react-picture-annotation/ReactPictureAnnotation`<IconExternalLink/>][link-react-picture-annotation]的Dash移植版。
+
+该组件提供了一个标记器，以帮助用户，针对某一特定图片，创建、修改、或删除标记信息。Dash版本的组件还提供了以下增值功能：
+
+1. 跟随父元素的响应式尺寸。
+2. 不仅仅是文本框输入，还允许用户透过选单指定标记类别。
+3. 只在鼠标松开的时候触发数据更新。
+4. 用来细粒度定制颜色的额外功能。
+5. 使用二值量来禁用标记器。
+6. 为标记框尺寸设置最小尺寸，以屏蔽那些因为误操作创建的微小标记框。
+
+## 组件属性 {#component-properties}
+
+<Tabs
+  defaultValue="descriptions"
+  values={[
+    { label: '描述', value: 'descriptions', },
+    { label: '参数', value: 'properties', },
+  ]
+}>
+
+<TabItem value="descriptions">
+
+|          名称          |                                                                        类型                                                                        | <center>说明</center>                                                                                                                                                                                     |
+| :--------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|          `id`          |                                                         `str \| Mapping[str, Any] \| None`                                                         | 组件ID。若设置为字典，则该ID用于[模式匹配callback<IconExternalLink/>][dash-pmcallback]。                                                                                                              |
+|      `class_name`      |                                                                   `str \| None`                                                                    | 组件的CSS类。使用` `分隔不同的类。                                                                                                                                                                      |
+|        `style`         |                                                            `Mapping[str, str] \| None`                                                             | 组件的CSS样式。这些样式用于覆盖组件容器的默认样式。                                                                                                                                                     |
+|   `style_annotation`   |                                  <code>{"str \| "}[AnnoStyle](../apis/typehints/AnnoStyle.mdx){" \| None"}</code>                                  | 标记框的CSS样式。若该值设置为字符串，则该字符串将会被解释为所有标记框的默认颜色。                                                                                                                       |
+|        `colors`        |                                                            `Mapping[str, str] \| None`                                                             | <p>颜色字典。关键字为标记名称（即属性`data`内使用的`comment`值），字典值为颜色字符串。</p><p>该方法用来手动指定标记颜色。相比属性`is_color_dynamic`，该值拥有更高的优先级。</p>                           |
+|        `image`         |                                                                   `str \| None`                                                                    | 指向当前需要显示在标记器上的图片URL。其用法与HTML元素`<img src={...}>`的属性相似。                                                                                                                     |
+|         `data`         |                                     <code>[Annotations](../apis/typehints/Annotations.mdx){" \| None"}</code>                                      | 标记数据。其值为由标记数据项构成的序列。每个数据项（字典类型）都包含其位置信息和文字标注。该值既可以由callback设置，也可以受到用户交互的修改。                                                          |
+|       `options`        | <code>{"Sequence["}[DashSelectOptionItem](../apis/typehints/DashSelectOptionItem.mdx){"] \| Mapping[str, Any] \| Sequence[Any] \| \| None"}</code> | <p>标记器的可选项。用法与选单组件`dcc.Dropdown(options=...)`相似。每个值都表示一个可用的标记类型选项。</p><p>若该值留空，则会使用文本输入框取代下拉菜单，其允许用户设置标记类型名称为任意值。</p>         |
+|     `selected_id`      |                                                                   `str \| None`                                                                    | <p>当前选中的标记ID。</p><p>该属性是只读（仅可交互）的。其会在用户选中某个标记框时自动设置。一个有效的ID是字符串。若没有选中任何标记框，该值设置为`None`。</p>                                         |
+|  `placeholder_input`   |                                                                       `str`                                                                        | 当编辑器是文本输入框时（亦即属性`options`留空时），所用的空值占位文字。                                                                                                                                   |
+| `placeholder_dropdown` |                                                                       `str`                                                                        | 当编辑器是下拉菜单时（亦即属性`options`包含有效项时），所用的空值占位文字。                                                                                                                               |
+|  `clearable_dropdown`  |                                                                       `bool`                                                                       | 二值量。启用、且使用下拉菜单时，允许清除当前选中的文字标注。                                                                                                                                              |
+|       `disabled`       |                                                                       `bool`                                                                       | 二值量。启用时，禁用标记器（使其无法点击）。                                                                                                                                                              |
+|   `is_color_dynamic`   |                                                                       `bool`                                                                       | 二值量。启用时，令所有标记框的颜色，按照其对应的文字标注内容、动态计算。那些没有附上文字标注的标记框，则不会受到影响。                                                                                    |
+|     `size_minimal`     |                                      <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                      | <p>针对标记框尺寸的最小需求。任何新创建的标记框，若尺寸小于该值，则会被舍弃。</p><p>若该值设置为一个标量，则该值会被同时用在宽（`width`）和高（`height`）的限制上。</p><p>若该值留空或无效，使用`0`。</p> |
+|    `loading_state`     |                                                [`LoadingState`<IconExternalLink/>][link-loadstate]                                                 | Dash的加载状态字典。用户不应手动设置该值。                                                                                                                                                               |
+
+</TabItem>
+
+<TabItem value="properties">
+
+|          名称          |                                                                      类型                                                                       |              可交互               |              可设置               | 必选 |           默认值            |
+| :--------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------: | :-------------------------------: | :--: | :-------------------------: |
+|          `id`          |                                                       `str \| Mapping[str, Any] \| None`                                                        |                                   |                                   |      |          undefined          |
+|      `class_name`      |                                                                  `str \| None`                                                                  |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|        `style`         |                                                           `Mapping[str, str] \| None`                                                           |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |     `{height: "60vh"}`      |
+|   `style_annotation`   |                                <code>{"str \| "}[AnnoStyle](../apis/typehints/AnnoStyle.mdx){" \| None"}</code>                                 |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|        `colors`        |                                                           `Mapping[str, str] \| None`                                                           |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|        `image`         |                                                                  `str \| None`                                                                  |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|         `data`         |                                    <code>[Annotations](../apis/typehints/Annotations.mdx){" \| None"}</code>                                    | <InlineIcon icon={vsiCheckIcon}/> | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|       `options`        | <code>{"Sequence["}[DashSelectOptionItem](../apis/typehints/DashSelectOptionItem.mdx){"] \| Mapping[str, Any] \| Sequence[Any] \| None"}</code> |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+|     `selected_id`      |                                                                  `str \| None`                                                                  | <InlineIcon icon={vsiCheckIcon}/> |                                   |      |          undefined          |
+|  `placeholder_input`   |                                                                      `str`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |     `"Input tag here"`      |
+| `placeholder_dropdown` |                                                                      `str`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |      `"Select a tag"`       |
+|  `clearable_dropdown`  |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
+|       `disabled`       |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
+|   `is_color_dynamic`   |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |           `False`           |
+|     `size_minimal`     |                                    <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                     |                                   | <InlineIcon icon={vsiCheckIcon}/> |      | `{"width": 0, "height": 0}` |
+|    `loading_state`     |                                               [`LoadingState`<IconExternalLink/>][link-loadstate]                                               |                                   | <InlineIcon icon={vsiCheckIcon}/> |      |          undefined          |
+
+- “可交互”指的是，用户交互可以改变该属性、并触发callback。
+- “可设置”指的是，透过callback的`Output(...)`修改该值会产生实际效果。
+- “必选”指的是，初始化组件时，必须向组件传递值，否则组件无法初始化。
+
+</TabItem>
+
+</Tabs>
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 查看教程中的范例 {#-check-examples-in-the-tutorial}
+
+<p>
+  {
+    <DarkButton to="/docs/category/examples" icon={epGuide}>
+      范例
+    </DarkButton>
+  }
+</p>
+
+[link-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation/blob/master/src/ReactPictureAnnotation.tsx
+[link-loadstate]: https://dash.plotly.com/loading-states
+[dash-pmcallback]: https://dash.plotly.com/pattern-matching-callbacks

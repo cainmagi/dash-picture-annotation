@@ -1,0 +1,133 @@
+---
+id: DashPictureAnnotation
+title: DashPictureAnnotation
+sidebar_label: DashPictureAnnotation
+slug: /apis/DashPictureAnnotation
+description: DashPictureAnnotation is a Dash porting version for the React component react-picture-annotation/ReactPictureAnnotation.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+import {biSlashLg} from "@site/src/components/icons/BiSlashLg";
+import {epGuide} from "@site/src/components/icons/EpGuide";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+import DarkButton from "@site/src/components/DarkButton";
+
+<APITopBar type="class" isComponent={true} source="DashPictureAnnotation" />
+
+```python
+comp = DashPictureAnnotation(
+    id: str | {str: Any} | None,
+    class_name: str | None,
+    style: {str: str} | None = {height: "60vh"},
+    style_annotation: str | AnnoStyle | None,
+    colors: {str: str} | None,
+    image: str | None,
+    data: Annotations | None,
+    options: [DashOptionItem] | {str: Any} | None,
+    selected_id: str | None,
+    placeholder_input: str = "Input tag here",
+    placeholder_dropdown: str = "Select a tag",
+    clearable_dropdown: bool = False,
+    disabled: bool = False,
+    is_color_dynamic: bool = False,
+    size_minimal: float | Size | None = {"width": 0, "height": 0}
+    loading_state: LoadingState
+)
+```
+
+`DashPictureAnnotation` is a Dash porting version for the React component: [`react-picture-annotation/ReactPictureAnnotation`<IconExternalLink/>][link-react-picture-annotation].
+
+This component provides a annotator that allows users to create, modify, or delete
+the annotation information for a specific picture. This dash version has been
+upgraded by adding the following features:
+
+1. Responsive size with respect to the parent component.
+2. Annotation type specified by a selector rather than an input box.
+3. Only trigger the data update when the mouse is released.
+4. Extensive functionalities for fine-grained customization of colors.
+5. Disabling the annotator by a flag.
+6. Setting a lower boundary of the annotation size to prevent small annotations created by mistake.
+
+## Component Properties
+
+<Tabs
+  defaultValue="descriptions"
+  values={[
+    { label: 'Descriptions', value: 'descriptions', },
+    { label: 'Properties', value: 'properties', },
+  ]
+}>
+
+<TabItem value="descriptions">
+
+|          Name          |                                                                        Type                                                                        | <center>Description</center>                                                                                                                                                                                                                                                                                          |
+| :--------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|          `id`          |                                                         `str \| Mapping[str, Any] \| None`                                                         | The ID of the component. A dictionary-id is used for creating a [pattern-matching callback :book:][dash-pmcallback].                                                                                                                                                                                                  |
+|      `class_name`      |                                                                   `str \| None`                                                                    | The css-class of the component. Use ` ` to separate different names.                                                                                                                                                                                                                                                  |
+|        `style`         |                                                            `Mapping[str, str] \| None`                                                             | The css-styles which will override styles of the component container.                                                                                                                                                                                                                                                 |
+|   `style_annotation`   |                                  <code>{"str \| "}[AnnoStyle](../apis/typehints/AnnoStyle.mdx){" \| None"}</code>                                  | The css-styles of the annotation marker (box). If this value is specified as a string, the string will be parsed as the default color of the annotation boxes.                                                                                                                                                        |
+|        `colors`        |                                                            `Mapping[str, str] \| None`                                                             | <p>A dictionary of colors. The keys and the values represent the annotation name (specified by the `comment` property of `data`) and the color string, respectively.</p><p>This method is used for specifying the annotation colors manually. It has a higher priority compared to `is_color_dynamic`.</p>            |
+|        `image`         |                                                                   `str \| None`                                                                    | The URL to the image to be currently displayed on the annotator. The usage is similar to the property of the HTML image tag: `<img src={...}>`.                                                                                                                                                                       |
+|         `data`         |                                     <code>[Annotations](../apis/typehints/Annotations.mdx){" \| None"}</code>                                      | The annotation data. This value is a sequence of annotation items. Each item contain the positional information and the annotation comment (the object type). This value will can be updated by callbacks or user operations on the annotator.                                                                        |
+|       `options`        | <code>{"Sequence["}[DashSelectOptionItem](../apis/typehints/DashSelectOptionItem.mdx){"] \| Mapping[str, Any] \| Sequence[Any] \| \| None"}</code> | <p>The available options of the annotator. The usage is like the selector component `dcc.Dropdown(options=...)`. Each item represents an available choice of the annotation type.</p><p>If this value is empty, will use a input box that allows users to specify any type names.</p>                                 |
+|     `selected_id`      |                                                                   `str \| None`                                                                    | <p>The ID of the currently selected annotation.</p><p>This property is read-only. It will be automatically set when users select an annotation. A valid ID is a string. When no annotation is selected, this property returns `None`.</p>                                                                                |
+|  `placeholder_input`   |                                                                       `str`                                                                        | The placeholder text when the editor is the input box (the property `options` is empty).                                                                                                                                                                                                                              |
+| `placeholder_dropdown` |                                                                       `str`                                                                        | The placeholder text when the editor is the dropdown component (the property `options` contains valid items).                                                                                                                                                                                                         |
+|  `clearable_dropdown`  |                                                                       `bool`                                                                       | A flag. Set it to allow the annotation comment to be cleared when the dropdown box is being used.                                                                                                                                                                                                                     |
+|       `disabled`       |                                                                       `bool`                                                                       | A flag for disabling the annotator (make unclickable).                                                                                                                                                                                                                                                                |
+|   `is_color_dynamic`   |                                                                       `bool`                                                                       | A flag. If this flag is turned on, will make the color of each annotation box dynamically calculated based on the text of the annotation. An annotation box without a text comment will not be influenced.                                                                                                            |
+|     `size_minimal`     |                                      <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                      | <p>The requirement of the minimal annotation size. Any newly created annotation with a size smaller than this size will be dropped.</p><p>If this value is configured as a scalar, will use it for both `width` and `height`.</p><p>If any of the value is not set or configured as invalid values, will use `0`.</p> |
+|    `loading_state`     |                                                [`LoadingState`<IconExternalLink/>][link-loadstate]                                                 | The loading state set by Dash. This value should not be used by users.                                                                                                                                                                                                                                                |
+
+</TabItem>
+
+<TabItem value="properties">
+
+|          Name          |                                                                      Type                                                                       |            Interactive            |              Setable              | Required |           Default           |
+| :--------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------: | :-------------------------------: | :------: | :-------------------------: |
+|          `id`          |                                                       `str \| Mapping[str, Any] \| None`                                                        |                                   |                                   |          |          undefined          |
+|      `class_name`      |                                                                  `str \| None`                                                                  |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|        `style`         |                                                           `Mapping[str, str] \| None`                                                           |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |     `{height: "60vh"}`      |
+|   `style_annotation`   |                                <code>{"str \| "}[AnnoStyle](../apis/typehints/AnnoStyle.mdx){" \| None"}</code>                                 |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|        `colors`        |                                                           `Mapping[str, str] \| None`                                                           |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|        `image`         |                                                                  `str \| None`                                                                  |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|         `data`         |                                    <code>[Annotations](../apis/typehints/Annotations.mdx){" \| None"}</code>                                    | <InlineIcon icon={vsiCheckIcon}/> | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|       `options`        | <code>{"Sequence["}[DashSelectOptionItem](../apis/typehints/DashSelectOptionItem.mdx){"] \| Mapping[str, Any] \| Sequence[Any] \| None"}</code> |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+|     `selected_id`      |                                                                  `str \| None`                                                                  | <InlineIcon icon={vsiCheckIcon}/> |                                   |          |          undefined          |
+|  `placeholder_input`   |                                                                      `str`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |     `"Input tag here"`      |
+| `placeholder_dropdown` |                                                                      `str`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |      `"Select a tag"`       |
+|  `clearable_dropdown`  |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |           `False`           |
+|       `disabled`       |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |           `False`           |
+|   `is_color_dynamic`   |                                                                     `bool`                                                                      |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |           `False`           |
+|     `size_minimal`     |                                    <code>{"float \| "}[Size](../apis/typehints/Size.mdx){" \| None"}</code>                                     |                                   | <InlineIcon icon={vsiCheckIcon}/> |          | `{"width": 0, "height": 0}` |
+|    `loading_state`     |                                               [`LoadingState`<IconExternalLink/>][link-loadstate]                                               |                                   | <InlineIcon icon={vsiCheckIcon}/> |          |          undefined          |
+
+- "Interactive" means that the property can be changed by users' interactions, thus firing a callback.
+- "Setable" means that changing it by callback `Output(...)` will take effects.
+- "Required" means that the component cannot be initialized if this value is not explicitly provided.
+
+</TabItem>
+
+</Tabs>
+
+## Examples
+
+### <IconObjType type="term"/> Check examples in the tutorial
+
+<p>
+  {
+    <DarkButton to="/docs/category/examples" icon={epGuide}>
+      Examples
+    </DarkButton>
+  }
+</p>
+
+[link-react-picture-annotation]: https://github.com/Kunduin/react-picture-annotation/blob/master/src/ReactPictureAnnotation.tsx
+[link-loadstate]: https://dash.plotly.com/loading-states
+[dash-pmcallback]: https://dash.plotly.com/pattern-matching-callbacks

@@ -1,0 +1,592 @@
+---
+id: sanitize_data
+title: sanitize_data
+sidebar_label: sanitize_data
+slug: /apis/utilities/sanitize_data
+description: Perform the full sanitization on the annotation data.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+import JSONView from "@site/src/components/JSONView";
+
+<APITopBar type="func" source="utilities.sanitize_data" />
+
+```python
+sanitized_data: Annotations = sanitize_data(
+    data: Annotations | Sequence[th.AnnoItem],
+    deduplicate: "add" | "drop" = "drop",
+)
+```
+
+Perform the full sanitization on the annotation data.
+
+The sanitization will ensure that:
+
+1. The current timestamp is the time when this method is used.
+2. All items in `data` are dictionaries typed by `AnnoItem`.
+3. Any item with a `None` comment will be sanitized as an item without the comment.
+4. The position of the annotation mark will always have positive width and height. (Negative values means that the starting location is reversed.)
+5. Annotation items will be deduplicated, i.e. the IDs will be sanitized.
+
+This method can be used when the annotations need to be saved as a file. It may
+take time to run, so it may not be suitable to sanitize the annotations in the
+real time.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.sanitize_data
+dpa.utilities.sanitize_data
+```
+
+## Arguments
+
+### Requires
+
+|   Argument    |                                                    Type                                                     |             Required              | <center>Description</center>                                                                                                                                                                                          |
+| :-----------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    `data`     | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that will be sanitized. Note that this method will not change the input data.                                                                                                                     |
+| `deduplicate` |                                              `"add" \| "drop"`                                              | <InlineIcon icon={vsiCheckIcon}/> | The deduplicate method for the annotation IDs. `"add"` means that preserving the duplicated ID by adding a postfix. `"drop"` means that dropping all annotation items with duplicated IDs after the first found item. |
+
+### Returns
+
+|     Argument     |                     Type                      | <center>Description</center>    |
+| :--------------: | :-------------------------------------------: | :------------------------------ |
+| `sanitized_data` | [`Annotations`](../typehints/Annotations.mdx) | The sanitized copy of the data. |
+
+## Examples
+
+### <IconObjType type="term"/> Sanitize a collection of data (`drop` mode)
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Input Data', value: 'data-input', },
+    { label: 'Codes', value: 'codes', },
+    { label: 'Output Data', value: 'data-output', },
+  ]
+}>
+
+<TabItem value="data-input">
+
+**`data-input.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    data: [
+      {
+        id: undefined,
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: undefined,
+      },
+      {
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 152.14361702127658,
+          y: 62.765957446808514,
+          width: -125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: 62.765957446808514,
+          width: 125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 528.1117021276596,
+          y: 62.765957446808514,
+          width: -125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: null,
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+<TabItem value="codes">
+
+The following codes will sanitize the data, but all data items with repeated IDs will
+be dropped. For any repeated ID, only the first occuring item will be preserved.
+
+```python title="sanitize_data_drop.py" showLineNumbers
+import json
+import dash_picture_annotation as dpa
+
+
+with open("./data-input.json", "r") as fobj:
+    data = json.load(fobj)
+
+with open("./sanitized-data.json", "w") as fobj:
+    json.dump(dpa.sanitize_data(data), fobj, indent=2, ensure_ascii=False)
+```
+
+</TabItem>
+
+<TabItem value="data-output">
+
+**`sanitized-data.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    timestamp: 1730913816961,
+    data: [
+      {
+        id: "67199d",
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "a22c54",
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 26.611702127659555,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 402.57978723404256,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "d345c5",
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+</Tabs>
+
+### <IconObjType type="term"/> Sanitize a collection of data (`add` mode)
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Input Data', value: 'data-input', },
+    { label: 'Codes', value: 'codes', },
+    { label: 'Output Data', value: 'data-output', },
+  ]
+}>
+
+<TabItem value="data-input">
+
+**`data-input.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    data: [
+      {
+        id: undefined,
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: undefined,
+      },
+      {
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 152.14361702127658,
+          y: 62.765957446808514,
+          width: -125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: 62.765957446808514,
+          width: 125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 528.1117021276596,
+          y: 62.765957446808514,
+          width: -125.531914893617,
+          height: -125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: null,
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+<TabItem value="codes">
+
+The following codes will sanitize the data and preserve all data items. For any item
+with a repeated ID, will add a random postfix to deduplicate it.
+
+```python title="sanitize_data_add.py" showLineNumbers
+import json
+import dash_picture_annotation as dpa
+
+
+with open("./data-input.json", "r") as fobj:
+    data = json.load(fobj)
+
+with open("./sanitized-data.json", "w") as fobj:
+    json.dump(dpa.sanitize_data(data, "add"), fobj, indent=2, ensure_ascii=False)
+```
+
+</TabItem>
+
+<TabItem value="data-output">
+
+**`sanitized-data.json`**
+
+<JSONView
+  defaultExpandDepth={1}
+  defaultExpandKeyTree={{data: {"4": {mark: true}}}}
+  data={{
+    timestamp: 1730915309229,
+    data: [
+      {
+        id: "1e5a53",
+        mark: {
+          x: -224.45212765957447,
+          y: 62.765957446808514,
+          width: 125.53191489361701,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3fc004",
+        mark: {
+          x: -36.15425531914895,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+        comment: "type-2",
+      },
+      {
+        id: "ZxdA2p",
+        mark: {
+          x: 26.611702127659555,
+          y: 62.765957446808514,
+          width: 125.53191489361703,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "hCC6Gi",
+        mark: {
+          x: 339.81382978723406,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxK",
+        mark: {
+          x: 402.57978723404256,
+          y: -62.7659574468085,
+          width: 125.531914893617,
+          height: 125.53191489361701,
+          type: "RECT",
+        },
+      },
+      {
+        id: "yJwGxKafa456",
+        mark: {
+          x: -224.45212765957447,
+          y: 251.06382978723406,
+          width: 125.53191489361701,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-6",
+      },
+      {
+        id: "yJwGxK60cfab",
+        mark: {
+          x: -36.15425531914895,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "be34ff",
+        mark: {
+          x: 152.14361702127658,
+          y: 251.06382978723406,
+          width: 125.53191489361703,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "type-7",
+      },
+      {
+        id: "EWCEpN",
+        mark: {
+          x: 339.81382978723406,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+      },
+      {
+        id: "3Pb3rh",
+        mark: {
+          x: 528.1117021276596,
+          y: 251.06382978723406,
+          width: 125.531914893617,
+          height: 125.531914893617,
+          type: "RECT",
+        },
+        comment: "",
+      },
+    ],
+  }}
+/>
+
+</TabItem>
+
+</Tabs>

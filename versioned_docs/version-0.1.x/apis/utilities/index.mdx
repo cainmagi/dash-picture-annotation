@@ -1,0 +1,27 @@
+---
+id: index
+title: utilities
+sidebar_label: utilities
+slug: /apis/utilities
+description: Utilities used for managing the data of the annotation results.
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="module" source="utilities" />
+
+Utilities used for managing the data of the annotation results.
+
+## Functions
+
+|                                                     Member                                                      | <center>Description</center>                                                                                     |
+| :-------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------- |
+|              [<IconObjType type="func" hasText={true} text="get_data_item"/>](./get_data_item.mdx)              | Get an annotation item by its unique ID.                                                                         |
+| [<IconObjType type="func" hasText={true} text="get_data_item_with_default"/>](./get_data_item_with_default.mdx) | Get an annotation item by its unique ID with a default value provided.                                           |
+|             [<IconObjType type="func" hasText={true} text="get_data_items"/>](./get_data_items.mdx)             | Get one or several annotation items by exactly matching the comment.                                             |
+|    [<IconObjType type="func" hasText={true} text="get_data_items_by_regex"/>](./get_data_items_by_regex.mdx)    | Get one or several annotation items by matching the comment with a regular expression.                           |
+|                [<IconObjType type="func" hasText={true} text="get_all_ids"/>](./get_all_ids.mdx)                | Get the list of all IDs in the annotation data. The returne IDs are ordered as the order of the items in `data`. |
+|           [<IconObjType type="func" hasText={true} text="get_all_comments"/>](./get_all_comments.mdx)           | Get the set of all comments in the annotation data. The returned comments are unordered.                         |
+|         [<IconObjType type="func" hasText={true} text="compare_anno_marks"/>](./compare_anno_marks.mdx)         | Compare whether two annotation marks are equivalent or not.                                                      |
+|         [<IconObjType type="func" hasText={true} text="sanitize_data_item"/>](./sanitize_data_item.mdx)         | Perform the full sanitization on an annotation item.                                                             |
+|              [<IconObjType type="func" hasText={true} text="sanitize_data"/>](./sanitize_data.mdx)              | Perform the full sanitization on the annotation data.                                                            |

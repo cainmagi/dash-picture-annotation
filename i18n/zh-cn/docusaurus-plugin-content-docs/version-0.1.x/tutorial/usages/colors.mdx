@@ -1,0 +1,257 @@
+---
+id: colors
+sidebar_label: 颜色
+title: 定制标记颜色
+description: 透过不同的方式，定制标记框的颜色。
+slug: /usages/colors
+---
+
+import IconExternalLink from "@theme/Icon/ExternalLink";
+
+# 定制标记颜色
+
+本项目提供了多种定制标记颜色的方式。默认情况下，所有的标记框都是白色的。要修改标记的默认颜色，可以使用[`style_annotation`](../../apis/DashPictureAnnotation.mdx#component-properties)。
+
+```python title="demo_colors.py" showLineNumbers
+from typing import Optional
+
+import dash
+from dash import html, Output, Input
+import dash_picture_annotation as dpa
+
+
+app = dash.Dash()
+
+get_mark = lambda x, y: {"x": x, "y": y, "width": 50, "height": 50, "type": "RECT"}
+
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        dpa.DashPictureAnnotation(
+            id="annotator",
+            data=dpa.sanitize_data(
+                [
+                    get_mark(50, 50),
+                    get_mark(150, 50),
+                    {"mark": get_mark(250, 50), "comment": "cls-1"},
+                    {"mark": get_mark(350, 50), "comment": "cls-1"},
+                    {"mark": get_mark(50, 150), "comment": "cls-1"},
+                    {"mark": get_mark(150, 150), "comment": "cls-2"},
+                    {"mark": get_mark(250, 150), "comment": "cls-3"},
+                    {"mark": get_mark(350, 150), "comment": "cls-4"},
+                ],
+                deduplicate="add",
+            ),
+            image="/site-address/to/an/image",
+        ),
+    )
+)
+
+
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return "black"
+    return dash.no_update
+
+
+app.run()
+```
+
+本文中后续的部分，都基于该范例脚本展开。在默认（初始化）情况下，启动应用时，用户可以看见白色的标记框。
+
+<div className="insize-50 indark-bg">
+
+|                    标记框的默认颜色                     |
+| :-----------------------------------------------------: |
+| ![标记框默认颜色的范例](/img/examples/colors-init.webp) |
+
+</div>
+
+## 修改标记的默认色 {#change-the-default-annotation-color}
+
+以上脚本中，callback的定义如下：
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return "black"
+    return dash.no_update
+```
+
+按下按钮时，默认标记色将会修改为`black`（黑色）。这是由于向属性`style_annotation`传递了一个`str`。该属性值为`str`时，该值会解释为CSS颜色：
+
+<div className="insize-50 indark-bg">
+
+|                      修改标记的默认色                      |
+| :--------------------------------------------------------: |
+| ![修改标记默认色的范例](/img/examples/colors-default.webp) |
+
+</div>
+
+:::tip
+
+CSS颜色可以透过多种方式格式化。例如，黑色可以写作`black`，`#000`，`#000000`，`rgb(0, 0, 0)`，`hsl(0, 0%, 0%)`。
+
+要了解更多信息，参见[CSS颜色文档<IconExternalLink/>][link-csscolor]。
+
+:::
+
+## 修改标记的默认色（细粒度） {#change-the-default-annotation-color-fine-grained}
+
+属性`style_annotation`还可以透过一种更细粒度的方式设置。若向其传递一个可以标记为类型[`dpa.AnnoStyle`](../../apis/typehints/AnnoStyle.mdx)的字典，则可以分别为标记框的不同部分、分别设置不同的样式参数。例如，
+
+```python showLineNumbers
+@app.callback(
+    Output("annotator", "style_annotation"),
+    Input("btn-color", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_color(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return dpa.AnnoStyle(shapeStrokeStyle="black", fontBackground="yellow")
+    return dash.no_update
+```
+
+此例中，标记框的颜色设置为了`"black"`（黑色），而文字标注的背景色，则设置为了`"yellow"`（黄色）。若[`dpa.AnnoStyle`](../../apis/typehints/AnnoStyle.mdx)的某个关键字成员未设置，其对应的样式将会采用默认值。
+
+<div className="insize-50 indark-bg">
+
+|                        修改标记的默认色（细粒度）                         |
+| :-----------------------------------------------------------------------: |
+| ![修改标记默认色（细粒度）的范例](/img/examples/colors-default-fine.webp) |
+
+</div>
+
+## 按类别修改颜色 {#change-the-color-of-a-specific-class}
+
+还可以按照标记框所包含的文字标注值、设置其对应的颜色。该功能允许用户、按标记对应的类别区分其颜色。该设置透过属性[`colors`](../../apis/DashPictureAnnotation.mdx#component-properties)完成。例如，可以考虑定义一个用来设置特定颜色的按钮。按下按钮时，就会触发callback `set_colors`。
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        # highlight-next-line
+        html.Div(html.Button(id="btn-colors", children="Set specified colors")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+    )
+)
+
+
+@app.callback(
+    # highlight-next-line
+    Output("annotator", "colors"),
+    Input("btn-colors", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_colors(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return {"cls-1": "#E00", "cls-2": "#66ccff"}
+    return dash.no_update
+```
+
+该callback返回一个字典，其关键字对应的是不同文字标注的值，而字典值对应的是不同的颜色。具有同样文字标注的标记，总会设置为同一颜色。下例中，由于`cls-1`的颜色设置为了`#E00`，所有三个具备该文字标注的标记框，都记以相同的颜色。
+
+<div className="insize-50 indark-bg">
+
+|         设置文字标注的颜色 Specify the comment color         |
+| :----------------------------------------------------------: |
+| ![设置文字标注颜色的范例](/img/examples/colors-specify.webp) |
+
+</div>
+
+:::tip
+
+属性`colors`的字典值，可以设置为任何CSS颜色格式。其颜色值的用法和属性`style_annotation`相关的前述用法相同。
+
+:::
+
+:::tip
+
+使用属性`colors`时，只能设置标记框的背景色。标记框的前景色（文字色）通过计算背景色的亮度自动调节。
+
+:::
+
+## 按类别动态设置颜色 {#use-dynamic-class-color}
+
+若用户不愿为每种文字标注分别手动设置颜色，可以考虑透过设置二值量[`is_color_dynamic`](../../apis/DashPictureAnnotation.mdx#component-properties)，令标记框的颜色自动计算。下例中，使用另一按钮`btn-dynamic`设置该属性。
+
+```python showLineNumbers
+app.layout = html.Div(
+    (
+        html.Div(html.Button(id="btn-color", children="Set color")),
+        # highlight-next-line
+        html.Div(html.Button(id="btn-dynamic", children="Set dynamic colors")),
+        dpa.DashPictureAnnotation(id="annotator", ...),
+    )
+)
+
+
+@app.callback(
+    # highlight-next-line
+    Output("annotator", "is_color_dynamic"),
+    Input("btn-dynamic", "n_clicks"),
+    prevent_initial_call=True,
+)
+def set_dynamic(n_clicks: Optional[int]):
+    if n_clicks:
+        # highlight-next-line
+        return True
+    return dash.no_update
+```
+
+按下按钮时，不同标记框的颜色，会根据其文字标注动态渲染。颜色渲染的方式，可以解释为先计算文字标注的哈希量（hash code），再透过该哈希量决定颜色的色调。因此，同样的文字标注，总会对应同样的颜色。那些不带有文字标注的标记框，仍然会显示为默认色。
+
+<div className="insize-50 indark-bg">
+
+|                       动态渲染颜色                       |
+| :------------------------------------------------------: |
+| ![动态渲染颜色的范例](/img/examples/colors-dynamic.webp) |
+
+</div>
+
+## 不同颜色属性的优先级 {#priority-of-different-color-properties}
+
+本指南中，提及了三种不同的配置标记色的方式。下图展示的例子中，已经使之前提及的三种颜色修改同时生效。换言之，其对应的颜色设置等价于：
+
+```python showLineNumbers
+dpa.DashPictureAnnotation(
+    id="annotator",
+    style_annotation="black",
+    colors={"cls-1": "#E00", "cls-2": "#66ccff"},
+    is_color_dynamic=True,
+)
+```
+
+<div className="insize-50 indark-bg">
+
+|                    不同颜色属性的优先级                    |
+| :--------------------------------------------------------: |
+| ![不同颜色属性优先级的范例](/img/examples/colors-all.webp) |
+
+</div>
+
+结果展示了，三种属性的优先级如下：
+
+```python
+"colors" > "is_color_dynamic" > "style_annotation"
+```
+
+## 完整范例 {#a-full-example}
+
+在范例这一章中，提供了一个有关修改标记色的完整范例。要了解详情，请查阅[`范例/颜色`](../examples/colors.mdx)一节。
+
+[link-csscolor]: https://developer.mozilla.org/zh-CN/docs/Web/CSS/color

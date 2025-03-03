@@ -1,0 +1,110 @@
+---
+id: get_data_item
+title: get_data_item
+sidebar_label: get_data_item
+slug: /apis/utilities/get_data_item
+description: Get an annotation item by its unique ID.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_item" />
+
+```python
+item: AnnoItem = get_data_item(
+    data: Annotations | [AnnoItem],
+    id: str,
+)
+```
+
+Get an annotation item by its unique ID.
+
+Note that this method will not validate the format of `data`. If the item cannot
+be found, will raise a `KeyError`.
+
+## Aliases
+
+This function can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_item
+dpa.utilities.get_data_item
+```
+
+## Arguments
+
+### Requires
+
+| Argument |                                                      Type                                                       |             Required              | <center>Description</center>               |
+| :------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------------------------ |
+|  `data`  | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | The annotation data that is queried.       |
+|   `id`   |                                                      `str`                                                      | <InlineIcon icon={vsiCheckIcon}/> | The ID of the annotation item to be found. |
+
+### Returns
+
+| Argument |                  Type                   | <center>Description</center>                          |
+| :------: | :-------------------------------------: | :---------------------------------------------------- |
+|  `item`  | [`AnnoItem`](../typehints/AnnoItem.mdx) | The queried value. If not found, raise an `KeyError`. |
+
+## Examples
+
+### <IconObjType type="term"/> Get an annotation item by quering its ID
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: 'Codes', value: 'codes', },
+    { label: 'Results', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_id.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+data = [
+    {"id": "a", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "b", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 1, "y": 1, "width": 0, "height": 0, "type": "RECT"}},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_item(data, "a"))
+pprint.pprint(dpa.get_data_item(data_wrapped, "a"))
+pprint.pprint(dpa.get_data_item(data, "c"))
+pprint.pprint(dpa.get_data_item(data_wrapped, "c"))
+try:
+    pprint.pprint(dpa.get_data_item(data, "d"))
+except KeyError as e:
+    print(e)
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+'The ID "d" is not found in the data.'
+```
+
+</TabItem>
+
+</Tabs>

@@ -1,0 +1,47 @@
+---
+id: Size
+title: Size
+sidebar_label: Size
+slug: /apis/typehints/Size
+description: 针对标记框尺寸的最小需求。
+---
+
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.Size" />
+
+```python
+Size(
+    label: str,
+    value: Any,
+    disabled: bool,
+)
+```
+
+`Size`是`TypedDict`。
+
+
+针对标记框尺寸的最小需求。任何新创建的标记框，若尺寸小于该值，则会被舍弃。
+
+若该值设置为一个标量，则该值会被同时用在宽（`width`）和高（`height`）的限制上。
+
+若该值留空或无效，使用`0`。
+
+## 别名 {#aliases}
+
+该类型可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.Size
+dpa.typehints.Size
+```
+
+## 关键字 {#keywords}
+
+|  关键字  |  类型   | 必选 | <center>说明</center>    |
+| :------: | :-----: | :--: | :----------------------- |
+| `width`  | `float` |      | 标记框所需要的最小宽度。 |
+| `height` | `float` |      | 标记框所需要的最小高度。 |

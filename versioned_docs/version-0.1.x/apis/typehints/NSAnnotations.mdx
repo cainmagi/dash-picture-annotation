@@ -1,0 +1,42 @@
+---
+id: NSAnnotations
+title: NSAnnotations
+sidebar_label: NSAnnotations
+slug: /apis/typehints/NSAnnotations
+description: The type of a not sanitized annotation collection.
+---
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="type" source="typehints.NSAnnotations" />
+
+```python
+NSAnnotations(
+    data: [NSAnnoItem],
+)
+```
+
+`NSAnnotations` is a `TypedDict`.
+
+The type of a not sanitized annotation collection.
+
+## Aliases
+
+This type can be acquired by
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.NSAnnotations
+dpa.typehints.NSAnnotations
+```
+
+## Keywords
+
+| Keyword |                         Type                          |             Required              | <center>Description</center>                                                                                   |
+| :-----: | :---------------------------------------------------: | :-------------------------------: | :------------------------------------------------------------------------------------------------------------- |
+| `data`  | <code>{`[`}[NSAnnoItem](./NSAnnoItem.mdx){`]`}</code> | <InlineIcon icon={vsiCheckIcon}/> | A sequence of not sanitized data items. These items will be sanitized can put into a sanitized data item list. |

@@ -4,7 +4,11 @@
 
 ## CHANGELOG
 
-### 0.2.0 @ 03/03/2025
+### 0.2.1 @ 03/03/2025
+
+#### :mega: New
+
+1. Bump the document to the new version `0.2.1`.
 
 #### :floppy_disk: Change
 

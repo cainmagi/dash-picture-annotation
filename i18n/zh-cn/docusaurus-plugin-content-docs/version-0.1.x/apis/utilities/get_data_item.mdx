@@ -1,0 +1,109 @@
+---
+id: get_data_item
+title: get_data_item
+sidebar_label: get_data_item
+slug: /apis/utilities/get_data_item
+description: 按照唯一ID获取一个标记数据项。
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import vsiCheckIcon from "@iconify-icons/codicon/check";
+
+import InlineIcon from "@site/src/components/InlineIcon";
+import APITopBar, {IconObjType} from "@site/src/components/APITopBar";
+
+<APITopBar type="func" source="utilities.get_data_item" />
+
+```python
+item: AnnoItem = get_data_item(
+    data: Annotations | [AnnoItem],
+    id: str,
+)
+```
+
+按照唯一ID获取一个标记数据项。
+
+注意，该方法不会验证数据`data`的格式。若未找到数据项，抛出`KeyError`。
+
+## 别名 {#aliases}
+
+该函数可以按以下方式之一获取
+
+```python
+import dash_picture_annotation as dpa
+
+
+dpa.get_data_item
+dpa.utilities.get_data_item
+```
+
+## 参数 {#arguments}
+
+### 输入 {#requires}
+
+|  参数  |                                                    类型                                                     |               必选                | <center>说明</center>     |
+| :----: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------: | ------------------------- |
+| `data` | <code>[Annotations](../typehints/Annotations.mdx){` \| [`}[AnnoItem](../typehints/AnnoItem.mdx){"]"}</code> | <InlineIcon icon={vsiCheckIcon}/> | 要检索的标记数据。        |
+|  `id`  |                                                    `str`                                                    | <InlineIcon icon={vsiCheckIcon}/> | 需要查询的标记数据项ID。 |
+
+### 输出 {#returns}
+
+|  参数  |                  类型                   | <center>说明</center>                          |
+| :----: | :-------------------------------------: | :--------------------------------------------- |
+| `item` | [`AnnoItem`](../typehints/AnnoItem.mdx) | 检索到的标记数据项。未找到时，抛出`KeyError`。 |
+
+## 范例 {#examples}
+
+### <IconObjType type="term"/> 按照ID检索标记数据项 {#-get-an-annotation-item-by-quering-its-id}
+
+<Tabs
+  defaultValue="codes"
+  values={[
+    { label: '代码', value: 'codes', },
+    { label: '结果', value: 'results', },
+  ]
+}>
+
+<TabItem value="codes">
+
+```python title="get_anno_item_by_id.py" showLineNumbers
+import pprint
+import dash_picture_annotation as dpa
+
+
+data = [
+    {"id": "a", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "b", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 0, "y": 0, "width": 0, "height": 0, "type": "RECT"}},
+    {"id": "c", "mark": {"x": 1, "y": 1, "width": 0, "height": 0, "type": "RECT"}},
+]
+
+data_wrapped = {"timestamp": 0, "data": data}
+
+pprint.pprint(dpa.get_data_item(data, "a"))
+pprint.pprint(dpa.get_data_item(data_wrapped, "a"))
+pprint.pprint(dpa.get_data_item(data, "c"))
+pprint.pprint(dpa.get_data_item(data_wrapped, "c"))
+try:
+    pprint.pprint(dpa.get_data_item(data, "d"))
+except KeyError as e:
+    print(e)
+```
+
+</TabItem>
+
+<TabItem value="results">
+
+```python
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'a', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+{'id': 'c', 'mark': {'height': 0, 'type': 'RECT', 'width': 0, 'x': 0, 'y': 0}}
+'The ID "d" is not found in the data.'
+```
+
+</TabItem>
+
+</Tabs>
