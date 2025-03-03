@@ -9,6 +9,8 @@
 #### :mega: New
 
 1. Bump the document to the new version `0.2.1`.
+2. Add the documents for the new features `DashPictureAnnotation(init_scale=...)`, `dpa.Scale`, and `dpa.sanitize_scale`.
+3. Add source file links for the new version `0.2.1`.
 
 #### :floppy_disk: Change
 
