@@ -92,6 +92,7 @@ app.layout = html.Div(
                 html.Button(
                     children="Reset Annotations", id="btn-reset", style=styles["mr1"]
                 ),
+                html.Button(children="Set scale", id="btn-scale", style=styles["mr1"]),
                 html.Button(
                     children="Change Image", id="btn-changeimg", style=styles["mr1"]
                 ),
@@ -152,6 +153,19 @@ def toggle_options(n_clicks: Optional[int], options: Optional[Sequence[Any]]):
 def reset_data(n_clicks: Optional[int]):
     if n_clicks:
         return default_data
+    return dash.no_update
+
+
+@callback(
+    Output("annotator", "init_scale"),
+    Input("btn-scale", "n_clicks"),
+)
+def set_scale(n_clicks: Optional[int]):
+    if n_clicks:
+        return dpa.sanitize_scale(
+            scale=1.0,
+            offset_x=0.5,  # 0: left, 0.5: center, 1.0: right
+        )
     return dash.no_update
 
 
