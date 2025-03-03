@@ -51,6 +51,7 @@ __all__ = (
     "compare_anno_marks",
     "sanitize_data_item",
     "sanitize_data",
+    "sanitize_scale",
 )
 
 
@@ -544,3 +545,53 @@ def sanitize_data(
     return th.Annotations(
         timestamp=int(datetime.datetime.now().timestamp() * 1000), data=new_data
     )
+
+
+def sanitize_scale(
+    scale: Union[float, th.Mapping[str, th.Any]],
+    offset_x: Optional[float] = None,
+    offset_y: Optional[float] = None,
+) -> th.Scale:
+    """Perform the sanitization on the annotated image scaling factor.
+
+    The sanitization will ensure that:
+    1. A dictionary containing at least the scaling ratio will be returned.
+    2. Optional offsets can be configured.
+    3. A timestamp will be attached to the sanitized configuration. It ensures that the
+       scaling event will be always triggered even if the configuration does not
+       change.
+
+    Arguments
+    ---------
+    scale: `float | Mapping[str, Any]`
+        The scaling factor value (float) or a full scaling configuration dictionary.
+
+    offset_x: `float`
+        The relative offset ratio along the X axis. This value will be added to the
+        returned value only when it is configured and `"offset_x"` is not configured
+        in `scale`.
+
+    offset_y: `float`
+        The relative offset ratio along the Y axis. This value will be added to the
+        returned value only when it is configured and `"offset_y"` is not configured
+        in `scale`.
+
+    Returns
+    -------
+    #1: `Scale`
+        The santized scaling factor with a newly configured timestamp.
+    """
+    if isinstance(scale, collections.abc.Mapping):
+        res = th.Scale(scale=(float(scale["scale"]) if "scale" in scale else 1.0))
+        if "offset_x" in scale:
+            res["offset_x"] = float(scale["offset_x"])
+        if "offset_y" in scale:
+            res["offset_y"] = float(scale["offset_y"])
+    else:
+        res = th.Scale(scale=float(scale))
+    if "offset_x" not in res and isinstance(offset_x, float):
+        res["offset_x"] = offset_x
+    if "offset_y" not in res and isinstance(offset_y, float):
+        res["offset_y"] = offset_y
+    res["timestamp"] = int(datetime.datetime.now().timestamp() * 1000)
+    return res

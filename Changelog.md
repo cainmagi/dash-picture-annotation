@@ -9,6 +9,7 @@
 #### :mega: New
 
 1. Improve and add the scaling control features. Now, the annotated image scale behaves more like the `<img>` tag. Users can use a new property, `init_scale`, to fine-grain control the scale.
+2. Add utilities and typehints related to the newly introduced `scale` features. It is recommended that `dpa.sanitize_scale` can be used to create `dpa.Scale`.
 
 #### :floppy_disk: Change
 

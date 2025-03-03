@@ -40,6 +40,7 @@ from .typehints import (
     AnnoStyle,
     DashSelectOptionItem,
     Size,
+    Scale,
     NSAnnoItem,
     NSAnnotations,
     is_sequence_of,
@@ -58,6 +59,7 @@ from .utilities import (
     compare_anno_marks,
     sanitize_data_item,
     sanitize_data,
+    sanitize_scale,
 )
 
 __all__ = (
@@ -69,6 +71,7 @@ __all__ = (
     "AnnoStyle",
     "DashSelectOptionItem",
     "Size",
+    "Scale",
     "NSAnnoItem",
     "NSAnnotations",
     "is_sequence_of",
@@ -85,6 +88,7 @@ __all__ = (
     "compare_anno_marks",
     "sanitize_data_item",
     "sanitize_data",
+    "sanitize_scale",
     "DashPictureAnnotation",
 )
 

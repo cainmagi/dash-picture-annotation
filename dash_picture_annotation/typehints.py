@@ -37,6 +37,7 @@ __all__ = (
     "AnnoStyle",
     "DashSelectOptionItem",
     "Size",
+    "Scale",
     "NSAnnoItem",
     "NSAnnotations",
     "is_sequence_of",
@@ -204,6 +205,30 @@ class Size(TypedDict, total=False):
 
     height: float
     """Requirement of the minimal height of an annotation."""
+
+
+class Scale(TypedDict, total=False):
+    """The initial image scale. This value can only be configured by users. The scaling
+    reflected by the wheel event will not influence this value. Note that this value
+    needs to be updated by a different value to make it take effect.
+    """
+
+    scale: float
+    """The scale related to the initial scale of the annotated image. If not specified,
+    will use `1.0`."""
+
+    offset_x: float
+    """The relative X offset. If not specified, will use `0.5` (center of the
+    width)."""
+
+    offset_y: float
+    """The relative Y offset. If not specified, will use `0.5` (center of the
+    height)."""
+
+    timestamp: int
+    """An optional timestamp value. This value will not be actually used, if it is
+    configured, it can be used for letting the component know the scale should
+    be updated."""
 
 
 NSAnnoItem = Union[AnnoItem, AnnoMark, Mapping[str, Any]]
