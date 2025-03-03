@@ -1,11 +1,17 @@
 import React, {useState, useEffect, useRef} from "react";
 import {useMeasure} from "react-use";
+import {useImageSize} from "react-image-size";
 import {useLRUCache} from "use-lru-cache";
 import clsx from "clsx";
-import {type, isNil, isEmpty, set} from "ramda";
+import {type, isNil, isEmpty} from "ramda";
 import disableScroll from "disable-scroll";
 
-import {sanitizeDataFast, sanitizeOptions, requireMin} from "../utils";
+import {
+  sanitizeDataFast,
+  sanitizeOptions,
+  sanitizeScale,
+  requireMin,
+} from "../utils";
 import {getBoxColor, getGlobalBoxColor} from "../colorhash";
 
 import {ReactPictureAnnotation} from "react-picture-annotation";
@@ -49,6 +55,26 @@ const default_style_annotation = () => ({
 });
 
 /**
+ * Wait until the property of an object is available.
+ * @param {object} obj - The object containing the property.
+ * @param {object} prop - The name of the property to be accessed.
+ * @param {object} interval - The waiting interval. The unit is ms.
+ * @returns {Promise<any>} A promise returning the property of `obj`.
+ */
+const waitForProperty = (obj, prop, interval = 100) => {
+  return new Promise((resolve, reject) => {
+    const checkProperty = () => {
+      if (obj[prop] !== undefined) {
+        resolve(obj[prop]);
+      } else {
+        setTimeout(checkProperty, interval);
+      }
+    };
+    checkProperty();
+  });
+};
+
+/**
  * DashPictureAnnotation is a Dash porting version for the React component:
  * `react-picture-annotation/ReactPictureAnnotation`
  *
@@ -76,15 +102,18 @@ const DashPictureAnnotation = (props) => {
     disabled,
     is_color_dynamic,
     size_minimal,
+    init_scale,
     loading_state,
     setProps,
   } = props;
 
+  const [initWidth, setInitWidth] = useState(undefined);
   const [prevWidth, setPrevWidth] = useState(0);
   const [curTimeStamp, setCurTimeStamp] = useState(Date.now());
   const [frequentData, setFrequentData] = useState(sanitizeDataFast(data).data);
 
   const [ref, {x, y, width, height, top, right, bottom, left}] = useMeasure();
+  const [dimensions, {loading, error}] = useImageSize(image);
 
   const lruCacheHash = useLRUCache(30);
   const lruCacheName = useLRUCache(30);
@@ -245,20 +274,91 @@ const DashPictureAnnotation = (props) => {
 
   var ref_anno = useRef();
 
+  const configureInitScale = (anno, scale, targetFullWidth, imgSize) => {
+    const normScale = (scale.scale * targetFullWidth) / imgSize.width;
+    anno.scaleState.scale = normScale;
+    anno.scaleState.originX = scale.offset_x * (width - normScale * imgSize.width);
+    anno.scaleState.originY = scale.offset_y * (height - normScale * imgSize.height);
+    anno.setState({imageScale: anno.scaleState});
+    anno.onImageChange();
+    anno.onShapeChange();
+  };
+
   useEffect(() => {
     const anno = ref_anno.current;
+    if (anno && dimensions && type(initWidth) != "Undefined") {
+      const initScaleOptions = sanitizeScale(init_scale);
+      waitForProperty(anno, "currentImageElement")
+        .then((value) => {
+          configureInitScale(
+            anno,
+            initScaleOptions,
+            width > 0
+              ? Math.min(
+                  width,
+                  dimensions
+                    ? (dimensions.width * height) / dimensions.height
+                    : width
+                )
+              : initWidth,
+            dimensions
+          );
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+    // if (anno && type(init_scale) === "Number") {
+    //   anno.onImageChange();
+    //   anno.onShapeChange();
+    // }
+    return () => {};
+  }, [init_scale]);
+
+  useEffect(() => {
+    const anno = ref_anno.current;
+    if (anno && dimensions && !initWidth && Math.abs(width) > 1e-3) {
+      const newInitWidth = Math.min(
+        width,
+        (dimensions.width * height) / dimensions.height
+      );
+      setInitWidth(newInitWidth);
+      const initScaleOptions = sanitizeScale(init_scale);
+      waitForProperty(anno, "currentImageElement")
+        .then((value) => {
+          configureInitScale(anno, initScaleOptions, newInitWidth, dimensions);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
     if (width != prevWidth) {
       if (prevWidth > 0) {
-        const ratio = width / prevWidth;
+        let NeedsUpdate = dimensions
+          ? width / dimensions.width < height / dimensions.height
+          : true;
+        let ratio = width / prevWidth;
+        let decsize = (width - prevWidth) / 2;
         if (anno) {
-          anno.scaleState.scale = anno.scaleState.scale * ratio;
+          if (NeedsUpdate) {
+            anno.scaleState.scale = anno.scaleState.scale * ratio;
+          }
+          const {originX, originY} = anno.scaleState;
+          if (NeedsUpdate) {
+            const offsetX = 0;
+            const offsetY = height / 2;
+            anno.scaleState.originX = offsetX - (offsetX - originX) * ratio;
+            anno.scaleState.originY = offsetY - (offsetY - originY) * ratio;
+          } else {
+            anno.scaleState.originX = originX + decsize;
+          }
           anno.setState({imageScale: anno.scaleState});
         }
       }
       setPrevWidth(width);
     }
     return () => {};
-  }, [width]);
+  }, [init_scale, width]);
 
   useEffect(() => {
     const anno = ref_anno.current;
@@ -293,6 +393,31 @@ const DashPictureAnnotation = (props) => {
         </div>
       </div>
     );
+  }
+
+  if (loading || error) {
+    <div
+      id={id}
+      ref={ref}
+      className={clsx(
+        styles["annotation-container"],
+        styles.disabled,
+        class_name
+      )}
+      style={style}
+      data-dash-is-loading={
+        (loading_state && loading_state.is_loading) || undefined
+      }
+    >
+      <div className={styles["overlay-container"]}>
+        <div className={styles["overlay-inner-container"]}>
+          <div className={styles["icon-container"]}>
+            <OcticonFileMedia24 className={styles.icon} />
+            <p className={styles.text}>Image not loaded.</p>
+          </div>
+        </div>
+      </div>
+    </div>;
   }
 
   if (disabled) {

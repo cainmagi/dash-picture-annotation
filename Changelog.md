@@ -6,6 +6,10 @@
 
 ### 0.2.0 @ 03/03/2025
 
+#### :mega: New
+
+1. Improve and add the scaling control features. Now, the annotated image scale behaves more like the `<img>` tag. Users can use a new property, `init_scale`, to fine-grain control the scale.
+
 #### :floppy_disk: Change
 
 1. Bump the `yarn` version from `4.5.3` to `4.7.0`.

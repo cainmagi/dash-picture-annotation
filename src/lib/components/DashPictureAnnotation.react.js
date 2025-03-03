@@ -32,6 +32,7 @@ DashPictureAnnotation.defaultProps = {
   clearable_dropdown: false,
   disabled: false,
   is_color_dynamic: false,
+  init_scale: 1.0,
   size_minimal: {
     width: 0,
     height: 0,
@@ -265,6 +266,35 @@ DashPictureAnnotation.propTypes = {
    * without a text comment will not be influenced.
    */
   is_color_dynamic: PropTypes.bool,
+
+  /**
+   * The initial image scale. This value can only be configured by users. The scaling
+   * reflected by the wheel event will not influence this value. Note that this value
+   * needs to be updated by a different value to make it take effect.
+   */
+  init_scale: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.exact({
+      /**
+       * The scale related to the initial scale of the annotated image. If not
+       * specified, will use `1.0`.
+       */
+      scale: PropTypes.number,
+      /**
+       * The relative X offset. If not specified, will use `0.5` (center of the width).
+       */
+      offset_x: PropTypes.number,
+      /**
+       * The relative Y offset. If not specified, will use `0.5` (center of the height).
+       */
+      timestamp: PropTypes.number,
+      /**
+       * An optional timestamp value. This value will not be actually used, if it is
+       * configured, it can be used for letting the component know the scale should
+       * be updated.
+       */
+    })
+  ]),
 
   /**
    * The requirement of the minimal annotation size. Any newly created annotation with

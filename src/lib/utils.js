@@ -35,6 +35,42 @@ export const requireMin = (val, minVal = 0) => {
 };
 
 /**
+ * Sanitize scale
+ * @param {number|object} scale - The scale factor to be sanitized
+ * @returns {{scale: number, offset_x: number, offset_y: number}} - An array of sanitized options
+ */
+export const sanitizeScale = (scale) => {
+  if (type(scale) === "Object") {
+    return {
+      scale:
+        hasIn("scale", scale) && type(scale.scale) === "Number"
+          ? scale.scale
+          : 1.0,
+      offset_x:
+        hasIn("offset_x", scale) && type(scale.offset_x) === "Number"
+          ? scale.offset_x
+          : 0.5,
+      offset_y:
+        hasIn("offset_y", scale) && type(scale.offset_y) === "Number"
+          ? scale.offset_y
+          : 0.5,
+    };
+  }
+  if (type(scale) === "Number") {
+    return {
+      scale: scale,
+      offset_x: 0.5,
+      offset_y: 0.5,
+    };
+  }
+  return {
+    scale: 1.0,
+    offset_x: 0.5,
+    offset_y: 0.5,
+  };
+};
+
+/**
  * Sanitize options
  * Copied from
  * https://github.com/plotly/dash/blob/dev/components/dash-core-components/src/utils/optionTypes.js
