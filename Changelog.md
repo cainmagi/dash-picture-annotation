@@ -15,6 +15,7 @@
 #### :wrench: Fix
 
 1. Fix: Add the missing links in the entry pages of the modules and packages.
+2. Fix: Correct typos in the legacy documents.
 
 #### :floppy_disk: Change
 
