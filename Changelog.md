@@ -4,13 +4,17 @@
 
 ## CHANGELOG
 
-### 0.2.1 @ 03/03/2025
+### 0.2.1 @ 03/04/2025
 
 #### :mega: New
 
 1. Bump the document to the new version `0.2.1`.
 2. Add the documents for the new features `DashPictureAnnotation(init_scale=...)`, `dpa.Scale`, and `dpa.sanitize_scale`.
 3. Add source file links for the new version `0.2.1`.
+
+#### :wrench: Fix
+
+1. Fix: Add the missing links in the entry pages of the modules and packages.
 
 #### :floppy_disk: Change
 
