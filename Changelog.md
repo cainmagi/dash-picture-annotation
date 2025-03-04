@@ -16,6 +16,7 @@
 
 1. Fix: Add the missing links in the entry pages of the modules and packages.
 2. Fix: Correct typos in the legacy documents.
+3. Fix: Bump the yarn typescript support from `4.0.0` to `4.0.1`. It solves an compatibility issue with `typescript@5.8.x`.
 
 #### :floppy_disk: Change
 
