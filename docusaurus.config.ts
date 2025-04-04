@@ -67,6 +67,10 @@ const config: Config = {
             },
           },
         },
+        gtag: {
+          trackingID: "G-2BFFJ4EWL9",
+          anonymizeIP: true,
+        },
         theme: {
           customCss: "./src/css/custom.scss",
         },
@@ -182,6 +186,16 @@ const config: Config = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Dash Picture Annotation, Yuchen Jin. Built with Docusaurus.`,
+    },
+    algolia: {
+      apiKey: "1d949e607f5b9f172d2ea8ea3a77bf70",
+      indexName: "cainmagiio",
+      // APP id
+      appId: "DLXMNZGTRK",
+      // Optional: make the search sensitive to sub-routing.
+      contextualSearch: true,
+      // Optional: Algolia search parameters
+      searchParameters: {facetFilters: ["type:content"]},
     },
     prism: {
       theme: prismThemes.github,
